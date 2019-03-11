@@ -1,6 +1,13 @@
 .hidden
 {
 	display: none;
+	pointer-events: none;
+}
+
+.softHidden
+{
+	opacity: 0;
+	pointer-events: none;
 }
 
 .alert

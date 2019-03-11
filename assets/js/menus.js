@@ -8,14 +8,24 @@ class Menus
 
 		this.customKeys = {};
 
-		this.fpsOption = false;
+		this.options = 
+		{
+			fpsOption: false
+		}
 
 		this.init();
 	}
 
-	getOption(name)
+	getOptions(optionName = false)
 	{
-		return this[name];
+		if (!optionName)
+		{
+			return this.options;
+		}
+		else
+		{
+			return this.options[name];
+		}
 	}
 
 	// COMMON (main menu and options menu)
@@ -76,10 +86,7 @@ class Menus
 
 	recordCustomKeys()
 	{
-		let optionsContainer = document.getElementById('options-container');
 		let keysID = document.querySelectorAll('#customKey-container button');
-
-		optionsContainer.classList.add('hidden');
 
 		for (let i = 0, length = keysID.length; i < length; i++)
 		{
@@ -93,9 +100,9 @@ class Menus
 	{
 		let content = document.querySelector('.fpsOption-content');
 		
-		this.fpsOption = this.fpsOption === true ? false : true;
+		this.options["fpsOption"] = this.options["fpsOption"] === true ? false : true;
 
-		content.innerText = this.fpsOption === false ? "OFF" : "ON";
+		content.innerText = this.options["fpsOption"] === false ? "OFF" : "ON";
 	}
 
 	updateCustomKey(key)
@@ -157,23 +164,52 @@ class Menus
 
 	// MAIN MENU
 
+	closeMenus()
+	{
+		let mainMenu = document.getElementById('mainMenu-container');
+
+		mainMenu.classList.add('closeMainMenu');
+
+		let queue = Tools.createQueue('menus', 'closeMenusWindow', 500);
+		return queue;
+	}
+
+	toggleOptionsWindow(action)
+	{
+		let optionsContainer = document.getElementById('options-container');
+
+		if (action == "open")
+		{
+			if (optionsContainer.classList.contains('hidden'))
+			{
+				optionsContainer.classList.remove('hidden');
+			}
+		}
+		else
+		{
+			if (!optionsContainer.classList.contains('hidden'))
+			{
+				optionsContainer.classList.add('hidden');
+			}
+		}
+	}
+
 	selectLabel(buttons, selectedIndex = -1)
 	{
 		let index = this.getCurrentIndex(buttons, selectedIndex)
-
 		// Play
 		if (buttons[index].id == "play-btn")
 		{
 			this.updateCustomKey();
 			this.recordCustomKeys();
+			this.toggleOptionsWindow("close");
 
-			return "mainMenu";
+			return "game";
 		}
 		// Options
 		else if (buttons[index].id == "options-btn")
 		{
-			let optionsContainer = document.getElementById('options-container');
-			optionsContainer.classList.remove('hidden');
+			this.toggleOptionsWindow("open");
 
 			return "options";
 		}
@@ -185,6 +221,6 @@ class Menus
 	{
 		// init fps status btn
 		let content = document.querySelector('.fpsOption-content');
-		content.innerText = this.fpsOption === false ? "OFF" : "ON";
+		content.innerText = this.options["fpsOption"] === false ? "OFF" : "ON";
 	}
 }

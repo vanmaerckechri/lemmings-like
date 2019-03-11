@@ -13,20 +13,6 @@ class Ui
 		this.updateFpsVisibility(fpsVisibility);
 	}
 
-	countTime(timeStart, milliSec)
-	{
-		let currentTime = new Date().getTime();
-
-		if ((currentTime - timeStart) >= milliSec || !timeStart)
-		{
-			return new Date().getTime();
-		}
-		else
-		{
-			return timeStart;
-		}
-	}
-
 	updateFpsVisibility(isVisible)
 	{
 		let fpsContainer = document.getElementById('fps-container');
@@ -57,7 +43,7 @@ class Ui
 		{
 			let frameBySecTimeStart = this.frameBySecTimeStart;
 
-			this.frameBySecTimeStart = this.countTime(this.frameBySecTimeStart, 1000);
+			this.frameBySecTimeStart = Tools.countTime(this.frameBySecTimeStart, 1000);
 
 			if (frameBySecTimeStart != this.frameBySecTimeStart)
 			{

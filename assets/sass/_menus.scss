@@ -1,5 +1,10 @@
 .menus
 {
+	position: fixed;
+	z-index: 2;
+	top: 0;
+	left: 0;
+
 	width: 100%;
 	height: 100%;
 
@@ -21,6 +26,7 @@
 	color: white;
 
 	background-color: $color-darkest;
+	transition: transform 0.2s;
 	button
 	{
 		margin-top: 0.2rem;
@@ -39,6 +45,10 @@
 		color: black;
 		background-color: $color-hot;
 	}
+}
+.closeMainMenu
+{
+	transform: translateX(-100%);
 }
 .options-container
 {
