@@ -4,6 +4,12 @@ html, body, header, nav, footer, section, div, span, h1, h2, h3, h4, h5, h6, p, 
   padding: 0;
   box-sizing: border-box; }
 
+p, a, cite, label, input, button, span {
+  font-family: "Quicksand", sans-serif; }
+
+h1, h2, h3, h4, h5, h6, legend {
+  font-family: "Lato", sans-serif; }
+
 html {
   max-width: 100%;
   width: 100%;
@@ -15,7 +21,6 @@ body {
   background-color: #99a0ad; }
 
 button {
-  font-family: "Quicksand", sans-serif;
   font-size: 1.5rem;
   color: white;
   background-color: transparent; }
@@ -66,13 +71,18 @@ button {
       border: 2px solid transparent;
       border-radius: 8px;
       padding: 0.5rem;
-      color: white; }
+      color: white;
+      background-color: #181d1e; }
     .options-container button:hover {
       cursor: pointer; }
       .options-container button:hover .option-content {
-        border-color: #c07878; }
+        border-color: #181d1e;
+        color: #181d1e;
+        background-color: #c07878; }
   .options-container .selected .option-content {
-    border-color: #c07878; }
+    border-color: #181d1e;
+    color: #181d1e;
+    background-color: #c07878; }
 
 .ui {
   padding: 20px;

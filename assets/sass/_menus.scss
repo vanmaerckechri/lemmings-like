@@ -63,15 +63,17 @@
 			border: 2px solid transparent;
 			border-radius: 8px;
 			padding: 0.5rem;
-
 			color: white;
+			background-color: $color-darkest;
 		}
 		&:hover
 		{
 			cursor: pointer;
 			.option-content
 			{
-				border-color: $color-hot;
+				border-color: $color-darkest;
+				color: $color-darkest;
+				background-color: $color-hot;
 			}
 		}
 	}
@@ -79,7 +81,9 @@
 	{
 		.option-content
 		{
-			border-color: $color-hot;
+			border-color: $color-darkest;
+			color: $color-darkest;
+			background-color: $color-hot;
 		}
 	}
 }

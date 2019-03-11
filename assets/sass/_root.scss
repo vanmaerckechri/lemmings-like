@@ -5,6 +5,14 @@ html, body, header, nav, footer, section, div, span, h1, h2, h3, h4, h5, h6, p, 
 	padding: 0;
 	box-sizing: border-box;
 }
+p, a, cite, label, input, button, span
+{
+	font-family: $main-fontFamily;
+}
+h1, h2, h3, h4, h5, h6, legend
+{
+	font-family: $sec-fontFamily;
+}
 html
 {
 	max-width: 100%;
@@ -20,7 +28,6 @@ body
 }
 button
 {
-	font-family: $btn-fontFamily;
 	font-size: 1.5rem;
 	color: white;
 
