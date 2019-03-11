@@ -85,6 +85,7 @@ class Engine
 				*/
 				this.menus.closeMenus();
 				this.game.launchGame();
+				this.updateWindowSize();
 			}
 		}
 	}
@@ -95,6 +96,8 @@ class Engine
 	{
 		this.game.moveScreen("moveDown");
 		this.game.moveScreen("moveRight");
+		this.game.moveScreen("moveUp");
+		this.game.moveScreen("moveLeft");
 	}
 
 	manageQueues()
@@ -213,6 +216,7 @@ class Engine
 					let queue = this.menus.closeMenus();
 					this.queues.push(queue);
 					this.game.launchGame();
+					this.updateWindowSize();
 				}
 			});
 		}
