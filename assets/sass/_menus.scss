@@ -1,0 +1,85 @@
+.menus
+{
+	width: 100%;
+	height: 100%;
+
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+.mainMenu-container
+{
+	width: 250px;
+	height: 100%;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	font-size: 1.5rem;
+	color: white;
+
+	background-color: $color-darkest;
+	button
+	{
+		margin-top: 0.2rem;
+		margin-bottom: 0.2rem;
+
+		width: 95%;
+		&:hover
+		{
+			cursor: pointer;
+			color: black;
+			background-color: $color-hot;
+		}
+	}
+	.selected
+	{
+		color: black;
+		background-color: $color-hot;
+	}
+}
+.options-container
+{
+	margin: 0 auto;
+
+	max-width: 500px;
+	width: 100%;
+	button
+	{
+		margin: 0.5rem 0;
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		color: $color-darkest;
+		span
+		{
+			display: inline-block;
+		}
+		.option-content
+		{
+			border: 2px solid transparent;
+			border-radius: 8px;
+			padding: 0.5rem;
+
+			color: white;
+		}
+		&:hover
+		{
+			cursor: pointer;
+			.option-content
+			{
+				border-color: $color-hot;
+			}
+		}
+	}
+	.selected
+	{
+		.option-content
+		{
+			border-color: $color-hot;
+		}
+	}
+}

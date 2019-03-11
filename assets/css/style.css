@@ -1,0 +1,91 @@
+html, body, header, nav, footer, section, div, span, h1, h2, h3, h4, h5, h6, p, a, blockquote, cite, img, ol, ul, li, form, fieldset, legend, label, input, button {
+  margin: 0;
+  border: none;
+  padding: 0;
+  box-sizing: border-box; }
+
+html {
+  max-width: 100%;
+  width: 100%;
+  height: 100%;
+  font-size: 18px; }
+
+body {
+  height: 100%;
+  background-color: #99a0ad; }
+
+button {
+  font-family: "Quicksand", sans-serif;
+  font-size: 1.5rem;
+  color: white;
+  background-color: transparent; }
+
+.menus {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center; }
+
+.mainMenu-container {
+  width: 250px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  color: white;
+  background-color: #181d1e; }
+  .mainMenu-container button {
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+    width: 95%; }
+    .mainMenu-container button:hover {
+      cursor: pointer;
+      color: black;
+      background-color: #c07878; }
+  .mainMenu-container .selected {
+    color: black;
+    background-color: #c07878; }
+
+.options-container {
+  margin: 0 auto;
+  max-width: 500px;
+  width: 100%; }
+  .options-container button {
+    margin: 0.5rem 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #181d1e; }
+    .options-container button span {
+      display: inline-block; }
+    .options-container button .option-content {
+      border: 2px solid transparent;
+      border-radius: 8px;
+      padding: 0.5rem;
+      color: white; }
+    .options-container button:hover {
+      cursor: pointer; }
+      .options-container button:hover .option-content {
+        border-color: #c07878; }
+  .options-container .selected .option-content {
+    border-color: #c07878; }
+
+.ui {
+  padding: 20px;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  color: white;
+  pointer-events: none; }
+
+.hidden {
+  display: none; }
+
+.alert {
+  color: #900; }
+
+/*# sourceMappingURL=style.css.map */

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="description" content="">
+	<link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
+    <title>Unknow</title>
+</head>
+<body>
+	<section id="ui" class="ui">
+		<div id="fps-container" class="fps-container">
+			<span>FPS: </span><span id="fps-content"></span>
+		</div>
+	</section>
+	<section id="menus" class="menus">
+		<div id="mainMenu-container" class="mainMenu-container">
+			<button id="play-btn" class="selected">PLAY</button>
+			<button id="options-btn">OPTIONS</button>
+		</div>
+		<div id="options-container" class="options-container hidden">
+			<div id="displayOptions-container" class="displayOptions-container">
+				<h2>Display</h2>
+				<button id="fpsOption" class="selected">
+	       			<span>FPS: </span><span class="option-content fpsOption-content">ON</span>
+	       		</button>
+			</div>
+			<div id="customKey-container" class="customKey-container">
+				<h2>Custom Keys</h2>
+				<button id="fullScreen">
+	       			<span>Fullscreen: </span><span class="option-content customKey"></span>
+	       		</button>
+	       		<button id="moveUp">
+	       			<span>Move up: </span><span class="option-content customKey"></span>
+	       		</button>
+	       		<button id="moveDown">
+	       			<span>Move down: </span><span class="option-content customKey"></span>
+	       		</button>
+	       		<button id="moveLeft">
+	       			<span>Move left: </span><span class="option-content customKey"></span>
+	       		</button>
+	       		<button id="moveRight">
+	       			<span>Move right: </span><span class="option-content customKey"></span>
+	       		</button>
+	       	</div>
+		</dsiv>
+	</section>
+	<section id="game">
+		<div id="canvas-container" class="canvas-container">
+		</div>
+	</section>
+	<script src="./assets/js/keyboard.js"></script>
+	<script src="./assets/js/ui.js"></script>
+	<script src="./assets/js/menus.js"></script>
+	<script src="./assets/js/engine.js"></script>
+</body>
+</html>
