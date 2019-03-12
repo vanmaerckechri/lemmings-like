@@ -98,6 +98,8 @@ class Engine
 		this.game.moveScreen("moveRight");
 		this.game.moveScreen("moveUp");
 		this.game.moveScreen("moveLeft");
+
+		Canvas.drawCanvasBg(this.tools.getImage("background"));
 	}
 
 	manageQueues()
