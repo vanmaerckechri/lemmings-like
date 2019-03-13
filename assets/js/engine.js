@@ -196,6 +196,20 @@ class Engine
 
 	initGame()
 	{
+		window.addEventListener('wheel', (event) =>
+		{
+			if (this.status == "game")
+			{
+				this.game.updateZoom(event);
+			}
+		})		
+		window.addEventListener('mousewheel', (event) =>
+		{
+			if (this.status == "game")
+			{
+				this.game.updateZoom(event);
+			}
+		})
 		window.addEventListener('DOMMouseScroll', (event) =>
 		{
 			if (this.status == "game")
