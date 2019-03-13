@@ -94,12 +94,21 @@ class Engine
 
 	updateWindowSize()
 	{
-		this.game.moveScreen("moveDown");
-		this.game.moveScreen("moveRight");
-		this.game.moveScreen("moveUp");
-		this.game.moveScreen("moveLeft");
+		let winWidth = window.innerWidth;
+		let winHeight = window.innerHeight;
+
+		this.game.updateScreen();
 
 		Canvas.drawCanvasBg(this.tools.getImage("background"));
+
+		// center sections
+		let sections = document.querySelectorAll('section')
+		for (let s = sections.length - 1; s >= 0; s--)
+		{
+			let section = sections[s];
+			section.style.left = (winWidth / 2) - (section.offsetWidth / 2) + "px";
+			section.style.top = (winHeight / 2) - (section.offsetHeight / 2) + "px";
+		}
 	}
 
 	manageQueues()
@@ -185,6 +194,17 @@ class Engine
 
 	// INIT
 
+	initGame()
+	{
+		window.addEventListener('DOMMouseScroll', (event) =>
+		{
+			if (this.status == "game")
+			{
+				this.game.updateZoom(event);
+			}
+		})
+	}
+
 	initMenus()
 	{
 		this.menus = new Menus();
@@ -260,12 +280,11 @@ class Engine
 			this.initKeyboard();
 			this.initMenus();
 			this.ui = new Ui(this.menus.getOptions("fpsOption"));
-
-			Canvas.initSize(this.tools.getImage("background"));
-
 			this.game = new Game();
-
+			this.initGame();
 			this.initCommon();
+
+			this.updateWindowSize();
 
 			window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 			window.requestAnimationFrame(() => this.mainLoop());

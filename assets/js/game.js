@@ -14,85 +14,84 @@ class Game
 
 	// UI
 
+	updateScreen()
+	{
+		this.moveScreen("moveDown");
+		this.moveScreen("moveRight");
+		this.moveScreen("moveUp");
+		this.moveScreen("moveLeft");
+	}
+
+	updateZoom(event)
+	{
+		let canvasContainer = document.getElementById('canvas-container');
+		let transform = this.screen;
+
+		if (event.detail == 3)
+		{
+			if (transform.scale > 1)
+			{
+				transform.scale -= 0.1;
+			}
+		}
+		else
+		{
+			if (transform.scale < 3)
+			{
+				transform.scale += 0.1;
+			}
+		}
+		canvasContainer.style.transform = "translate3d(" + transform.translateX + "px, " + transform.translateY + "px, 0) scale(" + transform.scale + ")";
+
+		this.updateScreen();
+	}
+
 	moveScreen(direction)
 	{
 		let canvasContainer = document.getElementById('canvas-container');
-		let canvasContainerInfos = canvasContainer.getBoundingClientRect();
-
-		let canvasBg = document.getElementById('canvas-bg');
-		let canvasBgInfos = canvasBg.getBoundingClientRect();
+		let canContWidth = canvasContainer.offsetWidth;
+		let canContHeight = canvasContainer.offsetHeight;
 
 		let gameSection = document.getElementById('game');
-		let gameSectionInfos = gameSection.getBoundingClientRect();
+		//let gameSectionInfos = gameSection.getBoundingClientRect();
 
 		let transform = this.screen;
+
 /*
 		let winWidth = window.innerWidth;
 		let winHeight = window.innerHeight;
 */		
 		let speed = 100;
 
-		// user can vertical move if image bg is smaller than game screen
-		if (canvasBgInfos.height > canvasContainerInfos.height)
+		if (direction == "moveUp")
 		{
-			if (direction == "moveUp")
-			{
-				transform.translateY += speed;
+			let limit = ((canContHeight * transform.scale) - (canContHeight )) / 2;
 
-				if (canvasContainerInfos.top + speed > 0)
-				{
-					transform.translateY = 0;
-				}
-			}
-			else if (direction == "moveDown")
-			{
-				transform.translateY -= speed;
-
-				if (canvasContainerInfos.top - speed < gameSectionInfos.height - canvasBgInfos.height)
-				{
-					transform.translateY = (gameSectionInfos.height - canvasBgInfos.height);
-				}
-			}
-			canvasContainer.style.top = "";
+			transform.translateY = transform.translateY + speed > limit ? limit : transform.translateY += speed;
 		}
-		// if not then vertical center on canvas-container;
-		else
+		else if (direction == "moveDown")
 		{
-			transform.translateY = -1 * canvasBgInfos.height / 2;
-			canvasContainer.style.top = "50%";
+			let limit = gameSection.offsetHeight - canContHeight - ((transform.scale - 1) * ( canContHeight / 2));
+
+			transform.translateY = transform.translateY - speed < limit ? limit : transform.translateY -= speed;
 		}
 
-		// user can horizontal move if image bg is smaller than game screen
-		if (canvasBgInfos.width > canvasContainerInfos.width)
+
+		if (direction == "moveLeft")
 		{
-			if (direction == "moveLeft")
-			{
-				transform.translateX += speed;
+			let limit = ((canContWidth * transform.scale) - (canContWidth )) / 2;
 
-				if (canvasContainerInfos.left + speed > 0)
-				{
-					transform.translateX = 0;
-				}
-			}
-			else if (direction == "moveRight")
-			{
-				transform.translateX -= speed;
-
-				if (canvasContainerInfos.left - speed < gameSectionInfos.width - canvasBgInfos.width)
-				{
-					transform.translateX = (gameSectionInfos.width - canvasBgInfos.width);
-				}
-			}
-			canvasContainer.style.left = "";
+			transform.translateX = transform.translateX + speed > limit ? limit : transform.translateX += speed;
 		}
-		// if not then horizontal center on canvas-container;
-		else
+		else if (direction == "moveRight")
 		{
-			transform.translateX = -1 * canvasBgInfos.width / 2;
-			canvasContainer.style.left = "50%";
+			let limit = gameSection.offsetWidth - canContWidth - ((transform.scale - 1) * ( canContWidth / 2));
+
+			transform.translateX = transform.translateX - speed < limit ? limit : transform.translateX -= speed;
 		}
 
-		canvasContainer.style.transform = "translate(" + transform.translateX + "px, " + transform.translateY + "px) scale(" + transform.scale + ")"
+
+		canvasContainer.style.transform = "translate3d(" + transform.translateX + "px, " + transform.translateY + "px, 0) scale(" + transform.scale + ")";
 	}
 
 	launchGame()

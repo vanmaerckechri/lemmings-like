@@ -11,30 +11,83 @@ class Canvas
 		let standardWidth = 1920;
 		let standardHeight = 1080;
 
+		let canvasContainer = document.getElementById('canvas-container');
+
 		let windowWidth = window.innerWidth;
 		let windowHeight = window.innerHeight;
 
-		// check if screen is smaller than standards sizes
-		if (windowWidth < standardWidth || windowHeight < standardHeight)
+		let fullscreenElement = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+
+
+		if (imgWidth < windowWidth || imgHeight < windowHeight)
 		{
-			// landscape
-			if (windowWidth / windowHeight > 1)
-			{	
-				let heightRatio = imgHeight / standardHeight;
-				imgHeight = windowHeight * heightRatio;
-				imgWidth = imgHeight / ratio;
-			}
-			// portrait
-			else
+			if (fullscreenElement) 
 			{
-				let widthRatio = imgWidth / standardWidth;
-				imgWidth = windowWidth * widthRatio;
-				imgHeight = imgWidth * ratio;
+				// landscape
+				if (windowWidth / windowHeight > 1)
+				{	
+					let heightRatio = imgHeight / windowHeight;
+					imgHeight = windowHeight;
+					imgWidth = imgHeight / ratio;
+				}
+				// portrait
+				else
+				{
+					let widthRatio = imgWidth / windowWidth;
+					imgWidth = windowWidth * widthRatio;
+					imgHeight = imgWidth * ratio;
+				}
 			}
 		}
+		else
+		{
+			// check if screen is smaller than standards sizes
+			if (windowWidth < standardWidth || windowHeight < standardHeight)
+			{
+				// landscape
+				if (windowWidth / windowHeight > 1)
+				{	
+					let heightRatio = imgHeight / standardHeight;
+					imgHeight = windowHeight * heightRatio;
+					imgWidth = imgHeight / ratio;
+				}
+				// portrait
+				else
+				{
+					let widthRatio = imgWidth / standardWidth;
+					imgWidth = windowWidth * widthRatio;
+					imgHeight = imgWidth * ratio;
+				}
+			}
+		}		
 
 		canvas.width = imgWidth;
 		canvas.height = imgHeight;
+
+		canvasContainer.style.width = canvas.width + "px";
+		canvasContainer.style.height = canvas.height + "px";
+
+		let sections = document.querySelectorAll('section')
+		for (let s = sections.length - 1; s >= 0; s--)
+		{
+			let section = sections[s];
+			if (canvas.width < windowWidth)
+			{
+				section.style.width = canvas.width + "px";
+			}
+			else
+			{
+				section.style.width = "";
+			}
+			if (canvas.height < windowHeight)
+			{
+				section.style.height = canvas.height + "px";
+			}
+			else
+			{
+				section.style.height = "";
+			}
+		}
 	}
 
 	static drawCanvasBg(imgBg)

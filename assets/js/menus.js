@@ -10,7 +10,7 @@ class Menus
 
 		this.options = 
 		{
-			fpsOption: false
+			fpsOption: true
 		}
 
 		this.init();
@@ -24,7 +24,7 @@ class Menus
 		}
 		else
 		{
-			return this.options[name];
+			return this.options[optionName];
 		}
 	}
 
