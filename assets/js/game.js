@@ -27,7 +27,9 @@ class Game
 		let canvasContainer = document.getElementById('canvas-container');
 		let transform = this.screen;
 
-		if (event.detail == 3)
+		let delta = event.deltaY || -event.wheelDelta || event.detail;
+
+		if (delta > 0)
 		{
 			if (transform.scale > 1)
 			{
