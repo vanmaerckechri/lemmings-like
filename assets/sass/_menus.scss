@@ -11,6 +11,11 @@
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
+
+	background-color: $color-cold;
+	
+	opacity: 1;
+	transition: opacity 0.5s;
 }
 .mainMenu-container
 {

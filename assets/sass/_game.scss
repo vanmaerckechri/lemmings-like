@@ -4,10 +4,7 @@
 	z-index: 1;
 	top: 0;
 	left: 0;
-
 	background-color: green;
-
-
 	opacity: 1;
     transition: opacity 0.5s ease;
 }
@@ -16,4 +13,10 @@
 	position: relative;
 
 	//transition: transform 0.1s;
+}
+canvas
+{
+	position: absolute;
+	left: 0;
+	top: 0;
 }

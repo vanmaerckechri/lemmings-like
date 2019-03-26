@@ -4,13 +4,22 @@ class Engine
 {
 	constructor()
 	{
-		this.tools;
+		this.imgs;
 		this.keyboard;
 		this.ui;
 		this.menus;
 		this.game;
+		this.maps;
+		this.gameSpeed = 1;
+		this.player;
+
+		// temp =>
+		this.w = 3840;
+		this.h = 2160;
+		// <=
 
 		this.status = "mainMenu";
+		this.loading = false;
 
 		this.queues = [];
 
@@ -79,13 +88,20 @@ class Engine
 			this.status = this.menus.selectLabel(buttons);
 			if (this.status == "game")
 			{
-				/*
+				this.loading = true;
+
+				this.menus.closeMenus();
 				let queue = this.menus.closeMenus();
 				this.queues.push(queue);
-				*/
-				this.menus.closeMenus();
-				this.game.launchGame();
-				this.updateWindowSize();
+
+				let imgMapInfos = this.maps[this.maps.currentMap]['imgInfos'];
+				this.imgs.preloadImgs([imgMapInfos], () =>
+				{
+					this.player = new Player(this.imgs.list["player"]);
+					this.game.launchGame();
+					this.updateWindowSize();
+					this.loading = false;
+				});
 			}
 		}
 	}
@@ -94,12 +110,15 @@ class Engine
 
 	updateWindowSize()
 	{
+		let canvasPl = document.getElementById('canvas-player');
+
 		let winWidth = window.innerWidth;
 		let winHeight = window.innerHeight;
 
-		this.game.updateScreen();
+		Resolution.update(this.w, this.h);
+		Resolution.drawCanvasBg(this.imgs.list["background"]["gabarit"]);
 
-		Canvas.drawCanvasBg(this.tools.getImage("background"));
+		this.game.updateScreen();
 
 		// center sections
 		let sections = document.querySelectorAll('section')
@@ -125,8 +144,10 @@ class Engine
 				{
 					if (queue.actionName == "closeMenusWindow")
 					{
+						/*
 						let menusSection = document.getElementById('menus');
 						menusSection.classList.add('hidden');
+						*/
 					}
 				}
 				this.queues.splice(q, 1);
@@ -185,8 +206,17 @@ class Engine
 		}
 	}
 
+	draw()
+	{
+		if (this.status == "game" && !this.loading)
+		{
+			this.player.draw(this.gameSpeed);
+		}
+	}
+
 	mainLoop()
 	{
+		this.draw();
 		this.manageQueues();
 		this.ui.calculFrameBySec();
 		window.requestAnimationFrame(() => this.mainLoop());
@@ -248,11 +278,11 @@ class Engine
 				{
 					let options = this.menus.getOptions();
 					this.dispatchOptions(options);
-					
-					let queue = this.menus.closeMenus();
-					this.queues.push(queue);
-					this.game.launchGame();
-					this.updateWindowSize();
+				}
+
+				if (this.status == "game")
+				{
+					this.manageMainMenu("validate");
 				}
 			});
 		}
@@ -288,19 +318,28 @@ class Engine
 
 	init()
 	{
-		this.tools = new Tools();
-		this.tools.preloadImgs(() =>
+		this.imgs = new Imgs();
+
+		let imgBgInfos =
+		{
+			entityName: "background",
+			actionsName: ["gabarit"],
+			imagesSrc: ["background.png"]
+		}
+
+		this.imgs.preloadImgs([imgBgInfos], () =>
 		{
 			this.initKeyboard();
 			this.initMenus();
 			this.ui = new Ui(this.menus.getOptions("fpsOption"));
 			this.game = new Game();
+			this.maps = new Maps();
 			this.initGame();
 			this.initCommon();
 
 			this.updateWindowSize();
 
-			window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+			//window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 			window.requestAnimationFrame(() => this.mainLoop());
 		});
 	}

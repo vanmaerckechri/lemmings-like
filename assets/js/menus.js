@@ -166,7 +166,10 @@ class Menus
 
 	closeMenus()
 	{
+		let menusSection = document.getElementById('menus');
 		let mainMenu = document.getElementById('mainMenu-container');
+
+		menusSection.classList.add('softHidden');
 
 		mainMenu.classList.add('closeMainMenu');
 

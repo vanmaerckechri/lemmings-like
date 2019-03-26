@@ -18,7 +18,7 @@ html {
 
 body {
   height: 100%;
-  background-color: #99a0ad; }
+  background-color: black; }
 
 section {
   max-width: 100vw;
@@ -41,7 +41,10 @@ button {
   height: 100%;
   display: flex;
   justify-content: flex-start;
-  align-items: center; }
+  align-items: center;
+  background-color: #99a0ad;
+  opacity: 1;
+  transition: opacity 0.5s; }
 
 .mainMenu-container {
   width: 250px;
@@ -126,6 +129,11 @@ button {
 
 .canvas-container {
   position: relative; }
+
+canvas {
+  position: absolute;
+  left: 0;
+  top: 0; }
 
 .hidden {
   display: none;

@@ -2,8 +2,9 @@
 
 class Resolution
 {
-	static update()
+	static update(canWidth, canHeight)
 	{
+		// sections
 		let sections = document.querySelectorAll('section')
 
 		let standardWidth = 1920;
@@ -17,7 +18,9 @@ class Resolution
 		let newWidth = 0;
 		let newHeight = 0;
 
-		if (windowHeight >= standardHeight && windowWidth >= standardWidth)
+		let fullscreenElement = document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+
+		if (windowHeight >= standardHeight && windowWidth >= standardWidth && !fullscreenElement)
 		{
 			newWidth = standardWidth;
 			newHeight = standardHeight;
@@ -43,35 +46,24 @@ class Resolution
 			section.style.width = newWidth + "px";
 			section.style.height = newHeight + "px";
 		}
-	}
 
-	static resizeCanvas(canWidth, canHeight)
-	{
-		Canvas.resizeSections();
+		// canvas
 
-		let standardWidth = 1920;
-		let standardHeight = 1080;
-
-		let gameSection = document.getElementById('game');
-		let gameWidth = gameSection.offsetWidth;
-		let gameHeight = gameSection.offsetHeight;
-
-		let ratio = standardWidth / gameWidth;
-
+		let ratio = standardWidth / newWidth;
 		let canvasContainer = document.getElementById('canvas-container');
-		let canvas = document.getElementById('canvas-bg');
+		let canvas = document.querySelectorAll('canvas');
 
-		canvas.width = canWidth / ratio;
-		canvas.height = canHeight / ratio;
+		canWidth = canWidth / ratio;
+		canHeight = canHeight / ratio;
 
-		canvasContainer.style.width = canvas.width + "px";
-		canvasContainer.style.height = canvas.height + "px";
-	}
+		canvasContainer.style.width = canWidth + "px";
+		canvasContainer.style.height = canHeight + "px";
 
-	static resizeWindow(canWidth, canHeight)
-	{
-		Canvas.resizeSections();
-		Canvas.resizeBgCanvas(canWidth, canHeight);
+		for (let c = canvas.length - 1; c >= 0; c--)
+		{
+			canvas[c].width = canWidth;
+			canvas[c].height = canHeight;
+		}
 	}
 
 	static drawCanvasBg(imgBg)
