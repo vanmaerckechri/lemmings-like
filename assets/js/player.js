@@ -9,6 +9,8 @@ class Player
 			x: 150,
 			y: 300
 		};
+		this.w = 32;
+		this.h = 32;
 
 		this.imgs = imgs;
 		this.players = [];
@@ -32,19 +34,22 @@ class Player
 		this.players.push(player);
 	}
 
-	draw(engineSpeed)
+	draw(engineSpeed, tileRatio)
 	{
 		let canvas = document.getElementById('canvas-player');
 		let ctx = canvas.getContext('2d');
 
 		let speed = 200 / engineSpeed;
-
 		let animationTempo = this.animationTempo;
 		this.animationTempo = Tools.countTime(this.animationTempo, speed);
 
 		if (animationTempo != this.animationTempo)
 		{
+			let dW = this.w * tileRatio;
+			let dH = this.h * tileRatio;
+			
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
+
 			for (let i = this.players.length - 1; i >= 0; i--)
 			{
 				let player = this.players[i];
@@ -52,7 +57,7 @@ class Player
 
 				let img = this.imgs[currentAnim];
 
-				ctx.drawImage(img, player.w * player.imgIndex, 0, player.w, player.h, player.x, player.y, player.w, player.h);
+				ctx.drawImage(img, player.w * player.imgIndex, 0, player.w, player.h, player.x * tileRatio, player.y * tileRatio, dW, dH);
 
 				player.imgIndex = player.imgIndex < img.width / player.w - 1? player.imgIndex + 1 : 0;
 			}

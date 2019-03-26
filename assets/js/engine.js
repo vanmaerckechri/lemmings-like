@@ -13,11 +13,8 @@ class Engine
 		this.gameSpeed = 1;
 		this.player;
 
-		// temp =>
-		this.w = 3840;
-		this.h = 2160;
-		// <=
-
+		this.tileSizeOrigin = 32;
+		this.tileSize = 32;
 		this.status = "mainMenu";
 		this.loading = false;
 
@@ -95,7 +92,8 @@ class Engine
 				this.queues.push(queue);
 
 				let imgMapInfos = this.maps[this.maps.currentMap]['imgInfos'];
-				this.imgs.preloadImgs([imgMapInfos], () =>
+				let imgCommonInfos = this.maps["commonElem"]['imgInfos'];
+				this.imgs.preloadImgs([imgCommonInfos, imgMapInfos], () =>
 				{
 					this.player = new Player(this.imgs.list["player"]);
 					this.game.launchGame();
@@ -115,7 +113,18 @@ class Engine
 		let winWidth = window.innerWidth;
 		let winHeight = window.innerHeight;
 
-		Resolution.update(this.w, this.h);
+		if (this.status == 'game')
+		{
+			let w = this.maps[this.maps.currentMap]['w'];
+			let h = this.maps[this.maps.currentMap]['h'];
+			
+			this.tileSize = Resolution.update(this.tileSizeOrigin, w, h);
+		}
+		else
+		{
+			this.tileSize = Resolution.update(this.tileSizeOrigin);
+		}
+
 		Resolution.drawCanvasBg(this.imgs.list["background"]["gabarit"]);
 
 		this.game.updateScreen();
@@ -210,7 +219,7 @@ class Engine
 	{
 		if (this.status == "game" && !this.loading)
 		{
-			this.player.draw(this.gameSpeed);
+			this.player.draw(this.gameSpeed, this.tileSize / this.tileSizeOrigin);
 		}
 	}
 
@@ -322,9 +331,14 @@ class Engine
 
 		let imgBgInfos =
 		{
-			entityName: "background",
-			actionsName: ["gabarit"],
-			imagesSrc: ["background.png"]
+			elements:
+			{
+				background:
+				{
+					actionsName: ["gabarit"],
+					imagesSrc: ["background.png"]
+				}
+			}		
 		}
 
 		this.imgs.preloadImgs([imgBgInfos], () =>

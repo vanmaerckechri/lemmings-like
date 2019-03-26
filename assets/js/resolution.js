@@ -2,7 +2,7 @@
 
 class Resolution
 {
-	static update(canWidth, canHeight)
+	static update(tileSizeOrigin, canWidth = null, canHeight = null)
 	{
 		// sections
 		let sections = document.querySelectorAll('section')
@@ -48,22 +48,26 @@ class Resolution
 		}
 
 		// canvas
-
-		let ratio = standardWidth / newWidth;
-		let canvasContainer = document.getElementById('canvas-container');
-		let canvas = document.querySelectorAll('canvas');
-
-		canWidth = canWidth / ratio;
-		canHeight = canHeight / ratio;
-
-		canvasContainer.style.width = canWidth + "px";
-		canvasContainer.style.height = canHeight + "px";
-
-		for (let c = canvas.length - 1; c >= 0; c--)
+		if (canWidth && canHeight)
 		{
-			canvas[c].width = canWidth;
-			canvas[c].height = canHeight;
+			let ratio = standardWidth / newWidth;
+			let canvasContainer = document.getElementById('canvas-container');
+			let canvas = document.querySelectorAll('canvas');
+
+			canWidth = canWidth / ratio;
+			canHeight = canHeight / ratio;
+
+			canvasContainer.style.width = canWidth + "px";
+			canvasContainer.style.height = canHeight + "px";
+
+			for (let c = canvas.length - 1; c >= 0; c--)
+			{
+				canvas[c].width = canWidth;
+				canvas[c].height = canHeight;
+			}
 		}
+
+		return newWidth / standardWidth * tileSizeOrigin;
 	}
 
 	static drawCanvasBg(imgBg)
