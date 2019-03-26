@@ -200,14 +200,22 @@ class Menus
 	selectLabel(buttons, selectedIndex = -1)
 	{
 		let index = this.getCurrentIndex(buttons, selectedIndex)
-		// Play
-		if (buttons[index].id == "play-btn")
+		
+		if (buttons[index].id != "options-btn")
 		{
 			this.updateCustomKey();
 			this.recordCustomKeys();
 			this.toggleOptionsWindow("close");
-
+		}
+		// Game
+		if (buttons[index].id == "play-btn")
+		{
 			return "game";
+		}
+		// Editor
+		else if (buttons[index].id == "editor-btn")
+		{
+			return "editor";
 		}
 		// Options
 		else if (buttons[index].id == "options-btn")

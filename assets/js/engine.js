@@ -8,6 +8,7 @@ class Engine
 		this.keyboard;
 		this.ui;
 		this.menus;
+		this.editor;
 		this.game;
 		this.maps;
 		this.gameSpeed = 1;
@@ -31,6 +32,14 @@ class Engine
 	}
 
 	manageGame(command)
+	{
+		if (command == "moveDown" || command == "moveUp" || command == "moveLeft" || command == "moveRight")
+		{
+			this.game.moveScreen(command);
+		}
+	}
+
+	manageEditor(command)
 	{
 		if (command == "moveDown" || command == "moveUp" || command == "moveLeft" || command == "moveRight")
 		{
@@ -99,6 +108,21 @@ class Engine
 					this.game.launchGame();
 					this.updateWindowSize();
 					this.loading = false;
+				});
+			}
+			else if (this.status == "editor")
+			{
+				this.loading = true;
+
+				this.menus.closeMenus();
+				let queue = this.menus.closeMenus();
+				this.queues.push(queue);
+
+				let imgInfos = this.editor.buildImgsList(this.maps);
+				this.imgs.preloadImgs([imgInfos], () =>
+				{
+					this.loading = false;
+					console.log("ok")
 				});
 			}
 		}
@@ -205,6 +229,11 @@ class Engine
 					{
 						this.manageMainMenu(command);
 					}
+					// editor
+					else if (this.status == "editor")
+					{
+						this.manageEditor(command);
+					}
 					// game
 					else if (this.status == "game")
 					{
@@ -287,10 +316,6 @@ class Engine
 				{
 					let options = this.menus.getOptions();
 					this.dispatchOptions(options);
-				}
-
-				if (this.status == "game")
-				{
 					this.manageMainMenu("validate");
 				}
 			});
@@ -346,6 +371,7 @@ class Engine
 			this.initKeyboard();
 			this.initMenus();
 			this.ui = new Ui(this.menus.getOptions("fpsOption"));
+			this.editor = new Editor();
 			this.game = new Game();
 			this.maps = new Maps();
 			this.initGame();

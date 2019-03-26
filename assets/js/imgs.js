@@ -48,9 +48,9 @@ class Imgs
 				for (let j = actionsName.length - 1; j >= 0; j--)
 				{
 					this.list[elemName] = !this.list[elemName] ? {} : this.list[elemName];
-					this.list[elemName][actionsName[j]] = new Image();
 
-					this.list[elemName][actionsName[j]].onload = () =>
+					// if img already loaded
+					if (this.list[elemName][actionsName[j]])
 					{
 						loaded += 1;
 						if (loaded == imgsLength)
@@ -58,7 +58,20 @@ class Imgs
 							imgsLoaded();
 						}
 					}
-					this.list[elemName][actionsName[j]].src = "./assets/img/" + imagesSrc[j];
+					else
+					{
+						this.list[elemName][actionsName[j]] = new Image();
+
+						this.list[elemName][actionsName[j]].onload = () =>
+						{
+							loaded += 1;
+							if (loaded == imgsLength)
+							{
+								imgsLoaded();
+							}
+						}
+						this.list[elemName][actionsName[j]].src = "./assets/img/" + imagesSrc[j];
+					}
 				}
 			}
 		}
