@@ -8,6 +8,8 @@ class Editor
 		this.mouseX = 0;
 		this.mouseY = 0;
 
+		this.action = false;
+
 		this.tileSizeOr = tileSizeOr;
 		this.tileRatio = 1;
 		this.map = [];
@@ -27,6 +29,8 @@ class Editor
 			let dependToCol = this.map[row][col].dependToCol;
 			let elem = this.map[dependToRow][dependToCol];
 
+			if (elem)
+			{
 			for (let r = elem.rowHeight - 1; r >= 0; r--)
 			{
 				this.map[dependToRow + r] = !this.map[dependToRow + r] ? [] : this.map[dependToRow + r];
@@ -35,6 +39,7 @@ class Editor
 				{
 					this.map[dependToRow + r][dependToCol + c] = null;
 				}
+			}
 			}
 		}
 	}
@@ -57,7 +62,7 @@ class Editor
 
 				for (let c = elem.colWidth - 1; c >= 0; c--)
 				{
-					if (this.map[row + r][col + c])
+					if (this.map[row + r][col + c] && this.map[row + r][col + c].dependToRow)
 					{
 						this.cleanElement(row + r, col + c);
 					}
@@ -66,10 +71,16 @@ class Editor
 			}
 			this.map[row][col] = elem;
 		}
+		console.log(JSON.parse(JSON.stringify(this.map)));
 	}
 
 	draw(tileRatio, tileWidthOrigin, tileHeightOrigin)
 	{
+		if (this.action == "putElem")
+		{
+			this.putElement();
+		}
+
 		this.tileRatio = tileRatio;
 
 		if (this.selectedElem != null)
@@ -188,7 +199,12 @@ class Editor
 
 		canvas.addEventListener('mousedown',  () =>
 		{
-			this.putElement();
+			this.action = "putElem";
+		})
+
+		canvas.addEventListener('mouseup',  () =>
+		{
+			this.action = "";
 		})
 
 	}

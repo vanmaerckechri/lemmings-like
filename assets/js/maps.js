@@ -56,7 +56,6 @@ class Maps
 			{
 				spawn:
 				{
-					editor: true,
 					img: null,
 					imgSrc: "entity_spawn.png",
 					colWidth: 2,
