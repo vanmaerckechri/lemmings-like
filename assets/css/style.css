@@ -2,7 +2,8 @@ html, body, header, nav, footer, section, div, span, h1, h2, h3, h4, h5, h6, p, 
   margin: 0;
   border: none;
   padding: 0;
-  box-sizing: border-box; }
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box; }
 
 p, a, cite, label, input, button, span {
   font-family: "Quicksand", sans-serif; }
@@ -32,6 +33,12 @@ button {
   color: white;
   background-color: transparent; }
 
+a {
+  color: #c07878;
+  text-decoration: none; }
+  a:hover {
+    text-decoration: underline; }
+
 .menus {
   position: fixed;
   z-index: 2;
@@ -39,24 +46,43 @@ button {
   left: 0;
   width: 100%;
   height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   background-color: #99a0ad;
   opacity: 1;
+  -webkit-transition: opacity 0.5s;
   transition: opacity 0.5s; }
 
 .menu-container {
   width: 250px;
   height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   font-size: 1.5rem;
   color: white;
   background-color: #181d1e;
-  transition: transform 0.2s; }
+  -webkit-transition: -webkit-transform 0.2s;
+  transition: -webkit-transform 0.2s;
+  transition: transform 0.2s;
+  transition: transform 0.2s, -webkit-transform 0.2s; }
   .menu-container button {
     margin-top: 0.2rem;
     margin-bottom: 0.2rem;
@@ -70,7 +96,8 @@ button {
     background-color: #c07878; }
 
 .closeMainMenu {
-  transform: translateX(-100%); }
+  -webkit-transform: translateX(-100%);
+          transform: translateX(-100%); }
 
 .options-container {
   margin: 0 auto;
@@ -79,9 +106,15 @@ button {
   .options-container button {
     margin: 0.5rem 0;
     width: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
     color: #181d1e; }
     .options-container button span {
       display: inline-block; }
@@ -118,6 +151,10 @@ button {
   color: white;
   pointer-events: none; }
 
+.fps-container {
+  position: absolute;
+  z-index: 10; }
+
 .game {
   position: fixed;
   z-index: 1;
@@ -125,6 +162,7 @@ button {
   left: 0;
   background-color: #99a0ad;
   opacity: 1;
+  -webkit-transition: opacity 0.5s ease;
   transition: opacity 0.5s ease; }
 
 .canvas-container {
@@ -137,22 +175,38 @@ canvas {
   image-rendering: crisp-edges; }
 
 .editor-ui {
-  padding: 10px;
+  padding: 60px 10px 10px;
   height: 100%;
   position: absolute;
   top: 0;
   left: 0;
   z-index: 3;
   background-color: #181d1e;
-  pointer-events: auto; }
+  pointer-events: auto;
+  -webkit-transform: translate3d(-100%, 0, 0);
+          transform: translate3d(-100%, 0, 0);
+  -webkit-transition: -webkit-transform 0.5s;
+  transition: -webkit-transform 0.5s;
+  transition: transform 0.5s;
+  transition: transform 0.5s, -webkit-transform 0.5s; }
 
-.editorCat img {
-  margin: 0 2px;
-  border: 2px solid transparent;
-  display: inline-block; }
-  .editorCat img:hover {
-    border-color: #c07878;
-    cursor: pointer; }
+.editor-openUi {
+  -webkit-transform: translate3d(0, 0, 0);
+          transform: translate3d(0, 0, 0); }
+
+.editorCat {
+  text-align: center; }
+  .editorCat img {
+    margin: 0 2px;
+    border: 2px solid transparent;
+    display: inline-block;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none; }
+    .editorCat img:hover {
+      border-color: #c07878;
+      cursor: pointer; }
 
 .hidden {
   display: none;

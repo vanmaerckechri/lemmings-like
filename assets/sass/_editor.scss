@@ -1,6 +1,6 @@
 .editor-ui
 {
-	padding: 10px;
+	padding: 60px 10px 10px;
 	height: 100%;
 	position: absolute;
 	top: 0;
@@ -8,14 +8,22 @@
 	z-index: 3;
 	background-color: $color-darkest;
 	pointer-events: auto;
+	transform: translate3d(-100%, 0, 0);
+	transition: transform 0.5s;
+}
+.editor-openUi
+{
+	transform: translate3d(0, 0, 0);
 }
 .editorCat
 {
+	text-align: center;
 	img
 	{
 		margin: 0 2px;
 		border: 2px solid transparent;
 		display: inline-block;
+		user-select: none;
 		&:hover
 		{
 			border-color: $color-hot;

@@ -40,3 +40,12 @@ button
 
 	background-color: transparent;
 }
+a
+{
+	color: $color-hot;
+	text-decoration: none;
+	&:hover
+	{
+		text-decoration: underline;
+	}
+}

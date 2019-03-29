@@ -151,7 +151,7 @@ class Engine
 		}
 		else if (this.status == 'editor')
 		{
-			this.tileSize = Resolution.update(this.tileSizeOrigin, this.editor.canWidth, this.editor.canHeight)
+			this.tileSize = Resolution.update(this.tileSizeOrigin, this.editor.canWidth, this.editor.canHeight);
 		}
 		else
 		{

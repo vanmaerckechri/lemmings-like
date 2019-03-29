@@ -198,6 +198,15 @@ class Editor
 		})
 	}
 
+	openUi()
+	{
+		let editorUI = document.getElementById('editor-ui');
+		if (!editorUI.classList.contains('editor-openUi'))
+		{
+			editorUI.classList.add('editor-openUi');
+		}
+	}
+
 	launchEditor()
 	{
 		let section = document.getElementById('game');
@@ -240,17 +249,17 @@ class Editor
 
 					img.setAttribute('id', cat[i] + '_' + t);
 					catContainer.appendChild(img);
-					
-					let br = document.createElement('br');
-					catContainer.appendChild(br);
 
 					img.addEventListener('click', this.selectElem.bind(this, catName, cat[i], t), false);
 				}
+				let br = document.createElement('br');
+				catContainer.appendChild(br);
 
 			}
 			editorElemsCont.appendChild(catContainer)
 		}
 		this.createLinkToExportMap();
+		this.openUi();
 	}
 	init()
 	{
