@@ -69,12 +69,25 @@ class Editor
 					this.map[row + r][col + c] = { dependToRow: row, dependToCol: col };
 				}
 			}
-			this.map[row][col] = elem;
+
+			// save element in map
+			let imgRef = elem.img;
+			let newObj = JSON.parse(JSON.stringify(elem));
+			newObj.img = imgRef
+
+			this.map[row][col] = newObj;
+
+			// change shade for next
+			let shade = 0;
+			if (elem.shadeLength > 1)
+			{
+				shade = Math.floor(Math.random() * (elem.shadeLength - 0) + 0);
+			}
+			this.selectedElem.imgCol = shade
 		}
-		console.log(JSON.parse(JSON.stringify(this.map)));
 	}
 
-	draw(tileRatio, tileWidthOrigin, tileHeightOrigin)
+	draw(tileRatio)
 	{
 		if (this.action == "putElem")
 		{
@@ -91,14 +104,15 @@ class Editor
 			let canvas = document.getElementById('canvas-editorUi');
 			let ctx = canvas.getContext('2d');
 
-			let sW = tileWidthOrigin * elem.colWidth;
-			let sH = tileHeightOrigin * elem.rowHeight;
-
+			let sX = elem.imgCol * this.tileSizeOr;
+			let sY = elem.imgRow * this.tileSizeOr;
+			let sW = this.tileSizeOr * elem.colWidth;
+			let sH = this.tileSizeOr * elem.rowHeight;
 			let x = Math.floor(this.mouseX / (this.tileSizeOr * this.tileRatio)) * (this.tileSizeOr * this.tileRatio);
 			let y = Math.floor(this.mouseY / (this.tileSizeOr * this.tileRatio)) * (this.tileSizeOr * this.tileRatio);
 
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			ctx.drawImage(img, 0, 0, sW, sH, x, y, sW * tileRatio, sH * tileRatio);
+			ctx.drawImage(img, sX, sY, sW, sH, x, y, sW * tileRatio, sH * tileRatio);
 		}
 
 		let canvasEd = document.getElementById('canvas-editor');
@@ -117,20 +131,24 @@ class Editor
 						let el = this.map[r][c];
 						let img = el.img;
 
-						let sW = tileWidthOrigin * el.colWidth;
-						let sH = tileHeightOrigin * el.rowHeight;
-						let dX = c * this.tileSizeOr * tileRatio;
-						let dY = r * this.tileSizeOr * tileRatio;
+						let sX = el.imgCol * this.tileSizeOr;
+						let sY = el.imgRow * this.tileSizeOr;
+						let sW = this.tileSizeOr * el.colWidth;
+						let sH = this.tileSizeOr * el.rowHeight;
+						let dX = Math.ceil(c * this.tileSizeOr * tileRatio);
+						let dY = Math.ceil(r * this.tileSizeOr * tileRatio);
 
-						ctxEd.drawImage(img, 0, 0, sW, sH, dX, dY, sW * tileRatio, sH * tileRatio);
+ 						ctxEd.drawImage(img, sX, sY, sW, sH, dX, dY, Math.ceil(sW * tileRatio), Math.ceil(sH * tileRatio));
 					}
 				}
 			}
 		}
 	}
 
-	selectElem(elem)
+	selectElem(elem, t)
 	{
+		elem.imgRow = t;
+		elem.imgCol = 0;
 		this.selectedElem = elem;
 	}
 
@@ -178,10 +196,7 @@ class Editor
 					let br = document.createElement('br');
 					catContainer.appendChild(br);
 
-					let newObj = JSON.parse(JSON.stringify(elem));
-					newObj.img = img;
-
-					img.addEventListener('click', this.selectElem.bind(this, newObj), false);
+					img.addEventListener('click', this.selectElem.bind(this, elem, t), false);
 				}
 
 			}

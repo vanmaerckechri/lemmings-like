@@ -61,8 +61,8 @@ class Resolution
 		let canvasContainer = document.getElementById('canvas-container');
 		let canvas = document.querySelectorAll('canvas');
 
-		canWidth = canWidth / ratio;
-		canHeight = canHeight / ratio;
+		canWidth = Math.ceil(canWidth / ratio);
+		canHeight = Math.ceil(canHeight / ratio);
 
 		canvasContainer.style.width = canWidth + "px";
 		canvasContainer.style.height = canHeight + "px";
@@ -81,7 +81,6 @@ class Resolution
 		let canvasBg = document.getElementById('canvas-bg');
 		let ctx = canvasBg.getContext('2d');
 		let img = imgBg['gabarit']['img'];
-		console.log(img)
 
 		ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvasBg.width, canvasBg.height);
 	}
