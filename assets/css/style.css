@@ -14,6 +14,7 @@ html {
   max-width: 100%;
   width: 100%;
   height: 100%;
+  image-rendering: pixelated;
   font-size: 18px; }
 
 body {
@@ -46,7 +47,7 @@ button {
   opacity: 1;
   transition: opacity 0.5s; }
 
-.mainMenu-container {
+.menu-container {
   width: 250px;
   height: 100%;
   display: flex;
@@ -57,15 +58,15 @@ button {
   color: white;
   background-color: #181d1e;
   transition: transform 0.2s; }
-  .mainMenu-container button {
+  .menu-container button {
     margin-top: 0.2rem;
     margin-bottom: 0.2rem;
     width: 95%; }
-    .mainMenu-container button:hover {
+    .menu-container button:hover {
       cursor: pointer;
       color: black;
       background-color: #c07878; }
-  .mainMenu-container .selected {
+  .menu-container .selected {
     color: black;
     background-color: #c07878; }
 
@@ -134,6 +135,24 @@ canvas {
   position: absolute;
   left: 0;
   top: 0; }
+
+.editor-ui {
+  padding: 10px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  background-color: #181d1e;
+  pointer-events: auto; }
+
+.editorCat img {
+  margin: 0 2px;
+  border: 2px solid transparent;
+  display: inline-block; }
+  .editorCat img:hover {
+    border-color: #c07878;
+    cursor: pointer; }
 
 .hidden {
   display: none;

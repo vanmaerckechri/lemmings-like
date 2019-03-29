@@ -2,13 +2,22 @@
 
 class Resolution
 {
+	static getStandardRes()
+	{
+		return {w: 1920, h: 1024};
+	}
+	
 	static update(tileSizeOrigin, canWidth = null, canHeight = null)
 	{
 		// sections
-		let sections = document.querySelectorAll('section')
+		let sections = document.querySelectorAll('section');
+		let standRes = this.getStandardRes();
+		let standardWidth = standRes["w"];
+		let standardHeight = standRes["h"];
 
-		let standardWidth = 1920;
-		let standardHeight = 1080;
+		canWidth = !canWidth ? standardWidth : canWidth;
+		canHeight = !canHeight ? standardHeight : canHeight;
+
 		let standardRatio = standardWidth / standardHeight;
 
 		let windowWidth = window.innerWidth;
@@ -48,23 +57,20 @@ class Resolution
 		}
 
 		// canvas
-		if (canWidth && canHeight)
+		let ratio = standardWidth / newWidth;
+		let canvasContainer = document.getElementById('canvas-container');
+		let canvas = document.querySelectorAll('canvas');
+
+		canWidth = canWidth / ratio;
+		canHeight = canHeight / ratio;
+
+		canvasContainer.style.width = canWidth + "px";
+		canvasContainer.style.height = canHeight + "px";
+
+		for (let c = canvas.length - 1; c >= 0; c--)
 		{
-			let ratio = standardWidth / newWidth;
-			let canvasContainer = document.getElementById('canvas-container');
-			let canvas = document.querySelectorAll('canvas');
-
-			canWidth = canWidth / ratio;
-			canHeight = canHeight / ratio;
-
-			canvasContainer.style.width = canWidth + "px";
-			canvasContainer.style.height = canHeight + "px";
-
-			for (let c = canvas.length - 1; c >= 0; c--)
-			{
-				canvas[c].width = canWidth;
-				canvas[c].height = canHeight;
-			}
+			canvas[c].width = canWidth;
+			canvas[c].height = canHeight;
 		}
 
 		return newWidth / standardWidth * tileSizeOrigin;
@@ -74,12 +80,9 @@ class Resolution
 	{
 		let canvasBg = document.getElementById('canvas-bg');
 		let ctx = canvasBg.getContext('2d');
+		let img = imgBg['gabarit']['img'];
+		console.log(img)
 
-		ctx.drawImage(imgBg, 0, 0, imgBg.width, imgBg.height, 0, 0, canvasBg.width, canvasBg.height);
-	}
-
-	static initSize(imgBg)
-	{
-		this.drawCanvasBg(imgBg);
+		ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvasBg.width, canvasBg.height);
 	}
 }

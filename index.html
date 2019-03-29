@@ -10,20 +10,25 @@
     <title>Unknow</title>
 </head>
 <body>
-	<section id="ui" class="ui">
-		<div id="fps-container" class="fps-container">
-			<span>FPS: </span><span id="fps-content"></span>
-		</div>
-	</section>
 	<section id="game" class="game hidden">
 		<div id="canvas-container" class="canvas-container">
 			<canvas id="canvas-bg"></canvas>
 			<canvas id="canvas-player"></canvas>
 			<canvas id="canvas-editor"></canvas>
+			<canvas id="canvas-editorUi"></canvas>
+		</div>
+	</section>
+	<section id="ui" class="ui">
+		<div id="fps-container" class="fps-container">
+			<span>FPS: </span><span id="fps-content"></span>
+		</div>
+		<div id="editor-ui" class="editor-ui">
+			<div id="editorElems-container">
+			</div>
 		</div>
 	</section>
 	<section id="menus" class="menus">
-		<div id="mainMenu-container" class="mainMenu-container">
+		<div id="mainMenu-container" class="menu-container">
 			<button id="play-btn" class="selected">PLAY</button>
 			<button id="editor-btn">EDITOR</button>
 			<button id="options-btn">OPTIONS</button>

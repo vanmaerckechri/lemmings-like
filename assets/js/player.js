@@ -2,7 +2,7 @@
 
 class Player
 {
-	constructor(imgs)
+	constructor(imgsByType)
 	{
 		this.spawn = 
 		{
@@ -12,9 +12,9 @@ class Player
 		this.w = 32;
 		this.h = 32;
 
-		this.imgs = imgs;
 		this.players = [];
 		this.animationTempo = null;
+		this.imgsByType = imgsByType;
 
 		this.init()
 	}
@@ -55,7 +55,7 @@ class Player
 				let player = this.players[i];
 				let currentAnim = player['animationType'];
 
-				let img = this.imgs[currentAnim];
+				let img = this.imgsByType[currentAnim]['img'];
 
 				ctx.drawImage(img, player.w * player.imgIndex, 0, player.w, player.h, player.x * tileRatio, player.y * tileRatio, dW, dH);
 

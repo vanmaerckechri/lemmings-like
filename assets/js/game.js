@@ -96,7 +96,7 @@ class Game
 		canvasContainer.style.transform = "translate3d(" + transform.translateX + "px, " + transform.translateY + "px, 0) scale(" + transform.scale + ")";
 	}
 
-	launchGame(objImg)
+	launchGame()
 	{
 		let gameSection = document.getElementById('game');
 		gameSection.classList.remove('hidden');

@@ -100,11 +100,12 @@ class Engine
 				let queue = this.menus.closeMenus();
 				this.queues.push(queue);
 
-				let imgMapInfos = this.maps[this.maps.currentMap]['imgInfos'];
-				let imgCommonInfos = this.maps["commonElem"]['imgInfos'];
-				this.imgs.preloadImgs([imgCommonInfos, imgMapInfos], () =>
+				let imgMapInfos = this.maps[this.maps.currentMap]['elemsList'];
+				let imgCommonInfos = this.maps["commonElem"]['elemsList'];
+
+				this.imgs.preloadImgs(this.maps, [imgCommonInfos, imgMapInfos], () =>
 				{
-					this.player = new Player(this.imgs.list["player"]);
+					this.player = new Player(this.maps['elemInfos']['player']);
 					this.game.launchGame();
 					this.updateWindowSize();
 					this.loading = false;
@@ -118,11 +119,15 @@ class Engine
 				let queue = this.menus.closeMenus();
 				this.queues.push(queue);
 
-				let imgInfos = this.editor.buildImgsList(this.maps);
-				this.imgs.preloadImgs([imgInfos], () =>
+				let imgMapInfos = this.maps['editor']['elemsList'];
+
+				this.imgs.preloadImgs(this.maps, [imgMapInfos], () =>
 				{
+					let res = Resolution.getStandardRes();
+					this.editor = new Editor(res["w"], res["h"], this.tileSizeOrigin);
+					this.editor.launchEditor(this.maps);
+					this.updateWindowSize();
 					this.loading = false;
-					console.log("ok")
 				});
 			}
 		}
@@ -144,12 +149,16 @@ class Engine
 			
 			this.tileSize = Resolution.update(this.tileSizeOrigin, w, h);
 		}
+		else if (this.status == 'editor')
+		{
+			this.tileSize = Resolution.update(this.tileSizeOrigin, this.editor.canWidth, this.editor.canHeight)
+		}
 		else
 		{
 			this.tileSize = Resolution.update(this.tileSizeOrigin);
 		}
 
-		Resolution.drawCanvasBg(this.imgs.list["background"]["gabarit"]);
+		Resolution.drawCanvasBg(this.maps['elemInfos']['background']);
 
 		this.game.updateScreen();
 
@@ -250,6 +259,10 @@ class Engine
 		{
 			this.player.draw(this.gameSpeed, this.tileSize / this.tileSizeOrigin);
 		}
+		else if (this.status == "editor" && !this.loading)
+		{
+			this.editor.draw(this.tileSize / this.tileSizeOrigin, this.maps.standardTileWidth, this.maps.standardTileHeight);
+		}
 	}
 
 	mainLoop()
@@ -280,7 +293,7 @@ class Engine
 
 		window.addEventListener(zoomEvent, (event) =>
 		{
-			if (this.status == "game")
+			if (this.status == "game" || this.status == "editor")
 			{
 				this.game.updateZoom(event);
 			}
@@ -353,27 +366,15 @@ class Engine
 	init()
 	{
 		this.imgs = new Imgs();
+		this.maps = new Maps();
+		let imgCommonInfos = this.maps["commonElem"]['elemsList'];
 
-		let imgBgInfos =
-		{
-			elements:
-			{
-				background:
-				{
-					actionsName: ["gabarit"],
-					imagesSrc: ["background.png"]
-				}
-			}		
-		}
-
-		this.imgs.preloadImgs([imgBgInfos], () =>
+		this.imgs.preloadImgs(this.maps, [imgCommonInfos], () =>
 		{
 			this.initKeyboard();
 			this.initMenus();
 			this.ui = new Ui(this.menus.getOptions("fpsOption"));
-			this.editor = new Editor();
 			this.game = new Game();
-			this.maps = new Maps();
 			this.initGame();
 			this.initCommon();
 
