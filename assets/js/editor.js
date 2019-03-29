@@ -84,6 +84,8 @@ class Editor
 				shade = Math.floor(Math.random() * (elem.shadeLength - 0) + 0);
 			}
 			this.selectedElem.imgCol = shade
+
+			this.updateLinkToExportMap();
 		}
 	}
 
@@ -152,6 +154,36 @@ class Editor
 		this.selectedElem = elem;
 	}
 
+	updateLinkToExportMap()
+	{
+		let link = document.getElementById('linkToSaveMap');
+		//let map = JSON.stringify(this.map, null, '\t');
+		let map = JSON.stringify(this.map);
+		let dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(map);
+		link.setAttribute("href", dataUri);
+	}
+
+	createLinkToExportMap()
+	{
+		let editorUi = document.getElementById('editor-ui');
+		let link = document.createElement("a");
+
+		link.setAttribute("id", "linkToSaveMap");
+		link.setAttribute("download", "map.json");
+		link.innerText = "download your map";
+		editorUi.appendChild(link);
+
+		this.updateLinkToExportMap();
+
+		link.addEventListener('click', () =>
+		{
+			if (this.map.length == 0)
+			{
+				event.preventDefault();
+			}
+		})
+	}
+
 	launchEditor(mapsInfos)
 	{
 		let section = document.getElementById('game');
@@ -202,6 +234,7 @@ class Editor
 			}
 			editorElemsCont.appendChild(catContainer)
 		}
+		this.createLinkToExportMap();
 	}
 	init()
 	{
