@@ -124,8 +124,8 @@ class Engine
 				this.imgs.preloadImgs(this.maps, [imgMapInfos], () =>
 				{
 					let res = Resolution.getStandardRes();
-					this.editor = new Editor(res["w"], res["h"], this.tileSizeOrigin);
-					this.editor.launchEditor(this.maps);
+					this.editor = new Editor(this.maps, res["w"], res["h"], this.tileSizeOrigin);
+					this.editor.launchEditor();
 					this.updateWindowSize();
 					this.loading = false;
 				});

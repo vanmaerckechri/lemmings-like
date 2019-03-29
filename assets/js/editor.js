@@ -2,8 +2,11 @@
 
 class Editor
 {
-	constructor(mapWidth, mapHeight, tileSizeOr)
+	constructor(maps, mapWidth, mapHeight, tileSizeOr)
 	{
+		// all maps infos
+		this.maps = maps;
+
 		this.selectedElem = null;
 		this.mouseX = 0;
 		this.mouseY = 0;
@@ -12,6 +15,8 @@ class Editor
 
 		this.tileSizeOr = tileSizeOr;
 		this.tileRatio = 1;
+
+		// current map created in editor
 		this.map = [];
 		this.mapWidth = mapWidth;
 		this.mapHeight = mapHeight;
@@ -27,19 +32,22 @@ class Editor
 		{
 			let dependToRow = this.map[row][col].dependToRow;
 			let dependToCol = this.map[row][col].dependToCol;
+
 			let elem = this.map[dependToRow][dependToCol];
 
-			if (elem)
+			if (elem && elem.objName)
 			{
-			for (let r = elem.rowHeight - 1; r >= 0; r--)
-			{
-				this.map[dependToRow + r] = !this.map[dependToRow + r] ? [] : this.map[dependToRow + r];
+				let elRef = this.maps['elemInfos'][elem.catName][elem.objName];
 
-				for (let c = elem.colWidth - 1; c >= 0; c--)
+				for (let r = elRef.rowHeight - 1; r >= 0; r--)
 				{
-					this.map[dependToRow + r][dependToCol + c] = null;
+					this.map[dependToRow + r] = !this.map[dependToRow + r] ? [] : this.map[dependToRow + r];
+
+					for (let c = elRef.colWidth - 1; c >= 0; c--)
+					{
+						this.map[dependToRow + r][dependToCol + c] = null;
+					}
 				}
-			}
 			}
 		}
 	}
@@ -48,7 +56,7 @@ class Editor
 	{
 		if (this.selectedElem != null)
 		{
-			let elem = this.selectedElem;
+			let elRef = this.maps['elemInfos'][this.selectedElem.catName][this.selectedElem.objName];
 
 			let x = this.mouseX / this.tileRatio;
 			let y = this.mouseY / this.tileRatio;
@@ -56,11 +64,11 @@ class Editor
 			let col = Math.floor(x / this.tileSizeOr);
 			let row = Math.floor(y / this.tileSizeOr);
 
-			for (let r = elem.rowHeight - 1; r >= 0; r--)
+			for (let r = elRef.rowHeight - 1; r >= 0; r--)
 			{
 				this.map[row + r] = !this.map[row + r] ? [] : this.map[row + r];
 
-				for (let c = elem.colWidth - 1; c >= 0; c--)
+				for (let c = elRef.colWidth - 1; c >= 0; c--)
 				{
 					if (this.map[row + r][col + c] && this.map[row + r][col + c].dependToRow)
 					{
@@ -70,18 +78,15 @@ class Editor
 				}
 			}
 
-			// save element in map
-			let imgRef = elem.img;
-			let newObj = JSON.parse(JSON.stringify(elem));
-			newObj.img = imgRef
+			let newObj = JSON.parse(JSON.stringify(this.selectedElem));
 
 			this.map[row][col] = newObj;
 
 			// change shade for next
 			let shade = 0;
-			if (elem.shadeLength > 1)
+			if (elRef.shadeLength > 1)
 			{
-				shade = Math.floor(Math.random() * (elem.shadeLength - 0) + 0);
+				shade = Math.floor(Math.random() * (elRef.shadeLength - 0) + 0);
 			}
 			this.selectedElem.imgCol = shade
 
@@ -100,14 +105,17 @@ class Editor
 
 		if (this.selectedElem != null)
 		{
-			let elem = this.selectedElem;
-			let img = elem.img;
+			let imgRow = this.selectedElem.imgRow;
+			let imgCol = this.selectedElem.imgCol;
+
+			let elem = this.maps['elemInfos'][this.selectedElem.catName][this.selectedElem.objName];
+			let img = elem.img
 
 			let canvas = document.getElementById('canvas-editorUi');
 			let ctx = canvas.getContext('2d');
 
-			let sX = elem.imgCol * this.tileSizeOr;
-			let sY = elem.imgRow * this.tileSizeOr;
+			let sX = imgCol * this.tileSizeOr;
+			let sY = imgRow * this.tileSizeOr;
 			let sW = this.tileSizeOr * elem.colWidth;
 			let sH = this.tileSizeOr * elem.rowHeight;
 			let x = Math.floor(this.mouseX / (this.tileSizeOr * this.tileRatio)) * (this.tileSizeOr * this.tileRatio);
@@ -128,13 +136,16 @@ class Editor
 			{
 				for (let c = this.map[r].length - 1; c >= 0; c--)
 				{
-					if (this.map[r][c] && this.map[r][c].img)
+					if (this.map[r][c] && this.map[r][c].objName)
 					{
-						let el = this.map[r][c];
+						let imgRow = this.map[r][c].imgRow;
+						let imgCol = this.map[r][c].imgCol;
+
+						let el = this.maps['elemInfos'][this.map[r][c].catName][this.map[r][c].objName];
 						let img = el.img;
 
-						let sX = el.imgCol * this.tileSizeOr;
-						let sY = el.imgRow * this.tileSizeOr;
+						let sX = imgCol * this.tileSizeOr;
+						let sY = imgRow * this.tileSizeOr;
 						let sW = this.tileSizeOr * el.colWidth;
 						let sH = this.tileSizeOr * el.rowHeight;
 						let dX = Math.ceil(c * this.tileSizeOr * tileRatio);
@@ -147,10 +158,13 @@ class Editor
 		}
 	}
 
-	selectElem(elem, t)
+	selectElem(catName, objName, imgRow)
 	{
-		elem.imgRow = t;
-		elem.imgCol = 0;
+		let elem = {};
+		elem['catName'] = catName;
+		elem['objName'] = objName;
+		elem['imgRow'] = imgRow;
+		elem['imgCol'] = 0;
 		this.selectedElem = elem;
 	}
 
@@ -184,9 +198,11 @@ class Editor
 		})
 	}
 
-	launchEditor(mapsInfos)
+	launchEditor()
 	{
 		let section = document.getElementById('game');
+		let mapsInfos = this.maps
+
 		section.classList.remove('hidden')
 
 		let editorElemsCont = document.getElementById('editorElems-container');
@@ -196,6 +212,7 @@ class Editor
 
 		let elemsList = mapsInfos['editor']['elemsList'];
 
+		// create icons to build map
 		for (let catName in elemsList)
 		{
 			let catContainer = document.createElement('div');
@@ -207,17 +224,16 @@ class Editor
 			for (let i = 0, length = cat.length; i < length; i++)
 			{
 				let elem = mapsInfos['elemInfos'][catName][cat[i]];
-				let imgComplete = elem.img;
+
 				let sW = mapsInfos.standardTileWidth * elem.colWidth;
 				let sH = mapsInfos.standardTileHeight * elem.rowHeight;
-
 				canvas.width = sW;
 				canvas.height = sH;
 
 				for (let t = 0, tLength = elem.typeLength; t < tLength; t++)
 				{
 					ctx.clearRect(0, 0, canvas.width, canvas.height);
-					ctx.drawImage(imgComplete, 0, t * sH, sW, sH, 0, 0, sW, sH);
+					ctx.drawImage(elem.img, 0, t * sH, sW, sH, 0, 0, sW, sH);
 
 					let img = new Image();
 					img.src = canvas.toDataURL("image/png");
@@ -228,7 +244,7 @@ class Editor
 					let br = document.createElement('br');
 					catContainer.appendChild(br);
 
-					img.addEventListener('click', this.selectElem.bind(this, elem, t), false);
+					img.addEventListener('click', this.selectElem.bind(this, catName, cat[i], t), false);
 				}
 
 			}
