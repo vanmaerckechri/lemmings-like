@@ -158,7 +158,7 @@ class Engine
 			this.tileSize = Resolution.update(this.tileSizeOrigin);
 		}
 
-		Resolution.drawCanvasBg(this.maps['elemInfos']['background']);
+		//Resolution.drawCanvasBg(this.maps['elemInfos']['background']);
 
 		this.game.updateScreen();
 
@@ -257,11 +257,12 @@ class Engine
 	{
 		if (this.status == "game" && !this.loading)
 		{
-			this.player.draw(this.gameSpeed, this.tileSize / this.tileSizeOrigin);
+			//this.player.draw(this.gameSpeed, this.tileSize / this.tileSizeOrigin);
+			this.game.mainLoop(this.tileSize / this.tileSizeOrigin);
 		}
 		else if (this.status == "editor" && !this.loading)
 		{
-			this.editor.draw(this.tileSize / this.tileSizeOrigin, this.maps.standardTileWidth, this.maps.standardTileHeight);
+			this.editor.draw(this.tileSize / this.tileSizeOrigin);
 		}
 	}
 
@@ -367,22 +368,18 @@ class Engine
 	{
 		this.imgs = new Imgs();
 		this.maps = new Maps();
-		let imgCommonInfos = this.maps["commonElem"]['elemsList'];
 
-		this.imgs.preloadImgs(this.maps, [imgCommonInfos], () =>
-		{
-			this.initKeyboard();
-			this.initMenus();
-			this.ui = new Ui(this.menus.getOptions("fpsOption"));
-			this.game = new Game();
-			this.initGame();
-			this.initCommon();
+		this.initKeyboard();
+		this.initMenus();
+		this.ui = new Ui(this.menus.getOptions("fpsOption"));
+		this.game = new Game(this.maps, this.tileSizeOrigin);
+		this.initGame();
+		this.initCommon();
 
-			this.updateWindowSize();
+		this.updateWindowSize();
 
-			//window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
-			window.requestAnimationFrame(() => this.mainLoop());
-		});
+		//window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+		window.requestAnimationFrame(() => this.mainLoop());
 	}
 }
 

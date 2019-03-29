@@ -2,8 +2,11 @@
 
 class Game
 {
-	constructor()
+	constructor(maps, tileSizeOr)
 	{
+		this.tileSizeOr = tileSizeOr;
+		this.maps = maps;
+		this.map = null;
 		this.screen = 
 		{
 			translateX: 0,
@@ -96,9 +99,44 @@ class Game
 		canvasContainer.style.transform = "translate3d(" + transform.translateX + "px, " + transform.translateY + "px, 0) scale(" + transform.scale + ")";
 	}
 
+	mainLoop(tileRatio)
+	{
+		let canvas = document.getElementById('canvas-bg');
+		let ctx = canvas.getContext('2d');
+
+		for (let r = this.map.length - 1; r >= 0; r--)
+		{
+			if (this.map[r])
+			{
+				for (let c = this.map[r].length - 1; c >= 0; c--)
+				{
+					if (this.map[r][c] && this.map[r][c].objName)
+					{
+						let imgRow = this.map[r][c].imgRow;
+						let imgCol = this.map[r][c].imgCol;
+
+						let el = this.maps['elemInfos'][this.map[r][c].catName][this.map[r][c].objName];
+						let img = el.img;
+
+						let sX = imgCol * this.tileSizeOr;
+						let sY = imgRow * this.tileSizeOr;
+						let sW = this.tileSizeOr * el.colWidth;
+						let sH = this.tileSizeOr * el.rowHeight;
+						let dX = Math.ceil(c * this.tileSizeOr * tileRatio);
+						let dY = Math.ceil(r * this.tileSizeOr * tileRatio);
+
+ 						ctx.drawImage(img, sX, sY, sW, sH, dX, dY, Math.ceil(sW * tileRatio), Math.ceil(sH * tileRatio));
+					}
+				}
+			}
+		}
+	}
+
 	launchGame()
 	{
 		let gameSection = document.getElementById('game');
 		gameSection.classList.remove('hidden');
+
+		this.map = this.maps[this.maps.currentMap]['tiles'];
 	}
 }
