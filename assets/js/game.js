@@ -4,7 +4,6 @@ class Game
 {
 	constructor(maps, tileSizeOr)
 	{
-		this.tileSizeOr = tileSizeOr;
 		this.maps = maps;
 		this.map = null;
 		this.screen = 
@@ -99,10 +98,13 @@ class Game
 		canvasContainer.style.transform = "translate3d(" + transform.translateX + "px, " + transform.translateY + "px, 0) scale(" + transform.scale + ")";
 	}
 
-	mainLoop(tileRatio)
+	mainLoop()
 	{
 		let canvas = document.getElementById('canvas-bg');
 		let ctx = canvas.getContext('2d');
+
+		let tileSizeOr = this.maps.tileSizeOrigin;
+		let tileRatio = this.maps.tileSizecurrent / tileSizeOr;
 
 		for (let r = this.map.length - 1; r >= 0; r--)
 		{
@@ -118,12 +120,12 @@ class Game
 						let el = this.maps['elemInfos'][this.map[r][c].catName][this.map[r][c].objName];
 						let img = el.img;
 
-						let sX = imgCol * this.tileSizeOr;
-						let sY = imgRow * this.tileSizeOr;
-						let sW = this.tileSizeOr * el.colWidth;
-						let sH = this.tileSizeOr * el.rowHeight;
-						let dX = Math.ceil(c * this.tileSizeOr * tileRatio);
-						let dY = Math.ceil(r * this.tileSizeOr * tileRatio);
+						let sX = imgCol * tileSizeOr;
+						let sY = imgRow * tileSizeOr;
+						let sW = tileSizeOr * el.colWidth;
+						let sH = tileSizeOr * el.rowHeight;
+						let dX = Math.ceil(c * tileSizeOr * tileRatio);
+						let dY = Math.ceil(r * tileSizeOr * tileRatio);
 
  						ctx.drawImage(img, sX, sY, sW, sH, dX, dY, Math.ceil(sW * tileRatio), Math.ceil(sH * tileRatio));
 					}

@@ -2,7 +2,7 @@
 
 class Editor
 {
-	constructor(maps, mapWidth, mapHeight, tileSizeOr)
+	constructor(maps, mapWidth, mapHeight)
 	{
 		// all maps infos
 		this.maps = maps;
@@ -13,7 +13,6 @@ class Editor
 
 		this.action = false;
 
-		this.tileSizeOr = tileSizeOr;
 		this.tileRatio = 1;
 
 		// current map created in editor
@@ -57,12 +56,13 @@ class Editor
 		if (this.selectedElem != null)
 		{
 			let elRef = this.maps['elemInfos'][this.selectedElem.catName][this.selectedElem.objName];
+			let tileSizeOr = this.maps.tileSizeOrigin;
 
 			let x = this.mouseX / this.tileRatio;
 			let y = this.mouseY / this.tileRatio;
 
-			let col = Math.floor(x / this.tileSizeOr);
-			let row = Math.floor(y / this.tileSizeOr);
+			let col = Math.floor(x / tileSizeOr);
+			let row = Math.floor(y / tileSizeOr);
 
 			for (let r = elRef.rowHeight - 1; r >= 0; r--)
 			{
@@ -94,8 +94,11 @@ class Editor
 		}
 	}
 
-	draw(tileRatio)
+	draw()
 	{
+		let tileSizeOr = this.maps.tileSizeOrigin;
+		let tileRatio = this.maps.tileSizeCurrent / tileSizeOr;
+
 		if (this.action == "putElem")
 		{
 			this.putElement();
@@ -114,12 +117,12 @@ class Editor
 			let canvas = document.getElementById('canvas-editorUi');
 			let ctx = canvas.getContext('2d');
 
-			let sX = imgCol * this.tileSizeOr;
-			let sY = imgRow * this.tileSizeOr;
-			let sW = this.tileSizeOr * elem.colWidth;
-			let sH = this.tileSizeOr * elem.rowHeight;
-			let x = Math.floor(this.mouseX / (this.tileSizeOr * this.tileRatio)) * (this.tileSizeOr * this.tileRatio);
-			let y = Math.floor(this.mouseY / (this.tileSizeOr * this.tileRatio)) * (this.tileSizeOr * this.tileRatio);
+			let sX = imgCol * tileSizeOr;
+			let sY = imgRow * tileSizeOr;
+			let sW = tileSizeOr * elem.colWidth;
+			let sH = tileSizeOr * elem.rowHeight;
+			let x = Math.floor(this.mouseX / (tileSizeOr * this.tileRatio)) * (tileSizeOr * this.tileRatio);
+			let y = Math.floor(this.mouseY / (tileSizeOr * this.tileRatio)) * (tileSizeOr * this.tileRatio);
 
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 			ctx.drawImage(img, sX, sY, sW, sH, x, y, sW * tileRatio, sH * tileRatio);
@@ -144,12 +147,12 @@ class Editor
 						let el = this.maps['elemInfos'][this.map[r][c].catName][this.map[r][c].objName];
 						let img = el.img;
 
-						let sX = imgCol * this.tileSizeOr;
-						let sY = imgRow * this.tileSizeOr;
-						let sW = this.tileSizeOr * el.colWidth;
-						let sH = this.tileSizeOr * el.rowHeight;
-						let dX = Math.ceil(c * this.tileSizeOr * tileRatio);
-						let dY = Math.ceil(r * this.tileSizeOr * tileRatio);
+						let sX = imgCol * tileSizeOr;
+						let sY = imgRow * tileSizeOr;
+						let sW = tileSizeOr * el.colWidth;
+						let sH = tileSizeOr * el.rowHeight;
+						let dX = Math.ceil(c * tileSizeOr * tileRatio);
+						let dY = Math.ceil(r * tileSizeOr * tileRatio);
 
  						ctxEd.drawImage(img, sX, sY, sW, sH, dX, dY, Math.ceil(sW * tileRatio), Math.ceil(sH * tileRatio));
 					}
@@ -280,8 +283,8 @@ class Editor
 			{
 				let elem = mapsInfos['elemInfos'][catName][cat[i]];
 
-				let sW = mapsInfos.standardTileWidth * elem.colWidth;
-				let sH = mapsInfos.standardTileHeight * elem.rowHeight;
+				let sW = mapsInfos.tileSizeOrigin * elem.colWidth;
+				let sH = mapsInfos.tileSizeOrigin * elem.rowHeight;
 				canvas.width = sW;
 				canvas.height = sH;
 

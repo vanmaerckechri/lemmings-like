@@ -14,7 +14,6 @@ class Engine
 		this.gameSpeed = 1;
 		this.player;
 
-		this.tileSizeOrigin = 32;
 		this.tileSize = 32;
 		this.status = "mainMenu";
 		this.loading = false;
@@ -124,7 +123,7 @@ class Engine
 				this.imgs.preloadImgs(this.maps, [imgMapInfos], () =>
 				{
 					let res = Resolution.getStandardRes();
-					this.editor = new Editor(this.maps, res["w"], res["h"], this.tileSizeOrigin);
+					this.editor = new Editor(this.maps, res["w"], res["h"]);
 					this.editor.launchEditor();
 					this.updateWindowSize();
 					this.loading = false;
@@ -147,15 +146,15 @@ class Engine
 			let w = this.maps[this.maps.currentMap]['w'];
 			let h = this.maps[this.maps.currentMap]['h'];
 			
-			this.tileSize = Resolution.update(this.tileSizeOrigin, w, h);
+			this.maps.tileSizeCurrent = Resolution.update(this.maps.tileSizeOrigin, w, h);
 		}
 		else if (this.status == 'editor')
 		{
-			this.tileSize = Resolution.update(this.tileSizeOrigin, this.editor.canWidth, this.editor.canHeight);
+			this.maps.tileSizeCurrent = Resolution.update(this.maps.tileSizeOrigin, this.editor.canWidth, this.editor.canHeight);
 		}
 		else
 		{
-			this.tileSize = Resolution.update(this.tileSizeOrigin);
+			this.maps.tileSizeCurrent = Resolution.update(this.maps.tileSizeOrigin);
 		}
 
 		//Resolution.drawCanvasBg(this.maps['elemInfos']['background']);
@@ -258,11 +257,11 @@ class Engine
 		if (this.status == "game" && !this.loading)
 		{
 			//this.player.draw(this.gameSpeed, this.tileSize / this.tileSizeOrigin);
-			this.game.mainLoop(this.tileSize / this.tileSizeOrigin);
+			this.game.mainLoop();
 		}
 		else if (this.status == "editor" && !this.loading)
 		{
-			this.editor.draw(this.tileSize / this.tileSizeOrigin);
+			this.editor.draw();
 		}
 	}
 
@@ -372,7 +371,7 @@ class Engine
 		this.initKeyboard();
 		this.initMenus();
 		this.ui = new Ui(this.menus.getOptions("fpsOption"));
-		this.game = new Game(this.maps, this.tileSizeOrigin);
+		this.game = new Game(this.maps);
 		this.initGame();
 		this.initCommon();
 
