@@ -100,12 +100,12 @@ class Engine
 				let queue = this.menus.closeMenus();
 				this.queues.push(queue);
 
-				let imgMapInfos = this.maps[this.maps.currentMap]['elemsList'];
-				let imgCommonInfos = this.maps["commonElem"]['elemsList'];
+				let imgMapInfos = this.maps[this.maps["currentMap"]]['elemsList'];
+				let imgCommonInfos = this.maps['commonElem']['elemsList'];
 
 				this.imgs.preloadImgs(this.maps, [imgCommonInfos, imgMapInfos], () =>
 				{
-					this.player = new Player(this.maps['elemInfos']['player']);
+					this.player = new Player(this.maps[this.maps["currentMap"]]);
 					this.game.launchGame();
 					this.updateWindowSize();
 					this.loading = false;

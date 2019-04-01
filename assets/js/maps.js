@@ -5,8 +5,8 @@ class Maps
 	constructor()
 	{
 		this.currentMap = "map01";
-		this.standardTileWidth= 32;
-		this.standardTileHeight= 32;
+		this.standardTileWidth = 32;
+		this.standardTileHeight = 32;
 
 		this.elemInfos = 
 		{

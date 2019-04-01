@@ -2,7 +2,7 @@
 
 class Player
 {
-	constructor(imgsByType)
+	constructor(map)
 	{
 		this.spawn = 
 		{
@@ -14,7 +14,7 @@ class Player
 
 		this.players = [];
 		this.animationTempo = null;
-		this.imgsByType = imgsByType;
+		this.map = map;
 
 		this.init()
 	}
@@ -64,8 +64,30 @@ class Player
 		}
 	}
 
+	detectSpawn()
+	{
+		for (let r = this.map['tiles'].length - 1; r >= 0; r--)
+		{
+			if (this.map['tiles'][r])
+			{
+				for (let c = this.map['tiles'][r].length - 1; c >= 0; c--)
+				{
+					if (this.map['tiles'][r][c])
+					{
+						let map = this.map['tiles'][r][c];
+						if (map['catName'] == "doors" && map['objName'] == "spawn")
+						{
+							console.log("r = " + r + " | c = " + c)
+						}
+					}
+				}
+			}
+		}
+	}
+
 	init()
 	{
+		this.detectSpawn();
 		this.createPlayer();
 	}
 }

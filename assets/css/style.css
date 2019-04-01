@@ -188,7 +188,9 @@ canvas {
   -webkit-transition: -webkit-transform 0.5s;
   transition: -webkit-transform 0.5s;
   transition: transform 0.5s;
-  transition: transform 0.5s, -webkit-transform 0.5s; }
+  transition: transform 0.5s, -webkit-transform 0.5s;
+  overflow-y: auto;
+  overflow-x: hidden; }
 
 .editor-openUi {
   -webkit-transform: translate3d(0, 0, 0);
@@ -207,6 +209,21 @@ canvas {
     .editorCat img:hover {
       border-color: #c07878;
       cursor: pointer; }
+
+.loadFileContainer {
+  position: relative;
+  width: 100%;
+  height: 1rem; }
+  .loadFileContainer .loadFileFakeLink {
+    position: absolute;
+    pointer-events: none; }
+  .loadFileContainer .loadFile {
+    position: absolute;
+    opacity: 0; }
+  .loadFileContainer:hover .loadFileFakeLink {
+    text-decoration: underline; }
+  .loadFileContainer:hover .loadFile {
+    cursor: pointer; }
 
 .hidden {
   display: none;

@@ -168,6 +168,29 @@ class Editor
 		this.selectedElem = elem;
 	}
 
+	loadMapFromFile(idInputFile)
+	{
+	    let inputFile, file, fr;
+
+	    if (typeof window.FileReader !== "function")
+	    {
+	        alert("Browser need to be updated to work with this function.");
+	        return;
+	    }
+
+	    inputFile = document.getElementById(idInputFile);
+	    if (inputFile.files[0])
+	    {
+	        file = inputFile.files[0];
+	        fr = new FileReader();
+	        fr.onload = () =>
+	        {
+	        	this.map = JSON.parse(fr.result);
+	        };
+	        fr.readAsText(file);
+	    }
+	}
+
 	updateLinkToExportMap()
 	{
 		let link = document.getElementById('linkToSaveMap');
@@ -180,11 +203,12 @@ class Editor
 	createLinkToExportMap()
 	{
 		let editorUi = document.getElementById('editor-ui');
-		let link = document.createElement("a");
 
+		// save
+		let link = document.createElement("a");
 		link.setAttribute("id", "linkToSaveMap");
 		link.setAttribute("download", "map.json");
-		link.innerText = "download your map";
+		link.innerText = "save map";
 		editorUi.appendChild(link);
 
 		this.updateLinkToExportMap();
@@ -195,6 +219,28 @@ class Editor
 			{
 				event.preventDefault();
 			}
+		})
+
+		//load
+		let div = document.createElement("div");
+		div.setAttribute("class", "loadFileContainer");
+
+		link = document.createElement("a");
+		link.setAttribute("class", "loadFileFakeLink");
+		link.innerText = "load map";
+
+		let input = document.createElement("input");
+		input.setAttribute("id", "loadFile");
+		input.setAttribute("class", "loadFile");
+		input.setAttribute("type", "file");
+
+		div.appendChild(link);
+		div.appendChild(input);
+		editorUi.appendChild(div);
+
+		input.addEventListener('change', () =>
+		{
+			this.loadMapFromFile("loadFile");
 		})
 	}
 
