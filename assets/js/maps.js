@@ -11,6 +11,18 @@ class Maps
 
 		this.elemInfos = 
 		{
+			icons:
+			{
+				removeTile:
+				{
+					img: null,
+					imgSrc: "icon_removetile.png",
+					colWidth: 1,
+					rowHeight: 1,
+					shadeLength: 1,
+					typeLength: 1
+				}
+			},
 			blocs:
 			{
 				grass:
@@ -110,7 +122,8 @@ class Maps
 			elemsList: 
 			{
 				blocs: ["grass", "ground", "stalactites"],
-				doors: ["spawn", "exit"]
+				doors: ["spawn", "exit"],
+				icons: ["removeTile"]
 			}
 		};
 

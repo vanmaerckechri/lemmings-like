@@ -33,6 +33,16 @@
 		}
 	}
 }
+.linkToSaveMap, .loadFileFakeLink
+{
+	display: block;
+	width: 100%;
+	text-align: center;
+	&:hover
+	{
+		cursor: default;
+	}
+}
 .loadFileContainer
 {
 	position: relative;
@@ -53,10 +63,6 @@
 		.loadFileFakeLink
 		{
 			text-decoration: underline;
-		}
-		.loadFile
-		{
-			cursor: pointer;
 		}
 	}
 }

@@ -210,6 +210,13 @@ canvas {
       border-color: #c07878;
       cursor: pointer; }
 
+.linkToSaveMap, .loadFileFakeLink {
+  display: block;
+  width: 100%;
+  text-align: center; }
+  .linkToSaveMap:hover, .loadFileFakeLink:hover {
+    cursor: default; }
+
 .loadFileContainer {
   position: relative;
   width: 100%;
@@ -222,8 +229,6 @@ canvas {
     opacity: 0; }
   .loadFileContainer:hover .loadFileFakeLink {
     text-decoration: underline; }
-  .loadFileContainer:hover .loadFile {
-    cursor: pointer; }
 
 .hidden {
   display: none;

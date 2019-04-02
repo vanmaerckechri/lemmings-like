@@ -246,6 +246,7 @@ class Editor
 		// save
 		let link = document.createElement("a");
 		link.setAttribute("id", "linkToSaveMap");
+		link.setAttribute("class", "linkToSaveMap");
 		link.setAttribute("download", "map.json");
 		link.innerText = "save map";
 		editorUi.appendChild(link);
@@ -335,7 +336,17 @@ class Editor
 					img.setAttribute('id', cat[i] + '_' + t);
 					catContainer.appendChild(img);
 
-					img.addEventListener('click', this.selectElem.bind(this, catName, cat[i], t), false);
+					if (cat[i] == "removeTile")
+					{
+						img.addEventListener('click', () =>
+						{
+							this.selectedElem = "removeTile";
+						});
+					}
+					else
+					{
+						img.addEventListener('click', this.selectElem.bind(this, catName, cat[i], t), false);
+					}
 				}
 				let br = document.createElement('br');
 				catContainer.appendChild(br);
@@ -343,14 +354,6 @@ class Editor
 			}
 			editorElemsCont.appendChild(catContainer)
 		}
-		// create icon to remove tile
-		let removeTile = document.createElement('p');
-		removeTile.innerText = 'Remove Tile';
-		catContainer.appendChild(removeTile);
-		removeTile.addEventListener('click', () =>
-		{
-			this.selectedElem = "removeTile";
-		});
 
 		this.createLinkToExportMap();
 		this.openUi();
