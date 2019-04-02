@@ -132,6 +132,7 @@ class Maps
 		{
 			w: 1920,
 			h: 1024,
+			antsLength: 20,
 			elemsList: 
 			{
 				blocs: ["grass", "ground", "stalactites"],

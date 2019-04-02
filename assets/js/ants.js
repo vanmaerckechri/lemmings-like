@@ -9,8 +9,8 @@ class Ants
 			x: 150,
 			y: 300
 		};
-		this.w = 32;
-		this.h = 32;
+		this.antsSpawned = 0;
+		this.spawnTempo = null;
 
 		this.ants = [];
 		this.maps = maps;
@@ -42,28 +42,24 @@ class Ants
 	{
 		let canvas = document.getElementById('canvas-ant');
 		let ctx = canvas.getContext('2d');
-		let tileRatio = this.maps.tileSizeCurrent / this.maps.tileSizeOrigin
+		let tileSizeOrigin = this.maps.tileSizeOrigin;
+		let tileRatio = this.maps.tileSizeCurrent / tileSizeOrigin
+
+		let currentAnim = ant['animationType'];
+
+		let sY = currentAnim == "walk" && ant.direction < 0 ? tileSizeOrigin : 0;
+		let dW = this.maps.tileSizeCurrent * this.maps['elemInfos']['ants'][currentAnim]['colWidth'];
+		let dH = this.maps.tileSizeCurrent * this.maps['elemInfos']['ants'][currentAnim]['rowHeight'];
+
+		let img = this.maps['elemInfos']['ants'][currentAnim]['img'];
+		ctx.drawImage(img, ant.w * ant.imgIndex, sY, ant.w, ant.h, ant.x * tileRatio, ant.y * tileRatio, dW, dH);
 
 		let speed = 100 / engineSpeed;
 		let animationTempo = ant.animationTempo;
 		ant.animationTempo = Tools.countTime(ant.animationTempo, speed);
-
 		if (animationTempo != ant.animationTempo)
 		{
-			let dW = this.w * tileRatio;
-			let dH = this.h * tileRatio;
-
-			ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-			let currentAnim = ant['animationType'];
-
-			let img = this.maps['elemInfos']['ants'][currentAnim]['img'];
-
-			let sY = currentAnim == "walk" && ant.direction < 0 ? this.maps.tileSizeOrigin : 0;
-
-			ctx.drawImage(img, ant.w * ant.imgIndex, sY, ant.w, ant.h, ant.x * tileRatio, ant.y * tileRatio, dW, dH);
-
-			ant.imgIndex = ant.imgIndex < img.width / ant.w - 1? ant.imgIndex + 1 : 0;
+			ant.imgIndex = ant.imgIndex < img.width / ant.w - 1 ? ant.imgIndex + 1 : 0;
 		}
 	}
 
@@ -166,6 +162,25 @@ class Ants
 
 	mainLoop(engineSpeed)
 	{
+		// create ants
+		if (this.antsSpawned < this.maps[this.maps['currentMap']]['antsLength'])
+		{
+			let speed = 2000 / engineSpeed;
+			let spawnTempo = this.spawnTempo;
+			this.spawnTempo = Tools.countTime(this.spawnTempo, speed);
+
+			if (spawnTempo != this.spawnTempo)
+			{
+				this.antsSpawned += 1;
+				this.createAnt();
+			}
+		}
+
+		// manage ants
+		let canvas = document.getElementById('canvas-ant');
+		let ctx = canvas.getContext('2d');
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+
 		for (let i = this.ants.length - 1; i >= 0; i--)
 		{
 			let ant = this.ants[i];
@@ -203,6 +218,5 @@ class Ants
 	init()
 	{
 		this.detectSpawn();
-		this.createAnt();
 	}
 }
