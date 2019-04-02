@@ -105,9 +105,8 @@ class Editor
 					shade = Math.floor(Math.random() * (elRef.shadeLength - 0) + 0);
 				}
 				this.selectedElem.imgCol = shade
-
-				this.updateLinkToExportMap();
 			}
+			this.updateLinkToExportMap();
 		}
 	}
 
