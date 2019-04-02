@@ -16,7 +16,7 @@ class Editor
 		this.tileRatio = 1;
 
 		// current map created in editor
-		this.map = [];
+		this.map = { tiles: [] };
 		this.mapWidth = mapWidth;
 		this.mapHeight = mapHeight;
 		this.col = 0;
@@ -27,12 +27,14 @@ class Editor
 
 	cleanElement(row, col)
 	{
-		if (this.map[row][col].dependToRow)
-		{
-			let dependToRow = this.map[row][col].dependToRow;
-			let dependToCol = this.map[row][col].dependToCol;
+		let map = this.map['tiles'];
 
-			let elem = this.map[dependToRow][dependToCol];
+		if (map[row][col].dependToRow)
+		{
+			let dependToRow = map[row][col].dependToRow;
+			let dependToCol = map[row][col].dependToCol;
+
+			let elem = map[dependToRow][dependToCol];
 
 			if (elem && elem.objName)
 			{
@@ -40,11 +42,11 @@ class Editor
 
 				for (let r = elRef.rowHeight - 1; r >= 0; r--)
 				{
-					this.map[dependToRow + r] = !this.map[dependToRow + r] ? [] : this.map[dependToRow + r];
+					map[dependToRow + r] = !map[dependToRow + r] ? [] : map[dependToRow + r];
 
 					for (let c = elRef.colWidth - 1; c >= 0; c--)
 					{
-						this.map[dependToRow + r][dependToCol + c] = null;
+						map[dependToRow + r][dependToCol + c] = null;
 					}
 				}
 			}
@@ -55,6 +57,8 @@ class Editor
 	{
 		if (this.selectedElem != null)
 		{
+			let map = this.map['tiles'];
+
 			let elRef = this.maps['elemInfos'][this.selectedElem.catName][this.selectedElem.objName];
 			let tileSizeOr = this.maps.tileSizeOrigin;
 
@@ -66,21 +70,21 @@ class Editor
 
 			for (let r = elRef.rowHeight - 1; r >= 0; r--)
 			{
-				this.map[row + r] = !this.map[row + r] ? [] : this.map[row + r];
+				map[row + r] = !map[row + r] ? [] : map[row + r];
 
 				for (let c = elRef.colWidth - 1; c >= 0; c--)
 				{
-					if (this.map[row + r][col + c] && this.map[row + r][col + c].dependToRow)
+					if (map[row + r][col + c] && map[row + r][col + c].dependToRow)
 					{
 						this.cleanElement(row + r, col + c);
 					}
-					this.map[row + r][col + c] = { dependToRow: row, dependToCol: col };
+					map[row + r][col + c] = { dependToRow: row, dependToCol: col };
 				}
 			}
 
 			let newObj = JSON.parse(JSON.stringify(this.selectedElem));
 
-			this.map[row][col] = newObj;
+			map[row][col] = newObj;
 
 			// change shade for next
 			let shade = 0;
@@ -96,6 +100,8 @@ class Editor
 
 	draw()
 	{
+		let map = this.map['tiles'];
+
 		let tileSizeOr = this.maps.tileSizeOrigin;
 		let tileRatio = this.maps.tileSizeCurrent / tileSizeOr;
 
@@ -133,18 +139,18 @@ class Editor
 
 		ctxEd.clearRect(0, 0, canvasEd.width, canvasEd.height);
 
-		for (let r = this.map.length - 1; r >= 0; r--)
+		for (let r = map.length - 1; r >= 0; r--)
 		{
-			if (this.map[r])
+			if (map[r])
 			{
-				for (let c = this.map[r].length - 1; c >= 0; c--)
+				for (let c = map[r].length - 1; c >= 0; c--)
 				{
-					if (this.map[r][c] && this.map[r][c].objName)
+					if (map[r][c] && map[r][c].objName)
 					{
-						let imgRow = this.map[r][c].imgRow;
-						let imgCol = this.map[r][c].imgCol;
+						let imgRow = map[r][c].imgRow;
+						let imgCol = map[r][c].imgCol;
 
-						let el = this.maps['elemInfos'][this.map[r][c].catName][this.map[r][c].objName];
+						let el = this.maps['elemInfos'][map[r][c].catName][map[r][c].objName];
 						let img = el.img;
 
 						let sX = imgCol * tileSizeOr;
@@ -189,6 +195,7 @@ class Editor
 	        fr.onload = () =>
 	        {
 	        	this.map = JSON.parse(fr.result);
+	        	this.updateLinkToExportMap();
 	        };
 	        fr.readAsText(file);
 	    }
@@ -218,7 +225,7 @@ class Editor
 
 		link.addEventListener('click', () =>
 		{
-			if (this.map.length == 0)
+			if (this.map['tiles'].length == 0)
 			{
 				event.preventDefault();
 			}

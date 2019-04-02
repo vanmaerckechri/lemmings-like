@@ -44,7 +44,7 @@ class Player
 		let ctx = canvas.getContext('2d');
 		let tileRatio = this.maps.tileSizeCurrent / this.maps.tileSizeOrigin
 
-		let speed = 200 / engineSpeed;
+		let speed = 150 / engineSpeed;
 		let animationTempo = player.animationTempo;
 		player.animationTempo = Tools.countTime(player.animationTempo, speed);
 
