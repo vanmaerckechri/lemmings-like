@@ -7,6 +7,7 @@ class Maps
 		this.currentMap = "map01";
 		this.tileSizeOrigin = 32;
 		this.tileSizeCurrent = 32;
+		this.gravity = 1;
 
 		this.elemInfos = 
 		{
@@ -14,6 +15,7 @@ class Maps
 			{
 				grass:
 				{
+					collision: true,
 					img: null,
 					imgSrc: "bloc_grass.png",
 					colWidth: 1,
@@ -23,6 +25,7 @@ class Maps
 				},
 				ground:
 				{
+					collision: true,
 					img: null,
 					imgSrc: "bloc_ground.png",
 					colWidth: 1,
@@ -32,6 +35,7 @@ class Maps
 				},
 				stalactites:
 				{
+					collision: true,
 					img: null,
 					imgSrc: "bloc_stalactites.png",
 					colWidth: 1,
@@ -46,6 +50,24 @@ class Maps
 				{
 					img: null,
 					imgSrc: "player_walk.png",
+					colWidth: 1,
+					rowHeight: 1,
+					shadeLength: 1,
+					typeLength: 1
+				},
+				spawn:
+				{
+					img: null,
+					imgSrc: "player_spawn.png",
+					colWidth: 1,
+					rowHeight: 1,
+					shadeLength: 1,
+					typeLength: 1
+				},
+				fall:
+				{
+					img: null,
+					imgSrc: "player_fall.png",
 					colWidth: 1,
 					rowHeight: 1,
 					shadeLength: 1,
@@ -96,7 +118,7 @@ class Maps
 		{
 			elemsList: 
 			{
-				player: ["walk"],
+				player: ["walk", "spawn", "fall"],
 				doors: ["spawn", "exit"],
 				background: ["gabarit"]
 			}

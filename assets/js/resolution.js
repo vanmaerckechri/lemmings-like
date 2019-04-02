@@ -75,13 +75,4 @@ class Resolution
 
 		return newWidth / standardWidth * tileSizeOrigin;
 	}
-
-	static drawCanvasBg(imgBg)
-	{
-		let canvasBg = document.getElementById('canvas-bg');
-		let ctx = canvasBg.getContext('2d');
-		let img = imgBg['gabarit']['img'];
-
-		ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, canvasBg.width, canvasBg.height);
-	}
 }

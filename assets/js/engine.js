@@ -104,7 +104,7 @@ class Engine
 
 				this.imgs.preloadImgs(this.maps, [imgCommonInfos, imgMapInfos], () =>
 				{
-					this.player = new Player(this.maps[this.maps["currentMap"]]);
+					this.player = new Player(this.maps);
 					this.game.launchGame();
 					this.updateWindowSize();
 					this.loading = false;
@@ -256,7 +256,7 @@ class Engine
 	{
 		if (this.status == "game" && !this.loading)
 		{
-			//this.player.draw(this.gameSpeed, this.tileSize / this.tileSizeOrigin);
+			this.player.mainLoop(this.gameSpeed);
 			this.game.mainLoop();
 		}
 		else if (this.status == "editor" && !this.loading)

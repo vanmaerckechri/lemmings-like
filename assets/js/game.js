@@ -5,7 +5,6 @@ class Game
 	constructor(maps, tileSizeOr)
 	{
 		this.maps = maps;
-		this.map = null;
 		this.screen = 
 		{
 			translateX: 0,
@@ -104,20 +103,22 @@ class Game
 		let ctx = canvas.getContext('2d');
 
 		let tileSizeOr = this.maps.tileSizeOrigin;
-		let tileRatio = this.maps.tileSizecurrent / tileSizeOr;
+		let tileRatio = this.maps.tileSizeCurrent / tileSizeOr;
 
-		for (let r = this.map.length - 1; r >= 0; r--)
+		let map = this.maps[this.maps['currentMap']]['tiles'];
+
+		for (let r = map.length - 1; r >= 0; r--)
 		{
-			if (this.map[r])
+			if (map[r])
 			{
-				for (let c = this.map[r].length - 1; c >= 0; c--)
+				for (let c = map[r].length - 1; c >= 0; c--)
 				{
-					if (this.map[r][c] && this.map[r][c].objName)
+					if (map[r][c] && map[r][c].objName)
 					{
-						let imgRow = this.map[r][c].imgRow;
-						let imgCol = this.map[r][c].imgCol;
+						let imgRow = map[r][c].imgRow;
+						let imgCol = map[r][c].imgCol;
 
-						let el = this.maps['elemInfos'][this.map[r][c].catName][this.map[r][c].objName];
+						let el = this.maps['elemInfos'][map[r][c].catName][map[r][c].objName];
 						let img = el.img;
 
 						let sX = imgCol * tileSizeOr;
