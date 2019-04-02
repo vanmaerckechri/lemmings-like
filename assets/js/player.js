@@ -67,9 +67,9 @@ class Player
 		}
 	}
 
-	pxToGrid(coord)
+	pxToGrid(px)
 	{
-		let gridValue = Math.floor(coord / this.maps.tileSizeOrigin);
+		let gridValue = Math.ceil(px / this.maps.tileSizeOrigin);
 		return gridValue;
 	}
 
@@ -82,6 +82,7 @@ class Player
 			let catName = map[row][col]['catName'];
 			let objName = map[row][col]['objName'];
 			let tile = this.maps['elemInfos'][catName][objName];
+
 			if (tile['collision'])
 			{
 				return true;
@@ -98,7 +99,10 @@ class Player
 
 		let speed = this.maps.gravity * engineSpeed;
 
-		let isCollision = this.checkCollisions(plRow + 1, plCol);
+		plCol = player.direction > 0 ? plCol - 1 : plCol;
+
+		let isCollision = this.checkCollisions(plRow, plCol);
+
 		if (!isCollision)
 		{
 			player.y += speed;
@@ -127,22 +131,19 @@ class Player
 		let plRow = this.pxToGrid(player.y);
 		let plCol = this.pxToGrid(player.x);
 
-		let direction = player.direction > 0 ? 1 : 0;
+		plCol = player.direction > 0 ? plCol : plCol - 1;
+
 		let speed = player.direction * engineSpeed;
 
-		let isCollisionWithGround = this.checkCollisions(plRow + 1, plCol);
-		let isCollisionWithFront = this.checkCollisions(plRow, plCol + direction);
+		let isCollision = this.checkCollisions(plRow - 1, plCol);
 
-		if (isCollisionWithGround)
+		if (!isCollision)
 		{
-			if (!isCollisionWithFront)
-			{
-				player.x += speed;
-			}
-			else
-			{
-				player.direction *= -1;
-			}
+			player.x += speed;
+		}
+		else
+		{
+			player.direction *= -1;
 		}
 	}
 
@@ -162,6 +163,8 @@ class Player
 		{
 			this.walk(player, engineSpeed);
 		}
+				console.log(player.animationType);
+
 	}
 
 	mainLoop(engineSpeed)

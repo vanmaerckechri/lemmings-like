@@ -29,7 +29,7 @@ class Editor
 	{
 		let map = this.map['tiles'];
 
-		if (map[row][col].dependToRow)
+		if (map[row] && map[row][col] && map[row][col].dependToRow)
 		{
 			let dependToRow = map[row][col].dependToRow;
 			let dependToCol = map[row][col].dependToCol;
@@ -59,42 +59,55 @@ class Editor
 		{
 			let map = this.map['tiles'];
 
-			let elRef = this.maps['elemInfos'][this.selectedElem.catName][this.selectedElem.objName];
 			let tileSizeOr = this.maps.tileSizeOrigin;
+			let tileRatio = this.maps.tileSizeCurrent / tileSizeOr;
 
-			let x = this.mouseX / this.tileRatio;
-			let y = this.mouseY / this.tileRatio;
+			let x = this.mouseX / tileRatio;
+			let y = this.mouseY / tileRatio;
 
 			let col = Math.floor(x / tileSizeOr);
 			let row = Math.floor(y / tileSizeOr);
 
-			for (let r = elRef.rowHeight - 1; r >= 0; r--)
+			if (this.selectedElem == "removeTile")
 			{
-				map[row + r] = !map[row + r] ? [] : map[row + r];
-
-				for (let c = elRef.colWidth - 1; c >= 0; c--)
+				this.cleanElement(row, col);
+				if (map[row] && map[row][col])
 				{
-					if (map[row + r][col + c] && map[row + r][col + c].dependToRow)
-					{
-						this.cleanElement(row + r, col + c);
-					}
-					map[row + r][col + c] = { dependToRow: row, dependToCol: col };
+					map[row][col] = null;
 				}
 			}
-
-			let newObj = JSON.parse(JSON.stringify(this.selectedElem));
-
-			map[row][col] = newObj;
-
-			// change shade for next
-			let shade = 0;
-			if (elRef.shadeLength > 1)
+			else
 			{
-				shade = Math.floor(Math.random() * (elRef.shadeLength - 0) + 0);
-			}
-			this.selectedElem.imgCol = shade
+				let elRef = this.maps['elemInfos'][this.selectedElem.catName][this.selectedElem.objName];
 
-			this.updateLinkToExportMap();
+				for (let r = elRef.rowHeight - 1; r >= 0; r--)
+				{
+					map[row + r] = !map[row + r] ? [] : map[row + r];
+
+					for (let c = elRef.colWidth - 1; c >= 0; c--)
+					{
+						if (map[row + r][col + c] && map[row + r][col + c].dependToRow)
+						{
+							this.cleanElement(row + r, col + c);
+						}
+						map[row + r][col + c] = { dependToRow: row, dependToCol: col };
+					}
+				}
+
+				let newObj = JSON.parse(JSON.stringify(this.selectedElem));
+
+				map[row][col] = newObj;
+
+				// change shade for next
+				let shade = 0;
+				if (elRef.shadeLength > 1)
+				{
+					shade = Math.floor(Math.random() * (elRef.shadeLength - 0) + 0);
+				}
+				this.selectedElem.imgCol = shade
+
+				this.updateLinkToExportMap();
+			}
 		}
 	}
 
@@ -112,28 +125,44 @@ class Editor
 
 		this.tileRatio = tileRatio;
 
+		// draw selected tool
 		if (this.selectedElem != null)
 		{
-			let imgRow = this.selectedElem.imgRow;
-			let imgCol = this.selectedElem.imgCol;
-
-			let elem = this.maps['elemInfos'][this.selectedElem.catName][this.selectedElem.objName];
-			let img = elem.img
-
 			let canvas = document.getElementById('canvas-editorUi');
 			let ctx = canvas.getContext('2d');
 
-			let sX = imgCol * tileSizeOr;
-			let sY = imgRow * tileSizeOr;
-			let sW = tileSizeOr * elem.colWidth;
-			let sH = tileSizeOr * elem.rowHeight;
-			let x = Math.floor(this.mouseX / (tileSizeOr * this.tileRatio)) * (tileSizeOr * this.tileRatio);
-			let y = Math.floor(this.mouseY / (tileSizeOr * this.tileRatio)) * (tileSizeOr * this.tileRatio);
+			let x = Math.floor(this.mouseX / (tileSizeOr * tileRatio)) * (tileSizeOr * tileRatio);
+			let y = Math.floor(this.mouseY / (tileSizeOr * tileRatio)) * (tileSizeOr * tileRatio);
 
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			ctx.drawImage(img, sX, sY, sW, sH, x, y, sW * tileRatio, sH * tileRatio);
+
+			if (this.selectedElem == "removeTile")
+			{
+				ctx.beginPath();
+				ctx.rect(x, y, tileSizeOr * tileRatio, tileSizeOr * tileRatio);
+				ctx.fillStyle = "rgba(255, 122, 122, .5)";
+				ctx.strokeStyle = "rgba(255, 75, 75, 1)";
+				ctx.fill();
+				ctx.stroke();
+			}
+			else
+			{
+				let imgRow = this.selectedElem.imgRow;
+				let imgCol = this.selectedElem.imgCol;
+
+				let elem = this.maps['elemInfos'][this.selectedElem.catName][this.selectedElem.objName];
+				let img = elem.img
+
+				let sX = imgCol * tileSizeOr;
+				let sY = imgRow * tileSizeOr;
+				let sW = tileSizeOr * elem.colWidth;
+				let sH = tileSizeOr * elem.rowHeight;
+
+				ctx.drawImage(img, sX, sY, sW, sH, x, y, sW * tileRatio, sH * tileRatio);
+			}
 		}
 
+		// draw tiles
 		let canvasEd = document.getElementById('canvas-editor');
 		let ctxEd = canvasEd.getContext('2d');
 
@@ -278,9 +307,9 @@ class Editor
 		let elemsList = mapsInfos['editor']['elemsList'];
 
 		// create icons to build map
+		let catContainer = document.createElement('div');
 		for (let catName in elemsList)
 		{
-			let catContainer = document.createElement('div');
 			catContainer.setAttribute('id', 'editorCat_' + catName);
 			catContainer.setAttribute('class', 'editorCat');
 
@@ -314,6 +343,15 @@ class Editor
 			}
 			editorElemsCont.appendChild(catContainer)
 		}
+		// create icon to remove tile
+		let removeTile = document.createElement('p');
+		removeTile.innerText = 'Remove Tile';
+		catContainer.appendChild(removeTile);
+		removeTile.addEventListener('click', () =>
+		{
+			this.selectedElem = "removeTile";
+		});
+
 		this.createLinkToExportMap();
 		this.openUi();
 	}
