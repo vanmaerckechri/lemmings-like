@@ -12,7 +12,7 @@ class Engine
 		this.game;
 		this.maps;
 		this.gameSpeed = 1;
-		this.player;
+		this.ants;
 
 		this.tileSize = 32;
 		this.status = "mainMenu";
@@ -104,7 +104,7 @@ class Engine
 
 				this.imgs.preloadImgs(this.maps, [imgCommonInfos, imgMapInfos], () =>
 				{
-					this.player = new Player(this.maps);
+					this.ants = new Ants(this.maps);
 					this.game.launchGame();
 					this.updateWindowSize();
 					this.loading = false;
@@ -136,7 +136,7 @@ class Engine
 
 	updateWindowSize()
 	{
-		let canvasPl = document.getElementById('canvas-player');
+		let canvasPl = document.getElementById('canvas-ants');
 
 		let winWidth = window.innerWidth;
 		let winHeight = window.innerHeight;
@@ -256,7 +256,7 @@ class Engine
 	{
 		if (this.status == "game" && !this.loading)
 		{
-			this.player.mainLoop(this.gameSpeed);
+			this.ants.mainLoop(this.gameSpeed);
 			this.game.mainLoop();
 		}
 		else if (this.status == "editor" && !this.loading)
