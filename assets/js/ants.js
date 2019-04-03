@@ -96,7 +96,7 @@ class Ants
 		return false;
 	}
 
-		checkIfAntAtMouse()
+	checkIfAntAtMouse()
 	{
 		if (this.mouse)
 		{

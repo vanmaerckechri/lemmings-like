@@ -11,9 +11,34 @@ class Game
 			translateY: 0,
 			scale: 1
 		}
+		this.timeTempo = null;
+		this.minutes = 0;
+		this.secondes = 0;
 	}
 
 	// UI
+
+	updateTimer(engineSpeed)
+	{
+		let speed = 1000 / engineSpeed;
+		let timeTempo = this.timeTempo;
+		this.timeTempo = Tools.countTime(this.timeTempo, speed);
+
+		if (timeTempo != this.timeTempo)
+		{
+			this.secondes += 1;
+			if (this.secondes >= 60)
+			{
+				this.secondes = 0;
+				this.minutes += 1;
+			}
+			let sec = this.secondes < 10 ? "0" + this.secondes : this.secondes;
+			let min = this.minutes < 10 ? "0" + this.minutes : this.minutes;
+
+			let timerContent = document.getElementById('timer-content');
+			timerContent.innerText = min + ":" + sec;
+		}
+	}
 
 	updateScreen()
 	{
@@ -97,7 +122,7 @@ class Game
 		canvasContainer.style.transform = "translate3d(" + transform.translateX + "px, " + transform.translateY + "px, 0) scale(" + transform.scale + ")";
 	}
 
-	mainLoop()
+	drawMap()
 	{
 		let canvas = document.getElementById('canvas-bg');
 		let ctx = canvas.getContext('2d');
@@ -132,7 +157,12 @@ class Game
 					}
 				}
 			}
-		}
+		}		
+	}
+
+	mainLoop(engineSpeed)
+	{
+		this.updateTimer(engineSpeed);
 	}
 
 	launchGame()
@@ -141,5 +171,6 @@ class Game
 		gameSection.classList.remove('hidden');
 
 		this.maps['currentMap'] = JSON.parse(JSON.stringify(this.maps[this.maps.currentMapName]));
+		this.drawMap();
 	}
 }

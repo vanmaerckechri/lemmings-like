@@ -147,6 +147,7 @@ class Engine
 			let h = this.maps[this.maps.currentMapName]['h'];
 			
 			this.maps.tileSizeCurrent = Resolution.update(this.maps.tileSizeOrigin, w, h);
+			this.game.drawMap();
 		}
 		else if (this.status == 'editor')
 		{
@@ -156,8 +157,6 @@ class Engine
 		{
 			this.maps.tileSizeCurrent = Resolution.update(this.maps.tileSizeOrigin);
 		}
-
-		//Resolution.drawCanvasBg(this.maps['elemInfos']['background']);
 
 		this.game.updateScreen();
 
@@ -257,7 +256,7 @@ class Engine
 		if (this.status == "game" && !this.loading)
 		{
 			this.ants.mainLoop(this.gameSpeed);
-			this.game.mainLoop();
+			this.game.mainLoop(this.gameSpeed);
 		}
 		else if (this.status == "editor" && !this.loading)
 		{
