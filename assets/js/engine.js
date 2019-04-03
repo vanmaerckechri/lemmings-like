@@ -104,8 +104,8 @@ class Engine
 
 				this.imgs.preloadImgs(this.maps, [imgCommonInfos, imgMapInfos], () =>
 				{
-					this.ants = new Ants(this.maps);
 					this.game.launchGame();
+					this.ants = new Ants(this.maps);
 					this.updateWindowSize();
 					this.loading = false;
 				});

@@ -96,6 +96,97 @@ class Ants
 		return false;
 	}
 
+		checkIfAntAtMouse()
+	{
+		if (this.mouse)
+		{
+			let mouseX = this.mouse.layerX;
+			let mouseY = this.mouse.layerY;
+			let tileSize = Math.ceil(this.maps.tileSizeCurrent);
+			let tileRatio = this.maps.tileSizeCurrent / this.maps.tileSizeOrigin;
+
+			for (let a = this.ants.length - 1; a >= 0; a--)
+			{
+				let ant = this.ants[a];
+
+				if (mouseX >= ant.x * tileRatio && mouseX < (ant.x * tileRatio) + tileSize && mouseY >= ant.y * tileRatio && mouseY < (ant.y * tileRatio) + tileSize)
+				{
+					this.selectedAnt = ant;
+					return;
+				}
+			}
+			this.selectedAnt = null;
+		}
+	}
+
+	addCollision(row, col)
+	{
+		let map = this.maps.currentMap;
+
+		map['tiles'][row] = !map['tiles'][row] ? [] : map['tiles'][row];
+		map['tiles'][row][col] = !map['tiles'][row][col] ? {} : map['tiles'][row][col];
+		map['tiles'][row][col]['collision'] = true;
+	}
+
+	unSelectAction()
+	{
+		let icon = document.getElementById(this.selectedAction);
+		if (icon.classList.contains('selected'))
+		{
+			icon.classList.remove('selected');
+		}
+		this.selectedAction = null;
+	}
+
+	manageActionLength()
+	{
+		let actions = this.maps['currentMap']['actions'];
+		if (actions[this.selectedAction] > 0)
+		{
+			actions[this.selectedAction] -= 1;
+
+			let uiIcon = document.getElementById(this.selectedAction);
+			let uiNumber = uiIcon.querySelector('.actionLength');
+			uiNumber.innerText = actions[this.selectedAction];
+
+			if (actions[this.selectedAction] == 0)
+			{
+				uiIcon.classList.add('off');
+			}
+
+			return true;
+		}
+	}
+
+	giveActionToAnt(event)
+	{
+		if (this.selectedAction)
+		{
+			let ant = this.selectedAnt;
+			if (ant)
+			{
+				if (this.selectedAction == "gameBlock")
+				{
+					let col = this.pxToGrid(ant.x);
+					let row = this.pxToGrid(ant.y) - 1;
+					col = ant.direction > 0 ? col - 1 : col;
+
+					// if ground exist and action have length
+					if (this.checkCollisions(row + 1, col) && this.manageActionLength())
+					{
+						this.unSelectAction();
+
+						ant.animationType = "block";
+						ant.x = col * this.maps.tileSizeOrigin;
+						ant.y = row * this.maps.tileSizeOrigin;
+
+						this.addCollision(row, col);
+					}
+				}
+			}
+		}
+	}
+
 	fall(ant, engineSpeed)
 	{
 		let plRow = this.pxToGrid(ant.y);
@@ -201,62 +292,6 @@ class Ants
 		this.checkIfAntAtMouse()
 	}
 
-	checkIfAntAtMouse()
-	{
-		if (this.mouse)
-		{
-			let mouseX = this.mouse.layerX;
-			let mouseY = this.mouse.layerY;
-			let tileSize = Math.ceil(this.maps.tileSizeCurrent);
-			let tileRatio = this.maps.tileSizeCurrent / this.maps.tileSizeOrigin;
-
-			for (let a = this.ants.length - 1; a >= 0; a--)
-			{
-				let ant = this.ants[a];
-
-				if (mouseX >= ant.x * tileRatio && mouseX < (ant.x * tileRatio) + tileSize && mouseY >= ant.y * tileRatio && mouseY < (ant.y * tileRatio) + tileSize)
-				{
-					this.selectedAnt = ant;
-					return;
-				}
-			}
-			this.selectedAnt = null;
-		}
-	}
-
-	giveActionToAnt(event)
-	{
-		if (this.selectedAction)
-		{
-			let ant = this.selectedAnt;
-			if (ant)
-			{
-				if (this.selectedAction == "gameBlock")
-				{
-					let col = this.pxToGrid(ant.x);
-					let row = this.pxToGrid(ant.y) - 1;
-					col = ant.direction > 0 ? col - 1 : col;
-
-					// if ground exist
-					if (this.checkCollisions(row + 1, col))
-					{
-						this.selectedAction = null;
-						ant.animationType = "block";
-
-						ant.x = col * this.maps.tileSizeOrigin;
-						ant.y = row * this.maps.tileSizeOrigin;
-
-						let map = this.maps.currentMap;
-
-						map['tiles'][row] = !map['tiles'][row] ? [] : map['tiles'][row];
-						map['tiles'][row][col] = !map['tiles'][row][col] ? {} : map['tiles'][row][col];
-						map['tiles'][row][col]['collision'] = true;
-					}
-				}
-			}
-		}
-	}
-
 	detectSpawn()
 	{
 		let map = this.maps[this.maps['currentMapName']];
@@ -291,13 +326,32 @@ class Ants
 		let icons = this.maps['commonElem']['elemsList']['icons'];
 		for (let i = 0, iLength = icons.length; i < iLength; i++)
 		{
-			let img = this.maps['elemInfos']['icons'][icons[i]]['img'];
-			img.addEventListener('click', () =>
+			// action does exist on this map ?
+			if (this.maps['currentMap']['actions'][icons[i]])
 			{
-				this.selectedAction = icons[i];
-			})
+				let imgContainer = document.createElement('div');
+				imgContainer.setAttribute('id', icons[i]);
+				imgContainer.setAttribute('class', 'img-container');
 
-			gameUiBotCont.appendChild(img);
+				let actionLength = document.createElement('p');
+				actionLength.setAttribute('class', 'actionLength');
+				actionLength.innerText = this.maps['currentMap']['actions'][icons[i]];
+
+				let img = this.maps['elemInfos']['icons'][icons[i]]['img'];
+				imgContainer.addEventListener('click', () =>
+				{
+					this.selectedAction = icons[i];
+					let icon = document.getElementById(icons[i]);
+					if (!icon.classList.contains('selected') && !icon.classList.contains('off'))
+					{
+						icon.classList.add('selected');
+					}
+				})
+
+				imgContainer.appendChild(img);
+				imgContainer.appendChild(actionLength);
+				gameUiBotCont.appendChild(imgContainer);
+			}
 		}
 	}
 

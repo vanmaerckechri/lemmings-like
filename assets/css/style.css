@@ -187,22 +187,41 @@ canvas {
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 32px;
-    text-align: center;
+    height: 36px;
     background-color: rgba(255, 255, 255, 0.2); }
   .game-ui .top-container {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 32px; }
-  .game-ui img {
+    height: 36px; }
+  .game-ui .img-container {
+    margin: 0 auto;
     border: 2px solid transparent;
-    width: 32px;
-    height: 32px; }
-    .game-ui img:hover {
-      border-color: #c07878;
+    position: relative;
+    width: 36px;
+    height: 36px;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none; }
+    .game-ui .img-container:hover {
+      border-color: red;
       cursor: pointer; }
+    .game-ui .img-container img {
+      pointer-events: none; }
+    .game-ui .img-container .actionLength {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -webkit-transform: translate3d(-50%, -50%, 0);
+              transform: translate3d(-50%, -50%, 0);
+      font-size: 24px;
+      text-shadow: 1px 0 0 black, 1px 1px 0 black, 0 1px 0 black, -1px 1px 0 black, -1px 0 0 black, -1px -1px 0 black, 0 -1px 0 black, 1px -1px 0 black; }
+  .game-ui .img-container.off:hover {
+    border-color: transparent; }
+  .game-ui .img-container.selected {
+    border-color: red; }
 
 .editor-ui {
   padding: 60px 10px 10px;
@@ -270,5 +289,9 @@ canvas {
 
 .alert {
   color: #900; }
+
+.off {
+  -webkit-filter: grayscale(100%);
+          filter: grayscale(100%); }
 
 /*# sourceMappingURL=style.css.map */

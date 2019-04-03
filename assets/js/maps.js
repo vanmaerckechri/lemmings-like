@@ -5,6 +5,7 @@ class Maps
 	constructor()
 	{
 		this.currentMapName = "map01";
+		this.currentMap;
 		this.tileSizeOrigin = 32;
 		this.tileSizeCurrent = 32;
 		this.gravity = 2;
@@ -29,7 +30,7 @@ class Maps
 					colWidth: 1,
 					rowHeight: 1,
 					shadeLength: 1,
-					typeLength: 1
+					typeLength: 2
 				}
 			},
 			blocs:
@@ -147,12 +148,14 @@ class Maps
 			}
 		};
 
-		this.currentMap;
-
 		this.map01 = 
 		{
 			w: 1920,
 			h: 1024,
+			actions:
+			{
+				gameBlock: 2
+			},
 			antsLength: 20,
 			elemsList: 
 			{
