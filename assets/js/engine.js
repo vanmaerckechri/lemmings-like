@@ -99,7 +99,7 @@ class Engine
 				let queue = this.menus.closeMenus();
 				this.queues.push(queue);
 
-				let imgMapInfos = this.maps[this.maps["currentMap"]]['elemsList'];
+				let imgMapInfos = this.maps[this.maps["currentMapName"]]['elemsList'];
 				let imgCommonInfos = this.maps['commonElem']['elemsList'];
 
 				this.imgs.preloadImgs(this.maps, [imgCommonInfos, imgMapInfos], () =>
@@ -143,8 +143,8 @@ class Engine
 
 		if (this.status == 'game')
 		{
-			let w = this.maps[this.maps.currentMap]['w'];
-			let h = this.maps[this.maps.currentMap]['h'];
+			let w = this.maps[this.maps.currentMapName]['w'];
+			let h = this.maps[this.maps.currentMapName]['h'];
 			
 			this.maps.tileSizeCurrent = Resolution.update(this.maps.tileSizeOrigin, w, h);
 		}

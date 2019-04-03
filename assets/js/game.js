@@ -105,7 +105,7 @@ class Game
 		let tileSizeOr = this.maps.tileSizeOrigin;
 		let tileRatio = this.maps.tileSizeCurrent / tileSizeOr;
 
-		let map = this.maps[this.maps['currentMap']]['tiles'];
+		let map = this.maps['currentMap']['tiles'];
 
 		for (let r = map.length - 1; r >= 0; r--)
 		{
@@ -140,6 +140,6 @@ class Game
 		let gameSection = document.getElementById('game');
 		gameSection.classList.remove('hidden');
 
-		this.map = this.maps[this.maps.currentMap]['tiles'];
+		this.maps['currentMap'] = JSON.parse(JSON.stringify(this.maps[this.maps.currentMapName]));
 	}
 }

@@ -71,18 +71,11 @@ class Ants
 
 	checkCollisions(row, col)
 	{
-		let map = this.maps[this.maps['currentMap']]['tiles'];
+		let map = this.maps['currentMap']['tiles'];
 
-		if (map[row] && map[row][col] && map[row][col]['catName'])
+		if (map[row] && map[row][col] && map[row][col]['collision'] === true)
 		{
-			let catName = map[row][col]['catName'];
-			let objName = map[row][col]['objName'];
-			let tile = this.maps['elemInfos'][catName][objName];
-
-			if (tile['collision'])
-			{
-				return true;
-			}
+			return true;
 		}
 
 		return false;
@@ -163,7 +156,7 @@ class Ants
 	mainLoop(engineSpeed)
 	{
 		// create ants
-		if (this.antsSpawned < this.maps[this.maps['currentMap']]['antsLength'])
+		if (this.antsSpawned < this.maps[this.maps['currentMapName']]['antsLength'])
 		{
 			let speed = 2000 / engineSpeed;
 			let spawnTempo = this.spawnTempo;
@@ -193,7 +186,7 @@ class Ants
 
 	detectSpawn()
 	{
-		let map = this.maps[this.maps['currentMap']];
+		let map = this.maps[this.maps['currentMapName']];
 
 		for (let r = map['tiles'].length - 1; r >= 0; r--)
 		{

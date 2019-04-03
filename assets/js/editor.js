@@ -195,13 +195,14 @@ class Editor
 		}
 	}
 
-	selectElem(catName, objName, imgRow)
+	selectElem(catName, objName, imgRow, collision)
 	{
 		let elem = {};
 		elem['catName'] = catName;
 		elem['objName'] = objName;
 		elem['imgRow'] = imgRow;
 		elem['imgCol'] = 0;
+		elem['collision'] = collision;
 		this.selectedElem = elem;
 	}
 
@@ -295,8 +296,6 @@ class Editor
 	launchEditor()
 	{
 		let section = document.getElementById('game');
-		let mapsInfos = this.maps
-
 		section.classList.remove('hidden')
 
 		let editorElemsCont = document.getElementById('editorElems-container');
@@ -304,7 +303,7 @@ class Editor
 		let canvas = document.createElement('canvas');
 		let ctx = canvas.getContext('2d');
 
-		let elemsList = mapsInfos['editor']['elemsList'];
+		let elemsList = this.maps['editor']['elemsList'];
 
 		// create icons to build map
 		let catContainer = document.createElement('div');
@@ -317,10 +316,11 @@ class Editor
 
 			for (let i = 0, length = cat.length; i < length; i++)
 			{
-				let elem = mapsInfos['elemInfos'][catName][cat[i]];
+				let elem = this.maps['elemInfos'][catName][cat[i]];
+				let collision = elem['collision'] ? elem['collision'] : false;
 
-				let sW = mapsInfos.tileSizeOrigin * elem.colWidth;
-				let sH = mapsInfos.tileSizeOrigin * elem.rowHeight;
+				let sW = this.maps.tileSizeOrigin * elem.colWidth;
+				let sH = this.maps.tileSizeOrigin * elem.rowHeight;
 				canvas.width = sW;
 				canvas.height = sH;
 
@@ -344,7 +344,7 @@ class Editor
 					}
 					else
 					{
-						img.addEventListener('click', this.selectElem.bind(this, catName, cat[i], t), false);
+						img.addEventListener('click', this.selectElem.bind(this, catName, cat[i], t, collision), false);
 					}
 				}
 				let br = document.createElement('br');
