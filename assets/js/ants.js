@@ -12,6 +12,9 @@ class Ants
 		this.antsSpawned = 0;
 		this.spawnTempo = null;
 
+		this.selectedAction = null;
+		this.selectedAnt = null;
+
 		this.ants = [];
 		this.maps = maps;
 
@@ -47,12 +50,15 @@ class Ants
 
 		let currentAnim = ant['animationType'];
 
+		let sX = ant.w * ant.imgIndex;
 		let sY = currentAnim == "walk" && ant.direction < 0 ? tileSizeOrigin : 0;
+		let dX = ant.x * tileRatio;
+		let dY = ant.y * tileRatio;
 		let dW = this.maps.tileSizeCurrent * this.maps['elemInfos']['ants'][currentAnim]['colWidth'];
 		let dH = this.maps.tileSizeCurrent * this.maps['elemInfos']['ants'][currentAnim]['rowHeight'];
 
 		let img = this.maps['elemInfos']['ants'][currentAnim]['img'];
-		ctx.drawImage(img, ant.w * ant.imgIndex, sY, ant.w, ant.h, ant.x * tileRatio, ant.y * tileRatio, dW, dH);
+		ctx.drawImage(img, sX, sY, ant.w, ant.h, dX, dY, dW, dH);
 
 		let speed = 100 / engineSpeed;
 		let animationTempo = ant.animationTempo;
@@ -60,6 +66,15 @@ class Ants
 		if (animationTempo != ant.animationTempo)
 		{
 			ant.imgIndex = ant.imgIndex < img.width / ant.w - 1 ? ant.imgIndex + 1 : 0;
+		}
+
+		// for selected ant
+		if (this.selectedAnt && this.selectedAnt == ant)
+		{
+			ctx.beginPath();
+			ctx.fillStyle = "orange";
+			ctx.arc(dX + (this.maps.tileSizeCurrent / 2), dY, this.maps.tileSizeCurrent / 8, 0, 2 * Math.PI);
+			ctx.fill();
 		}
 	}
 
@@ -156,7 +171,7 @@ class Ants
 	mainLoop(engineSpeed)
 	{
 		// create ants
-		if (this.antsSpawned < this.maps[this.maps['currentMapName']]['antsLength'])
+		if (this.antsSpawned < this.maps['currentMap']['antsLength'])
 		{
 			let speed = 2000 / engineSpeed;
 			let spawnTempo = this.spawnTempo;
@@ -181,6 +196,64 @@ class Ants
 			this.fall(ant, engineSpeed);
 			this.manageStatut(ant, engineSpeed);
 			this.draw(ant, engineSpeed);
+		}
+
+		this.checkIfAntAtMouse()
+	}
+
+	checkIfAntAtMouse()
+	{
+		if (this.mouse)
+		{
+			let mouseX = this.mouse.layerX;
+			let mouseY = this.mouse.layerY;
+			let tileSize = Math.ceil(this.maps.tileSizeCurrent);
+			let tileRatio = this.maps.tileSizeCurrent / this.maps.tileSizeOrigin;
+
+			for (let a = this.ants.length - 1; a >= 0; a--)
+			{
+				let ant = this.ants[a];
+
+				if (mouseX >= ant.x * tileRatio && mouseX < (ant.x * tileRatio) + tileSize && mouseY >= ant.y * tileRatio && mouseY < (ant.y * tileRatio) + tileSize)
+				{
+					this.selectedAnt = ant;
+					return;
+				}
+			}
+			this.selectedAnt = null;
+		}
+	}
+
+	giveActionToAnt(event)
+	{
+		if (this.selectedAction)
+		{
+			let ant = this.selectedAnt;
+			if (ant)
+			{
+				if (this.selectedAction == "gameBlock")
+				{
+					let col = this.pxToGrid(ant.x);
+					let row = this.pxToGrid(ant.y) - 1;
+					col = ant.direction > 0 ? col - 1 : col;
+
+					// if ground exist
+					if (this.checkCollisions(row + 1, col))
+					{
+						this.selectedAction = null;
+						ant.animationType = "block";
+
+						ant.x = col * this.maps.tileSizeOrigin;
+						ant.y = row * this.maps.tileSizeOrigin;
+
+						let map = this.maps.currentMap;
+
+						map['tiles'][row] = !map['tiles'][row] ? [] : map['tiles'][row];
+						map['tiles'][row][col] = !map['tiles'][row][col] ? {} : map['tiles'][row][col];
+						map['tiles'][row][col]['collision'] = true;
+					}
+				}
+			}
 		}
 	}
 
@@ -208,8 +281,39 @@ class Ants
 		}
 	}
 
+	createGameIcons()
+	{
+		let gameUiContainer = document.getElementById('game-ui');
+		gameUiContainer.classList.remove('hidden');
+
+		let gameUiBotCont = document.getElementById('game-uiBotCont');
+
+		let icons = this.maps['commonElem']['elemsList']['icons'];
+		for (let i = 0, iLength = icons.length; i < iLength; i++)
+		{
+			let img = this.maps['elemInfos']['icons'][icons[i]]['img'];
+			img.addEventListener('click', () =>
+			{
+				this.selectedAction = icons[i];
+			})
+
+			gameUiBotCont.appendChild(img);
+		}
+	}
+
 	init()
 	{
+		let gameUi = document.getElementById('game-ui');
+		gameUi.addEventListener('click', ()=>
+		{
+			this.giveActionToAnt(event);
+		})
+		gameUi.addEventListener('mousemove', ()=>
+		{
+			this.mouse = event;
+		})
+		this.createGameIcons();
+
 		this.detectSpawn();
 	}
 }
