@@ -18,7 +18,9 @@ class Keyboard
 			keyD: false,
 			keyQ: false,
 			keyS: false,
-			keyZ: false
+			keyZ: false,
+			keyMore: false,
+			keyLess: false
 		}
 
 		this.keysDefault =
@@ -27,7 +29,9 @@ class Keyboard
 			moveUp: "keyArrowUp",
 			moveDown: "keyArrowDown",
 			moveLeft: "keyArrowLeft",
-			moveRight: "keyArrowRight"
+			moveRight: "keyArrowRight",
+			speedUp: "keyMore",
+			speedDown: "keyLess"
 		};
 
 		this.keysCurrent = this.keysDefault;
@@ -39,6 +43,8 @@ class Keyboard
 			moveDown: false,
 			moveRight: false,
 			moveUp: false,
+			speedUp: false,
+			speedDown: false,
 			validate: false
 		}
 	}
@@ -87,6 +93,8 @@ class Keyboard
 		this.commands.moveDown = this.keys[this.keysCurrent['moveDown']] ? true : false;
 		this.commands.moveLeft = this.keys[this.keysCurrent['moveLeft']] ? true : false;
 		this.commands.moveRight = this.keys[this.keysCurrent['moveRight']] ? true : false;
+		this.commands.speedUp = this.keys[this.keysCurrent['speedUp']] ? true : false;
+		this.commands.speedDown = this.keys[this.keysCurrent['speedDown']] ? true : false;
 		this.commands.validate = this.keys.keyEnter ? true : false;
 	}
 
@@ -147,6 +155,16 @@ class Keyboard
 		{
 			self.keys.keyZ = true;
 		}
+		// +
+		else if (event.keyCode == 107)
+		{
+			self.keys.keyMore = true;
+		}
+		// -
+		else if (event.keyCode == 109)
+		{
+			self.keys.keyLess = true;
+		}
 		this.isPressed = true;
 	}
 
@@ -206,6 +224,16 @@ class Keyboard
 		else if (event.keyCode == 90)
 		{
 			self.keys.keyZ = false;
+		}
+		// +
+		else if (event.keyCode == 107)
+		{
+			self.keys.keyMore = false;
+		}
+		// -
+		else if (event.keyCode == 109)
+		{
+			self.keys.keyLess = false;
 		}
 		this.isPressed = false;
 	}

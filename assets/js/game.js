@@ -5,12 +5,14 @@ class Game
 	constructor(maps, tileSizeOr)
 	{
 		this.maps = maps;
+		this.ants;
 		this.screen = 
 		{
 			translateX: 0,
 			translateY: 0,
 			scale: 1
 		}
+		this.gameSpeed = 1;
 		this.timeTempo = null;
 		this.minutes = 0;
 		this.secondes = 0;
@@ -18,9 +20,9 @@ class Game
 
 	// UI
 
-	updateTimer(engineSpeed)
+	updateTimer()
 	{
-		let speed = 1000 / engineSpeed;
+		let speed = 1000 / this.gameSpeed;
 		let timeTempo = this.timeTempo;
 		this.timeTempo = Tools.countTime(this.timeTempo, speed);
 
@@ -37,6 +39,18 @@ class Game
 
 			let timerContent = document.getElementById('timer-content');
 			timerContent.innerText = min + ":" + sec;
+		}
+	}
+
+	updateSpeedGame(direction)
+	{
+		if (direction == 1)
+		{
+			this.gameSpeed = this.gameSpeed < 2 ? this.gameSpeed += 0.5 : this.gameSpeed;
+		}
+		else
+		{
+			this.gameSpeed = this.gameSpeed > 0 ? this.gameSpeed -= 0.5 : this.gameSpeed;
 		}
 	}
 
@@ -160,9 +174,10 @@ class Game
 		}		
 	}
 
-	mainLoop(engineSpeed)
+	mainLoop()
 	{
-		this.updateTimer(engineSpeed);
+		this.updateTimer(this.gameSpeed);
+		this.ants.mainLoop(this.gameSpeed);
 	}
 
 	launchGame()
@@ -172,5 +187,6 @@ class Game
 
 		this.maps['currentMap'] = JSON.parse(JSON.stringify(this.maps[this.maps.currentMapName]));
 		this.drawMap();
+		this.ants = new Ants(this.maps);
 	}
 }

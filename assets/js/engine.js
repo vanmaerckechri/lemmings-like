@@ -11,7 +11,6 @@ class Engine
 		this.editor;
 		this.game;
 		this.maps;
-		this.gameSpeed = 1;
 		this.ants;
 
 		this.tileSize = 32;
@@ -35,6 +34,14 @@ class Engine
 		if (command == "moveDown" || command == "moveUp" || command == "moveLeft" || command == "moveRight")
 		{
 			this.game.moveScreen(command);
+		}
+		else if (command == "speedUp")
+		{
+			this.game.updateSpeedGame(1)
+		}
+		else if (command == "speedDown")
+		{
+			this.game.updateSpeedGame(0)
 		}
 	}
 
@@ -105,7 +112,6 @@ class Engine
 				this.imgs.preloadImgs(this.maps, [imgCommonInfos, imgMapInfos], () =>
 				{
 					this.game.launchGame();
-					this.ants = new Ants(this.maps);
 					this.updateWindowSize();
 					this.loading = false;
 				});
@@ -255,8 +261,7 @@ class Engine
 	{
 		if (this.status == "game" && !this.loading)
 		{
-			this.ants.mainLoop(this.gameSpeed);
-			this.game.mainLoop(this.gameSpeed);
+			this.game.mainLoop();
 		}
 		else if (this.status == "editor" && !this.loading)
 		{
@@ -308,7 +313,10 @@ class Engine
 		for (let key in keys)
 		{
 			let keyContainer = document.getElementById(key);
-			keyContainer.querySelector('.customKey').innerText = keys[key].replace("key", "");
+			if (keyContainer)
+			{
+				keyContainer.querySelector('.customKey').innerText = keys[key].replace("key", "");
+			}
 		}
 
 		// EVENTS
