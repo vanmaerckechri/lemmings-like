@@ -50,6 +50,7 @@ canvas
 		align-items: center;
 		width: 100%;
 		text-align: center;
+		user-select: none;
 		.fps-container
 		{
 			padding-left: 10px;
@@ -71,6 +72,11 @@ canvas
 				width: 100px;
 				text-align: left;
 			}
+		}
+		.speed
+		{
+			width: 40px;
+			text-align: left;
 		}
 		.gameSpeed-icons
 		{

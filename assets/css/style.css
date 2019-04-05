@@ -204,7 +204,11 @@ canvas {
         -ms-flex-align: center;
             align-items: center;
     width: 100%;
-    text-align: center; }
+    text-align: center;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none; }
     .game-ui .top-container .fps-container {
       padding-left: 10px;
       position: static;
@@ -227,6 +231,9 @@ canvas {
               align-items: center; }
     .game-ui .top-container .timer p {
       width: 100px;
+      text-align: left; }
+    .game-ui .top-container .speed {
+      width: 40px;
       text-align: left; }
     .game-ui .top-container .gameSpeed-icons {
       margin-left: 10px;
