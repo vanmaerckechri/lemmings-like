@@ -307,7 +307,8 @@ canvas {
 
 .editorCat {
   max-width: 150px;
-  text-align: left; }
+  text-align: left;
+  pointer-events: auto; }
   .editorCat img {
     margin: 0 2px;
     border: 2px solid transparent;

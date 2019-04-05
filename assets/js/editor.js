@@ -362,19 +362,19 @@ class Editor
 	}
 	init()
 	{
-		let canvas = document.getElementById('canvas-editorUi');
-		canvas.addEventListener('mousemove',  () =>
+		let canvasCont = document.getElementById('canvas-container');
+		canvasCont.addEventListener('mousemove',  () =>
 		{ 
 			this.mouseX = event.layerX;
 			this.mouseY = event.layerY;
 		});
 
-		canvas.addEventListener('mousedown',  () =>
+		canvasCont.addEventListener('mousedown',  () =>
 		{
 			this.action = "putElem";
 		})
 
-		canvas.addEventListener('mouseup',  () =>
+		canvasCont.addEventListener('mouseup',  () =>
 		{
 			this.action = "";
 		})
