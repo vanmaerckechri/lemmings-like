@@ -41,7 +41,11 @@ class Engine
 		}
 		else if (command == "speedDown")
 		{
-			this.game.updateSpeedGame(0)
+			this.game.updateSpeedGame(-1)
+		}
+		else if (command == "pause")
+		{
+			this.game.updateSpeedGame(0);
 		}
 	}
 

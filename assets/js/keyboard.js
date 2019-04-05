@@ -17,6 +17,7 @@ class Keyboard
 			keyArrowRight: false,
 			keyD: false,
 			keyQ: false,
+			keyP: false,
 			keyS: false,
 			keyZ: false,
 			keyMore: false,
@@ -31,7 +32,8 @@ class Keyboard
 			moveLeft: "keyArrowLeft",
 			moveRight: "keyArrowRight",
 			speedUp: "keyMore",
-			speedDown: "keyLess"
+			speedDown: "keyLess",
+			pause: "keyP"
 		};
 
 		this.keysCurrent = this.keysDefault;
@@ -45,6 +47,7 @@ class Keyboard
 			moveUp: false,
 			speedUp: false,
 			speedDown: false,
+			pause: false,
 			validate: false
 		}
 	}
@@ -95,6 +98,7 @@ class Keyboard
 		this.commands.moveRight = this.keys[this.keysCurrent['moveRight']] ? true : false;
 		this.commands.speedUp = this.keys[this.keysCurrent['speedUp']] ? true : false;
 		this.commands.speedDown = this.keys[this.keysCurrent['speedDown']] ? true : false;
+		this.commands.pause = this.keys[this.keysCurrent['pause']] ? true : false;
 		this.commands.validate = this.keys.keyEnter ? true : false;
 	}
 
@@ -139,6 +143,11 @@ class Keyboard
 		else if (event.keyCode == 68)
 		{
 			self.keys.keyD = true;
+		}
+		// p
+		else if (event.keyCode == 80)
+		{
+			self.keys.keyP = true;
 		}
 		// q
 		else if (event.keyCode == 81)
@@ -209,6 +218,11 @@ class Keyboard
 		else if (event.keyCode == 68)
 		{
 			self.keys.keyD = false;
+		}
+		// p
+		else if (event.keyCode == 80)
+		{
+			self.keys.keyP = false;
 		}
 		// q
 		else if (event.keyCode == 81)

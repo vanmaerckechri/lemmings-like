@@ -13,6 +13,7 @@ class Game
 			scale: 1
 		}
 		this.gameSpeed = 1;
+		this.lastGameSpeed = 1;
 		this.timeTempo = null;
 		this.minutes = 0;
 		this.secondes = 0;
@@ -46,12 +47,22 @@ class Game
 	{
 		if (direction == 1)
 		{
-			this.gameSpeed = this.gameSpeed < 2 ? this.gameSpeed += 0.5 : this.gameSpeed;
+			this.gameSpeed = this.gameSpeed < 3 ? this.gameSpeed += 0.5 : this.gameSpeed;
+			this.lastGameSpeed = this.gameSpeed;
+		}
+		else if (direction == -1)
+		{
+			this.gameSpeed = this.gameSpeed > 0 ? this.gameSpeed -= 0.5 : this.gameSpeed;
+			this.lastGameSpeed = this.gameSpeed > 0 ? this.gameSpeed : this.lastGameSpeed;;
 		}
 		else
 		{
-			this.gameSpeed = this.gameSpeed > 0 ? this.gameSpeed -= 0.5 : this.gameSpeed;
+			this.gameSpeed = this.gameSpeed != 0 ? this.gameSpeed = 0 : this.gameSpeed = this.lastGameSpeed;
 		}
+
+		let speed = this.gameSpeed.toFixed(1);
+		let speedContent = document.getElementById('speed-content');
+		speedContent.innerText = speed;
 	}
 
 	updateScreen()
@@ -86,6 +97,9 @@ class Game
 		canvasContainer.style.transform = "translate3d(" + transform.translateX + "px, " + transform.translateY + "px, 0) scale(" + transform.scale + ")";
 
 		this.updateScreen();
+
+		let zoomContent = document.getElementById('zoom-content');
+		zoomContent.innerText = Math.round(transform.scale * 100);
 	}
 
 	moveScreen(direction)
