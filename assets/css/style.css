@@ -180,7 +180,7 @@ canvas {
   left: 0;
   width: 100%;
   height: 100%;
-  pointer-events: auto; }
+  pointer-events: none; }
   .game-ui .bottom-container {
     border-top: 1px solid rgba(255, 255, 255, 0.9);
     position: absolute;
@@ -263,7 +263,8 @@ canvas {
     -webkit-user-select: none;
        -moz-user-select: none;
         -ms-user-select: none;
-            user-select: none; }
+            user-select: none;
+    pointer-events: auto; }
     .game-ui .img-container:hover {
       border-color: red;
       cursor: pointer; }
@@ -305,7 +306,8 @@ canvas {
           transform: translate3d(0, 0, 0); }
 
 .editorCat {
-  text-align: center; }
+  max-width: 150px;
+  text-align: left; }
   .editorCat img {
     margin: 0 2px;
     border: 2px solid transparent;

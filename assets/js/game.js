@@ -204,9 +204,12 @@ class Game
 	{
 		let canvas = document.getElementById('canvas-bg');
 		let ctx = canvas.getContext('2d');
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 		let tileSizeOr = this.maps.tileSizeOrigin;
-		let tileRatio = this.maps.tileSizeCurrent / tileSizeOr;
+		let tileSizeCur = this.maps.tileSizeCurrent;
+
+		console.log(tileSizeCur)
 
 		let map = this.maps['currentMap']['tiles'];
 
@@ -228,10 +231,15 @@ class Game
 						let sY = imgRow * tileSizeOr;
 						let sW = tileSizeOr * el.colWidth;
 						let sH = tileSizeOr * el.rowHeight;
-						let dX = Math.ceil(c * tileSizeOr * tileRatio);
-						let dY = Math.ceil(r * tileSizeOr * tileRatio);
 
- 						ctx.drawImage(img, sX, sY, sW, sH, dX, dY, Math.ceil(sW * tileRatio), Math.ceil(sH * tileRatio));
+
+						let dX = c * tileSizeCur;
+						let dY = r * tileSizeCur;
+						let dW = tileSizeCur * el.colWidth;
+						let dH = tileSizeCur * el.rowHeight;
+
+						ctx.imageSmoothingEnabled  = false;
+ 						ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
 					}
 				}
 			}

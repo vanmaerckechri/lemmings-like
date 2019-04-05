@@ -4,6 +4,9 @@ class Ants
 {
 	constructor(maps)
 	{
+		this.mouseX;
+		this.mouseY;
+
 		this.spawn = 
 		{
 			x: 150,
@@ -58,6 +61,7 @@ class Ants
 		let dH = this.maps.tileSizeCurrent * this.maps['elemInfos']['ants'][currentAnim]['rowHeight'];
 
 		let img = this.maps['elemInfos']['ants'][currentAnim]['img'];
+		ctx.imageSmoothingEnabled = false;
 		ctx.drawImage(img, sX, sY, ant.w, ant.h, dX, dY, dW, dH);
 
 		let speed = 100 / engineSpeed;
@@ -98,11 +102,12 @@ class Ants
 
 	checkIfAntAtMouse()
 	{
-		if (this.mouse)
+		if (this.mouseX && this.mouseY)
 		{
-			let mouseX = this.mouse.layerX;
-			let mouseY = this.mouse.layerY;
-			let tileSize = Math.ceil(this.maps.tileSizeCurrent);
+			let mouseX = this.mouseX
+			let mouseY = this.mouseY
+
+			let tileSize = this.maps.tileSizeCurrent;
 			let tileRatio = this.maps.tileSizeCurrent / this.maps.tileSizeOrigin;
 
 			for (let a = this.ants.length - 1; a >= 0; a--)
@@ -288,8 +293,8 @@ class Ants
 			this.manageStatut(ant, engineSpeed);
 			this.draw(ant, engineSpeed);
 		}
-
-		this.checkIfAntAtMouse()
+		
+		this.checkIfAntAtMouse();
 	}
 
 	detectSpawn()
@@ -357,14 +362,17 @@ class Ants
 
 	init()
 	{
-		let gameUi = document.getElementById('game-ui');
-		gameUi.addEventListener('click', ()=>
+		let canvasCon = document.getElementById('canvas-container');
+
+		canvasCon.addEventListener('click', ()=>
 		{
 			this.giveActionToAnt(event);
 		})
-		gameUi.addEventListener('mousemove', ()=>
+
+		canvasCon.addEventListener('mousemove', ()=>
 		{
-			this.mouse = event;
+			this.mouseX = event.layerX;
+			this.mouseY = event.layerY;
 		})
 		this.createGameIcons();
 

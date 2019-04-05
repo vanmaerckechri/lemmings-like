@@ -4,7 +4,7 @@ class Resolution
 {
 	static getStandardRes()
 	{
-		return {w: 1920, h: 1024};
+		return {w: 1280, h: 720};
 	}
 	
 	static update(tileSizeOrigin, canWidth = null, canHeight = null)
@@ -73,6 +73,6 @@ class Resolution
 			canvas[c].height = canHeight;
 		}
 
-		return newWidth / standardWidth * tileSizeOrigin;
+		return Math.ceil(newWidth / standardWidth * tileSizeOrigin);
 	}
 }

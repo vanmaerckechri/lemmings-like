@@ -185,9 +185,10 @@ class Editor
 						let sY = imgRow * tileSizeOr;
 						let sW = tileSizeOr * el.colWidth;
 						let sH = tileSizeOr * el.rowHeight;
-						let dX = Math.ceil(c * tileSizeOr * tileRatio);
-						let dY = Math.ceil(r * tileSizeOr * tileRatio);
+						let dX = c * this.maps.tileSizeCurrent;
+						let dY = r * this.maps.tileSizeCurrent;
 
+						ctxEd.imageSmoothingEnabled  = false;
  						ctxEd.drawImage(img, sX, sY, sW, sH, dX, dY, Math.ceil(sW * tileRatio), Math.ceil(sH * tileRatio));
 					}
 				}
@@ -347,9 +348,11 @@ class Editor
 						img.addEventListener('click', this.selectElem.bind(this, catName, cat[i], t, collision), false);
 					}
 				}
-				let br = document.createElement('br');
-				catContainer.appendChild(br);
-
+				if (catName != "doors")
+				{
+					let br = document.createElement('br');
+					catContainer.appendChild(br);
+				}
 			}
 			editorElemsCont.appendChild(catContainer)
 		}
