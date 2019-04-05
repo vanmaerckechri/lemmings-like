@@ -12,7 +12,7 @@ class Maps
 
 		this.elemInfos = 
 		{
-			icons:
+			editorIcons:
 			{
 				removeTile:
 				{
@@ -22,7 +22,10 @@ class Maps
 					rowHeight: 1,
 					shadeLength: 1,
 					typeLength: 1
-				},
+				}
+			},
+			antsIcons:
+			{
 				gameBlock:
 				{
 					img: null,
@@ -31,6 +34,45 @@ class Maps
 					rowHeight: 1,
 					shadeLength: 1,
 					typeLength: 2
+				}
+			},
+			gameSpeedIcons:
+			{
+				timePlay:
+				{
+					img: null,
+					imgSrc: "icon_game_timeplay.png",
+					colWidth: 1,
+					rowHeight: 1,
+					shadeLength: 1,
+					typeLength: 1
+				},
+				timePause:
+				{
+					img: null,
+					imgSrc: "icon_game_timepause.png",
+					colWidth: 1,
+					rowHeight: 1,
+					shadeLength: 1,
+					typeLength: 1
+				},
+				timeUp:
+				{
+					img: null,
+					imgSrc: "icon_game_timeup.png",
+					colWidth: 1,
+					rowHeight: 1,
+					shadeLength: 1,
+					typeLength: 1
+				},
+				timeDown:
+				{
+					img: null,
+					imgSrc: "icon_game_timedown.png",
+					colWidth: 1,
+					rowHeight: 1,
+					shadeLength: 1,
+					typeLength: 1
 				}
 			},
 			blocs:
@@ -134,7 +176,7 @@ class Maps
 			{
 				blocs: ["grass", "ground", "stalactites"],
 				doors: ["spawn", "exit"],
-				icons: ["removeTile"]
+				editorIcons: ["removeTile"]
 			}
 		};
 
@@ -144,7 +186,8 @@ class Maps
 			{
 				ants: ["walk", "spawn", "fall", "block"],
 				doors: ["spawn", "exit"],
-				icons: ["gameBlock"]
+				antsIcons: ["gameBlock"],
+				gameSpeedIcons: ["timeDown", "timePause", "timePlay", "timeUp"]
 			}
 		};
 

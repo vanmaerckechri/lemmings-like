@@ -45,24 +45,74 @@ class Game
 
 	updateSpeedGame(direction)
 	{
+		let timePlay = document.getElementById('timePlay');
+		let timePause = document.getElementById('timePause');
+
+		let unPause = function()
+		{
+			if (timePause.classList.contains('hidden'))
+			{
+				timePlay.classList.add('hidden');
+				timePause.classList.remove('hidden');
+			}
+		}
+
+		let pause = function()
+		{
+			if (timePlay.classList.contains('hidden'))
+			{
+				timePlay.classList.remove('hidden');
+				timePause.classList.add('hidden');
+			}
+		}
+
 		if (direction == 1)
 		{
+			unPause();
 			this.gameSpeed = this.gameSpeed < 3 ? this.gameSpeed += 0.5 : this.gameSpeed;
 			this.lastGameSpeed = this.gameSpeed;
 		}
 		else if (direction == -1)
 		{
-			this.gameSpeed = this.gameSpeed > 0 ? this.gameSpeed -= 0.5 : this.gameSpeed;
-			this.lastGameSpeed = this.gameSpeed > 0 ? this.gameSpeed : this.lastGameSpeed;;
+			if (this.gameSpeed > 0)
+			{
+				this.gameSpeed -= 0.5;
+				this.lastGameSpeed = this.gameSpeed;			
+			}
 		}
 		else
 		{
-			this.gameSpeed = this.gameSpeed != 0 ? this.gameSpeed = 0 : this.gameSpeed = this.lastGameSpeed;
+			if (this.gameSpeed != 0)
+			{
+				pause();
+				this.gameSpeed = 0;
+			}
+			else
+			{
+				unPause();
+				this.gameSpeed = this.lastGameSpeed;
+			}
 		}
 
 		let speed = this.gameSpeed.toFixed(1);
 		let speedContent = document.getElementById('speed-content');
 		speedContent.innerText = speed;
+	}
+
+	updateSpeedGameByButton(buttonClicked)
+	{
+		if (buttonClicked == "timeUp")
+		{
+			this.updateSpeedGame(1);
+		}
+		else if (buttonClicked == "timeDown")
+		{
+			this.updateSpeedGame(-1);
+		}
+		else if (buttonClicked == "timePause" || buttonClicked == "timePlay")
+		{
+			this.updateSpeedGame(0);
+		}
 	}
 
 	updateScreen()
@@ -194,13 +244,45 @@ class Game
 		this.ants.mainLoop(this.gameSpeed);
 	}
 
+	loadTimeSpeedIcons()
+	{
+		let gameSpeed = document.getElementById('gameSpeedIcons');
+		let icons = this.maps['commonElem']['elemsList']['gameSpeedIcons'];
+		for (let i = 0, iLength = icons.length; i < iLength; i++)
+		{
+			let imgContainer = document.createElement('div');
+			imgContainer.setAttribute('id', icons[i]);
+			imgContainer.setAttribute('class', "img-container");
+
+			imgContainer.addEventListener('click', ()=>
+			{
+				this.updateSpeedGameByButton(icons[i]);
+			})
+
+			if (icons[i] == "timePlay")
+			{
+				imgContainer.classList.add('hidden');
+			}
+
+			let img = this.maps['elemInfos']['gameSpeedIcons'][icons[i]].img;
+
+			imgContainer.appendChild(img);
+			gameSpeed.appendChild(imgContainer);
+		}
+	}
+
 	launchGame()
 	{
 		let gameSection = document.getElementById('game');
 		gameSection.classList.remove('hidden');
 
+		let topContainer = document.getElementById('top-container');
+		let fpsContainer = document.getElementById('fps-container');
+		topContainer.insertBefore(fpsContainer, topContainer.firstChild)
+
 		this.maps['currentMap'] = JSON.parse(JSON.stringify(this.maps[this.maps.currentMapName]));
 		this.drawMap();
+		this.loadTimeSpeedIcons();
 		this.ants = new Ants(this.maps);
 	}
 }

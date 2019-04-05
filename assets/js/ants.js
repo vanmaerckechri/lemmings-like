@@ -323,7 +323,7 @@ class Ants
 
 		let gameUiBotCont = document.getElementById('game-uiBotCont');
 
-		let icons = this.maps['commonElem']['elemsList']['icons'];
+		let icons = this.maps['commonElem']['elemsList']['antsIcons'];
 		for (let i = 0, iLength = icons.length; i < iLength; i++)
 		{
 			// action does exist on this map ?
@@ -337,7 +337,7 @@ class Ants
 				actionLength.setAttribute('class', 'actionLength');
 				actionLength.innerText = this.maps['currentMap']['actions'][icons[i]];
 
-				let img = this.maps['elemInfos']['icons'][icons[i]]['img'];
+				let img = this.maps['elemInfos']['antsIcons'][icons[i]]['img'];
 				imgContainer.addEventListener('click', () =>
 				{
 					this.selectedAction = icons[i];
