@@ -17,6 +17,8 @@ class Game
 		this.timeTempo = null;
 		this.minutes = 0;
 		this.secondes = 0;
+
+		this.pauseTime = 0;
 	}
 
 	// UI
@@ -48,21 +50,25 @@ class Game
 		let timePlay = document.getElementById('timePlay');
 		let timePause = document.getElementById('timePause');
 
-		let unPause = function()
+		let unPause = function(self)
 		{
 			if (timePause.classList.contains('hidden'))
 			{
 				timePlay.classList.add('hidden');
 				timePause.classList.remove('hidden');
+
+				self.ants['spawnTempo'] -= (self['pauseTime'] - new Date().getTime());
 			}
 		}
 
-		let pause = function()
+		let pause = function(self)
 		{
 			if (timePlay.classList.contains('hidden'))
 			{
 				timePlay.classList.remove('hidden');
 				timePause.classList.add('hidden');
+
+				self['pauseTime'] = new Date().getTime();
 			}
 		}
 
@@ -82,14 +88,15 @@ class Game
 		}
 		else
 		{
+			let self = this;
 			if (this.gameSpeed != 0)
 			{
-				pause();
+				pause(self);
 				this.gameSpeed = 0;
 			}
 			else
 			{
-				unPause();
+				unPause(self);
 				this.gameSpeed = this.lastGameSpeed;
 			}
 		}
@@ -208,8 +215,6 @@ class Game
 
 		let tileSizeOr = this.maps.tileSizeOrigin;
 		let tileSizeCur = this.maps.tileSizeCurrent;
-
-		console.log(tileSizeCur)
 
 		let map = this.maps['currentMap']['tiles'];
 
