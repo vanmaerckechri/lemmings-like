@@ -352,6 +352,60 @@ class Editor
 		}
 	}
 
+	loadBuildMapIcons(objsName, catName)
+	{
+		let editorElemsCont = document.getElementById('editorElems-container');
+
+		let catContainer = document.createElement('div');
+		catContainer.setAttribute('id', 'editorCat_' + catName);
+		catContainer.setAttribute('class', 'editorCat');
+
+		// temp canvas to cut tiles collection
+		let canvas = document.createElement('canvas');
+		let ctx = canvas.getContext('2d');
+
+		for (let i = 0, length = objsName.length; i < length; i++)
+		{
+			let elem = this.maps['elemInfos'][catName][objsName[i]];
+			let collision = elem['collision'] ? elem['collision'] : false;
+
+			let sW = this.maps.tileSizeOrigin * elem.colWidth;
+			let sH = this.maps.tileSizeOrigin * elem.rowHeight;
+			canvas.width = sW;
+			canvas.height = sH;
+
+			for (let t = 0, tLength = elem.typeLength; t < tLength; t++)
+			{
+				ctx.clearRect(0, 0, canvas.width, canvas.height);
+				ctx.drawImage(elem.img, 0, t * sH, sW, sH, 0, 0, sW, sH);
+
+				let img = new Image();
+				img.src = canvas.toDataURL("image/png");
+
+				img.setAttribute('id', objsName[i] + '_' + t);
+				catContainer.appendChild(img);
+
+				if (objsName[i] == "removeTile")
+				{
+					img.addEventListener('click', () =>
+					{
+						this.selectedElem = "removeTile";
+					});
+				}
+				else
+				{
+					img.addEventListener('click', this.selectElem.bind(this, catName, objsName[i], t, collision), false);
+				}
+			}
+			if (catName != "doors")
+			{
+				let br = document.createElement('br');
+				catContainer.appendChild(br);
+			}
+		}
+		editorElemsCont.appendChild(catContainer)
+	}
+
 	moveDisplayFps()
 	{
 		let editorUi = document.getElementById('editor-ui');
@@ -360,22 +414,17 @@ class Editor
 		editorUi.insertBefore(fpsContainer, editorUi.firstChild);
 	}
 
-	launchEditor()
+	initMenu()
 	{
 		this.moveDisplayFps();
 
+		// Unhide all game canvas
 		let section = document.getElementById('game');
 		section.classList.remove('hidden')
 
-		let editorElemsCont = document.getElementById('editorElems-container');
-
-		let canvas = document.createElement('canvas');
-		let ctx = canvas.getContext('2d');
-
+		// Create icons
 		let elemsList = this.maps['editor']['elemsList'];
 
-		// create icons
-		let catContainer = document.createElement('div');
 		for (let catName in elemsList)
 		{
 			// icons for menu editor options
@@ -386,58 +435,15 @@ class Editor
 			// icons to build map
 			else
 			{
-				catContainer.setAttribute('id', 'editorCat_' + catName);
-				catContainer.setAttribute('class', 'editorCat');
-
-				let cat = elemsList[catName];
-
-				for (let i = 0, length = cat.length; i < length; i++)
-				{
-					let elem = this.maps['elemInfos'][catName][cat[i]];
-					let collision = elem['collision'] ? elem['collision'] : false;
-
-					let sW = this.maps.tileSizeOrigin * elem.colWidth;
-					let sH = this.maps.tileSizeOrigin * elem.rowHeight;
-					canvas.width = sW;
-					canvas.height = sH;
-
-					for (let t = 0, tLength = elem.typeLength; t < tLength; t++)
-					{
-						ctx.clearRect(0, 0, canvas.width, canvas.height);
-						ctx.drawImage(elem.img, 0, t * sH, sW, sH, 0, 0, sW, sH);
-
-						let img = new Image();
-						img.src = canvas.toDataURL("image/png");
-
-						img.setAttribute('id', cat[i] + '_' + t);
-						catContainer.appendChild(img);
-
-						if (cat[i] == "removeTile")
-						{
-							img.addEventListener('click', () =>
-							{
-								this.selectedElem = "removeTile";
-							});
-						}
-						else
-						{
-							img.addEventListener('click', this.selectElem.bind(this, catName, cat[i], t, collision), false);
-						}
-					}
-					if (catName != "doors")
-					{
-						let br = document.createElement('br');
-						catContainer.appendChild(br);
-					}
-				}
-				editorElemsCont.appendChild(catContainer)
+				this.loadBuildMapIcons(elemsList[catName], catName);
 			}
 		}
 
 		this.createLinkToExportMap();
 		this.openUi();
 	}
-	init()
+
+	initEvents()
 	{
 		let canvasCont = document.getElementById('canvas-container');
 		canvasCont.addEventListener('mousemove',  () =>
@@ -455,6 +461,11 @@ class Editor
 		{
 			this.action = "";
 		})
+	}
 
+	init()
+	{
+		this.initMenu();
+		this.initEvents();
 	}
 }

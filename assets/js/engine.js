@@ -134,7 +134,6 @@ class Engine
 				{
 					let res = Resolution.getStandardRes();
 					this.editor = new Editor(this.maps, res["w"], res["h"]);
-					this.editor.launchEditor();
 					this.updateWindowSize();
 					this.loading = false;
 				});
