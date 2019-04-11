@@ -12,7 +12,28 @@ class Maps
 
 		this.elemInfos = 
 		{
-			editorIcons:
+			editorOptionsIcons:
+			{
+				autoCloseMenu:
+				{
+					img: null,
+					imgSrc: "icon_editor_autoclosemenu.png",
+					colWidth: 1,
+					rowHeight: 1,
+					shadeLength: 1,
+					typeLength: 1
+				},
+				toggleSideMenu:
+				{
+					img: null,
+					imgSrc: "icon_editor_togglesidemenu.png",
+					colWidth: 1,
+					rowHeight: 1,
+					shadeLength: 1,
+					typeLength: 1
+				}
+			},
+			editorToolsIcons:
 			{
 				removeTile:
 				{
@@ -22,7 +43,7 @@ class Maps
 					rowHeight: 1,
 					shadeLength: 1,
 					typeLength: 1
-				}
+				},
 			},
 			antsIcons:
 			{
@@ -176,7 +197,8 @@ class Maps
 			{
 				blocs: ["grass", "ground", "stalactites"],
 				doors: ["spawn", "exit"],
-				editorIcons: ["removeTile"]
+				editorOptionsIcons: ["autoCloseMenu", "toggleSideMenu"],
+				editorToolsIcons: ["removeTile"]
 			}
 		};
 

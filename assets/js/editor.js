@@ -294,8 +294,76 @@ class Editor
 		}
 	}
 
+	toggleMenuAutoClose()
+	{
+		let editorUi = document.getElementById('editor-ui');
+		let autoCloseMenuIcon = document.getElementById('autoCloseMenu');
+
+		if (editorUi.classList.contains('editor-autoClose'))
+		{
+			editorUi.classList.remove('editor-autoClose');
+			autoCloseMenuIcon.classList.remove('iconSelected');
+		}
+		else
+		{
+			editorUi.classList.add('editor-autoClose');
+			autoCloseMenuIcon.classList.add('iconSelected');
+		}
+	}
+
+	toggleMenuSide()
+	{
+		let editorUi = document.getElementById('editor-ui');
+
+		if (editorUi.classList.contains('editor-rightSide'))
+		{
+			editorUi.classList.remove('editor-rightSide');
+		}
+		else
+		{
+			editorUi.classList.add('editor-rightSide');
+		}
+	}
+
+	loadOptionsIcons(icons, catName)
+	{
+		let editorMenuOptions = document.getElementById('editor-menuOptions');
+
+		for (let i = 0, length = icons.length; i < length; i++)
+		{
+			let icon = this.maps['elemInfos'][catName][icons[i]].img;
+
+			let iconContainer = document.createElement('div');
+			iconContainer.setAttribute('id', icons[i]);
+			iconContainer.setAttribute('class', 'icon-Container ' + icons[i]);
+
+			iconContainer.appendChild(icon);
+			editorMenuOptions.appendChild(iconContainer);
+
+			// events
+			if (icons[i] == "autoCloseMenu")
+			{
+				iconContainer.addEventListener('click', this.toggleMenuAutoClose);
+			}
+			else if (icons[i] == "toggleSideMenu")
+			{
+				iconContainer.addEventListener('click', this.toggleMenuSide);
+			}
+		}
+	}
+
+	moveDisplayFps()
+	{
+		let editorUi = document.getElementById('editor-ui');
+		let fpsContainer = document.getElementById('fps-container');
+
+		editorUi.insertBefore(fpsContainer, editorUi.firstChild);
+	}
+
 	launchEditor()
 	{
+		this.moveDisplayFps();
+
 		let section = document.getElementById('game');
 		section.classList.remove('hidden')
 
@@ -306,55 +374,64 @@ class Editor
 
 		let elemsList = this.maps['editor']['elemsList'];
 
-		// create icons to build map
+		// create icons
 		let catContainer = document.createElement('div');
 		for (let catName in elemsList)
 		{
-			catContainer.setAttribute('id', 'editorCat_' + catName);
-			catContainer.setAttribute('class', 'editorCat');
-
-			let cat = elemsList[catName];
-
-			for (let i = 0, length = cat.length; i < length; i++)
+			// icons for menu editor options
+			if (catName == "editorOptionsIcons")
 			{
-				let elem = this.maps['elemInfos'][catName][cat[i]];
-				let collision = elem['collision'] ? elem['collision'] : false;
-
-				let sW = this.maps.tileSizeOrigin * elem.colWidth;
-				let sH = this.maps.tileSizeOrigin * elem.rowHeight;
-				canvas.width = sW;
-				canvas.height = sH;
-
-				for (let t = 0, tLength = elem.typeLength; t < tLength; t++)
-				{
-					ctx.clearRect(0, 0, canvas.width, canvas.height);
-					ctx.drawImage(elem.img, 0, t * sH, sW, sH, 0, 0, sW, sH);
-
-					let img = new Image();
-					img.src = canvas.toDataURL("image/png");
-
-					img.setAttribute('id', cat[i] + '_' + t);
-					catContainer.appendChild(img);
-
-					if (cat[i] == "removeTile")
-					{
-						img.addEventListener('click', () =>
-						{
-							this.selectedElem = "removeTile";
-						});
-					}
-					else
-					{
-						img.addEventListener('click', this.selectElem.bind(this, catName, cat[i], t, collision), false);
-					}
-				}
-				if (catName != "doors")
-				{
-					let br = document.createElement('br');
-					catContainer.appendChild(br);
-				}
+				this.loadOptionsIcons(elemsList[catName], catName);
 			}
-			editorElemsCont.appendChild(catContainer)
+			// icons to build map
+			else
+			{
+				catContainer.setAttribute('id', 'editorCat_' + catName);
+				catContainer.setAttribute('class', 'editorCat');
+
+				let cat = elemsList[catName];
+
+				for (let i = 0, length = cat.length; i < length; i++)
+				{
+					let elem = this.maps['elemInfos'][catName][cat[i]];
+					let collision = elem['collision'] ? elem['collision'] : false;
+
+					let sW = this.maps.tileSizeOrigin * elem.colWidth;
+					let sH = this.maps.tileSizeOrigin * elem.rowHeight;
+					canvas.width = sW;
+					canvas.height = sH;
+
+					for (let t = 0, tLength = elem.typeLength; t < tLength; t++)
+					{
+						ctx.clearRect(0, 0, canvas.width, canvas.height);
+						ctx.drawImage(elem.img, 0, t * sH, sW, sH, 0, 0, sW, sH);
+
+						let img = new Image();
+						img.src = canvas.toDataURL("image/png");
+
+						img.setAttribute('id', cat[i] + '_' + t);
+						catContainer.appendChild(img);
+
+						if (cat[i] == "removeTile")
+						{
+							img.addEventListener('click', () =>
+							{
+								this.selectedElem = "removeTile";
+							});
+						}
+						else
+						{
+							img.addEventListener('click', this.selectElem.bind(this, catName, cat[i], t, collision), false);
+						}
+					}
+					if (catName != "doors")
+					{
+						let br = document.createElement('br');
+						catContainer.appendChild(br);
+					}
+				}
+				editorElemsCont.appendChild(catContainer)
+			}
 		}
 
 		this.createLinkToExportMap();

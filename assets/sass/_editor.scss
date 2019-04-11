@@ -1,6 +1,6 @@
 .editor-ui
 {
-	padding: 60px 10px 10px;
+	border-right: 1px solid white;
 	height: 100%;
 	position: absolute;
 	top: 0;
@@ -12,10 +12,76 @@
 	transition: transform 0.5s;
 	overflow-y: auto;
 	overflow-x: hidden;
+	.fps-container
+	{
+		padding-left: 10px;
+		position: static;
+		flex: 1;
+		text-align: center;
+	}
 }
 .editor-openUi
 {
 	transform: translate3d(0, 0, 0);
+}
+// menu left side
+.editor-autoClose
+{
+	transform: translate3d(calc(16px - 100%), 0, 0);
+	&:hover
+	{
+		transform: translate3d(0, 0, 0);		
+	}
+}
+// menu right side
+.editor-rightSide
+{
+	border-right: none;
+	border-left: 1px solid white;
+	left: unset;
+	right: 0;
+	.toggleSideMenu
+	{
+		transform: scaleX(-1)
+	}
+}
+.editor-rightSide.editor-autoClose
+{
+	transform: translate3d(calc(100% - 16px), 0, 0);
+	&:hover
+	{
+		transform: translate3d(0, 0, 0);		
+	}
+}
+// menu options icons
+.menuOptions-container
+{
+	border-bottom: 1px solid white;
+	border-top: 1px solid white;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	.icon-Container
+	{
+		border: 2px solid transparent;
+		&:hover
+		{
+			@include iconsHover();
+		}
+		img
+		{
+			display: block;
+		}
+	}
+	.iconSelected
+	{
+		@include iconsSelected();
+	}
+}
+// tools icons
+.editorElems-container
+{
+	padding: 10px;
 }
 .editorCat
 {
@@ -30,8 +96,7 @@
 		user-select: none;
 		&:hover
 		{
-			border-color: $color-hot;
-			cursor: pointer;
+			@include iconsHover();
 		}
 	}
 }

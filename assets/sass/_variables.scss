@@ -10,3 +10,13 @@ $main-fontFamily: 'Quicksand', sans-serif;
 $sec-fontFamily: 'Lato', sans-serif;
 
 $main-fontSize: 18px;
+
+@mixin iconsHover()
+{
+	border-color: $color-hot;
+	cursor: pointer;
+}
+@mixin iconsSelected()
+{
+	border-color: $color-hot;
+}

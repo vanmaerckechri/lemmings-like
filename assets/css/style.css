@@ -284,7 +284,7 @@ canvas {
     border-color: red; }
 
 .editor-ui {
-  padding: 60px 10px 10px;
+  border-right: 1px solid white;
   height: 100%;
   position: absolute;
   top: 0;
@@ -300,10 +300,64 @@ canvas {
   transition: transform 0.5s, -webkit-transform 0.5s;
   overflow-y: auto;
   overflow-x: hidden; }
+  .editor-ui .fps-container {
+    padding-left: 10px;
+    position: static;
+    -webkit-box-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
+    text-align: center; }
 
 .editor-openUi {
   -webkit-transform: translate3d(0, 0, 0);
           transform: translate3d(0, 0, 0); }
+
+.editor-autoClose {
+  -webkit-transform: translate3d(calc(16px - 100%), 0, 0);
+          transform: translate3d(calc(16px - 100%), 0, 0); }
+  .editor-autoClose:hover {
+    -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0); }
+
+.editor-rightSide {
+  border-right: none;
+  border-left: 1px solid white;
+  left: unset;
+  right: 0; }
+  .editor-rightSide .toggleSideMenu {
+    -webkit-transform: scaleX(-1);
+            transform: scaleX(-1); }
+
+.editor-rightSide.editor-autoClose {
+  -webkit-transform: translate3d(calc(100% - 16px), 0, 0);
+          transform: translate3d(calc(100% - 16px), 0, 0); }
+  .editor-rightSide.editor-autoClose:hover {
+    -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0); }
+
+.menuOptions-container {
+  border-bottom: 1px solid white;
+  border-top: 1px solid white;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center; }
+  .menuOptions-container .icon-Container {
+    border: 2px solid transparent; }
+    .menuOptions-container .icon-Container:hover {
+      border-color: #c07878;
+      cursor: pointer; }
+    .menuOptions-container .icon-Container img {
+      display: block; }
+  .menuOptions-container .iconSelected {
+    border-color: #c07878; }
+
+.editorElems-container {
+  padding: 10px; }
 
 .editorCat {
   max-width: 150px;
