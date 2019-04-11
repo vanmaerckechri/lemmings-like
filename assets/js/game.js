@@ -284,6 +284,43 @@ class Game
 		}
 	}
 
+	updateCollisions()
+	{
+		let map = this.maps['currentMap'];
+		let canvas = document.getElementById('canvas-bg');
+		let ctx = canvas.getContext('2d');
+		let canvasW = 1920;
+		let canvasH = 1024
+
+		let pixels = ctx.getImageData(0, 0, canvasW, canvasH).data;
+
+		// take only alpha
+		for (let y = 0, yLength = canvasH; y < yLength; y++)
+		{
+			for (let x = 0, xLength = canvasW; x < xLength; x++)
+			{
+				map['collisions'][y] = !map['collisions'][y] ? [] : map['collisions'][y];
+				map['collisions'][y][x] = !map['collisions'][y][x] ? [] : map['collisions'][y][x];
+
+				let constante = 4;
+				let indexAlpha = 3;
+				x = Math.floor(x);
+				y = Math.floor(y);
+
+				let index = ((y * (canvasW * constante)) + (x * constante)) + indexAlpha;
+
+				if(pixels[index] == 255)
+				{
+					map['collisions'][y][x] = true;
+				}
+				else
+				{
+					map['collisions'][y][x] = false;
+				}
+			}
+		}
+	}
+
 	launchGame()
 	{
 		let gameSection = document.getElementById('game');
@@ -295,6 +332,7 @@ class Game
 
 		this.maps['currentMap'] = JSON.parse(JSON.stringify(this.maps[this.maps.currentMapName]));
 		this.drawMap();
+		this.updateCollisions();
 		this.loadTimeSpeedIcons();
 		this.ants = new Ants(this.maps);
 	}
