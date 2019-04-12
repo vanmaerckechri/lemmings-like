@@ -21,6 +21,8 @@ class Ants
 		this.ants = [];
 		this.maps = maps;
 
+		this.particles = new Particles(maps);
+
 		this.init()
 	}
 
@@ -172,6 +174,16 @@ class Ants
 		}
 	}
 
+	crashAnt(ant)
+	{
+		let size = 4;
+		let number = 12;
+		let ratio = this.maps.tileSizeCurrent / this.maps.tileSizeOrigin;
+
+		this.particles.create(Math.round(ant.x), Math.round(ant.y), size, number, 'red')
+		this.ants.splice(ant.index, 1);
+	}
+
 	fall(ant, engineSpeed, tileRatio)
 	{
 		let y = ant.y + ant.h;
@@ -179,7 +191,7 @@ class Ants
 
 		let speed = this.maps.gravity * engineSpeed;
 
-		let isCollision = Collisions.check(this.maps, y, x, ant.w - 2, 1);
+		let isCollision = Collisions.check(this.maps, y, x, ant.w - 4, 1);
 
 		if (!isCollision)
 		{
@@ -199,6 +211,11 @@ class Ants
 			if (ant.animationType == "fall")
 			{
 				ant.animationType = ant.lastAnimationType;
+				// check death
+				if ((ant.y - ant.fallStartY) / this.maps.tileSizeCurrent >= 4)
+				{
+					this.crashAnt(ant);
+				}
 			}
 		}
 	}
@@ -273,12 +290,15 @@ class Ants
 		for (let i = this.ants.length - 1; i >= 0; i--)
 		{
 			let ant = this.ants[i];
+			ant.index = i;
 
 			this.manageStatut(ant, engineSpeed);
 			this.draw(ant, engineSpeed);
 		}
 		
 		this.checkIfAntAtMouse();
+
+		this.particles.mainLoop();
 	}
 
 	detectSpawn()

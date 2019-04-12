@@ -74,7 +74,8 @@ class Game
 
 		if (direction == 1)
 		{
-			unPause();
+			let self = this;
+			unPause(self);
 			this.gameSpeed = this.gameSpeed < 3 ? this.gameSpeed += 0.5 : this.gameSpeed;
 			this.lastGameSpeed = this.gameSpeed;
 		}

@@ -158,6 +158,10 @@ class Engine
 			
 			this.maps.tileSizeCurrent = Resolution.update(this.maps.tileSizeOrigin, w, h);
 			this.game.drawMap();
+			if (this.game.ants)
+			{
+				this.game.ants.particles.drawDeads();
+			}
 		}
 		else if (this.status == 'editor')
 		{

@@ -6,10 +6,6 @@ class Collisions
 	{
 		let map = maps['currentMap']['tiles'];
 		let collisions = maps['currentMap']['collisions'];
-		let ratio = maps.tileSizeOrigin / maps.tileSizeCurrent;
-
-		width = Math.round(width)
-		height = Math.round(height)
 
 		for (let h = height; h >= 0; h--)
 		{
