@@ -332,7 +332,7 @@ class Game
 
 		this.maps['currentMap'] = JSON.parse(JSON.stringify(this.maps[this.maps.currentMapName]));
 		this.drawMap();
-		this.updateCollisions();
+		this.maps['currentMap']['collisions'] = Collisions.init(this.maps, "canvas-bg", 0, 0, this.maps['currentMap'].w, this.maps['currentMap'].h);
 		this.loadTimeSpeedIcons();
 		this.ants = new Ants(this.maps);
 	}

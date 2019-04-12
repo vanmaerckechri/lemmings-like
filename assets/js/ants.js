@@ -88,18 +88,6 @@ class Ants
 		return gridValue;
 	}
 
-	checkCollisions(row, col)
-	{
-		let map = this.maps['currentMap']['tiles'];
-
-		if (map[row] && map[row][col] && map[row][col]['collision'] === true)
-		{
-			return true;
-		}
-
-		return false;
-	}
-
 	checkIfAntAtMouse()
 	{
 		if (this.mouseX && this.mouseY)
@@ -124,6 +112,7 @@ class Ants
 		}
 	}
 
+/*
 	addCollision(row, col)
 	{
 		let map = this.maps.currentMap;
@@ -132,6 +121,7 @@ class Ants
 		map['tiles'][row][col] = !map['tiles'][row][col] ? {} : map['tiles'][row][col];
 		map['tiles'][row][col]['collision'] = true;
 	}
+*/
 
 	unSelectAction()
 	{
@@ -172,20 +162,19 @@ class Ants
 			{
 				if (this.selectedAction == "gameBlock")
 				{
-					let col = this.pxToGrid(ant.x);
-					let row = this.pxToGrid(ant.y) - 1;
-					col = ant.direction > 0 ? col - 1 : col;
+					let y = ant.y + ant.h;
+					let x = ant.direction < 0 ? ant.x + ant.w : ant.x;
 
 					// if ground exist and action have length
-					if (this.checkCollisions(row + 1, col) && this.manageActionLength())
+					if (Collisions.check(this.maps, y, x) && this.manageActionLength())
 					{
 						this.unSelectAction();
 
 						ant.animationType = "block";
-						ant.x = col * this.maps.tileSizeOrigin;
-						ant.y = row * this.maps.tileSizeOrigin;
-
-						this.addCollision(row, col);
+						
+						let currentMap = this.maps['currentMap'];
+						let ctx = false;
+						currentMap['collisions'] = Collisions.update(ctx, currentMap['collisions'], ant.x, ant.y, ant.w, ant.h);
 					}
 				}
 			}
@@ -194,14 +183,14 @@ class Ants
 
 	fall(ant, engineSpeed)
 	{
-		let plRow = this.pxToGrid(ant.y);
-		let plCol = this.pxToGrid(ant.x);
+		let y = ant.y + ant.h;
+		let x = ant.x;
+
+		x = ant.direction < 0 ? x + ant.w : x;
 
 		let speed = this.maps.gravity * engineSpeed;
 
-		plCol = ant.direction > 0 ? plCol - 1 : plCol;
-
-		let isCollision = this.checkCollisions(plRow, plCol);
+		let isCollision = Collisions.check(this.maps, y, x);
 
 		if (!isCollision)
 		{
@@ -212,7 +201,7 @@ class Ants
 				ant.imgIndex = 0;
 				ant.lastAnimationType = ant.animationType;
 				ant.animationType = "fall";
-				ant.fallStartY = ant.y;
+				ant.fallStartY = y;
 			}
 		}
 		else
@@ -227,14 +216,14 @@ class Ants
 
 	walk(ant, engineSpeed)
 	{
-		let plRow = this.pxToGrid(ant.y);
-		let plCol = this.pxToGrid(ant.x);
+		let y = ant.y;
+		let x = ant.x;
 
-		plCol = ant.direction > 0 ? plCol : plCol - 1;
+		x = ant.direction > 0 ? x + ant.w : x;
 
 		let speed = ant.direction * engineSpeed;
 
-		let isCollision = this.checkCollisions(plRow - 1, plCol);
+		let isCollision = Collisions.check(this.maps, y, x);
 
 		if (!isCollision)
 		{
@@ -258,7 +247,12 @@ class Ants
 				ant.imgIndex = 0;
 			}
 		}
-		else if (ant.animationType == "walk")
+		else
+		{
+			this.fall(ant, engineSpeed);
+		}
+		
+		if (ant.animationType == "walk")
 		{
 			this.walk(ant, engineSpeed);
 		}
@@ -289,7 +283,6 @@ class Ants
 		{
 			let ant = this.ants[i];
 
-			this.fall(ant, engineSpeed);
 			this.manageStatut(ant, engineSpeed);
 			this.draw(ant, engineSpeed);
 		}
