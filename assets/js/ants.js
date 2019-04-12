@@ -112,17 +112,6 @@ class Ants
 		}
 	}
 
-/*
-	addCollision(row, col)
-	{
-		let map = this.maps.currentMap;
-
-		map['tiles'][row] = !map['tiles'][row] ? [] : map['tiles'][row];
-		map['tiles'][row][col] = !map['tiles'][row][col] ? {} : map['tiles'][row][col];
-		map['tiles'][row][col]['collision'] = true;
-	}
-*/
-
 	unSelectAction()
 	{
 		let icon = document.getElementById(this.selectedAction);
@@ -173,15 +162,17 @@ class Ants
 						ant.animationType = "block";
 						
 						let currentMap = this.maps['currentMap'];
+						let tileRatio = this.maps['tileSizeCurrent'] / this.maps['tileSizeOrigin'];
+
 						let ctx = false;
-						currentMap['collisions'] = Collisions.update(ctx, currentMap['collisions'], ant.x, ant.y, ant.w, ant.h);
+						currentMap['collisions'] = Collisions.update(ctx, currentMap['collisions'], ant.x * tileRatio, ant.y * tileRatio, ant.w * tileRatio, ant.h * tileRatio, tileRatio);
 					}
 				}
 			}
 		}
 	}
 
-	fall(ant, engineSpeed)
+	fall(ant, engineSpeed, tileRatio)
 	{
 		let y = ant.y + ant.h;
 		let x = ant.x;
@@ -214,7 +205,7 @@ class Ants
 		}
 	}
 
-	walk(ant, engineSpeed)
+	walk(ant, engineSpeed, tileRatio)
 	{
 		let y = ant.y;
 		let x = ant.x;
@@ -237,6 +228,8 @@ class Ants
 
 	manageStatut(ant, engineSpeed)
 	{
+		let tileRatio = this.maps['tileSizeCurrent'] / this.maps['tileSizeOrigin'];
+
 		if (ant.animationType == "spawn")
 		{
 			let img = this.maps['elemInfos']['ants']['spawn']['img'];
@@ -249,12 +242,12 @@ class Ants
 		}
 		else
 		{
-			this.fall(ant, engineSpeed);
+			this.fall(ant, engineSpeed, tileRatio);
 		}
 		
 		if (ant.animationType == "walk")
 		{
-			this.walk(ant, engineSpeed);
+			this.walk(ant, engineSpeed, tileRatio);
 		}
 	}
 
@@ -306,7 +299,7 @@ class Ants
 						if (mapTiles['catName'] == "doors" && mapTiles['objName'] == "spawn")
 						{
 							this.spawn.x = (c + 0.5) * this.maps.tileSizeOrigin;
-							this.spawn.y = (r + 1) * this.maps.tileSizeOrigin;
+							this.spawn.y = (r) * this.maps.tileSizeOrigin;
 						}
 					}
 				}

@@ -17,27 +17,59 @@ class Collisions
 		return false;
 	}
 
-	static update(ctx, collisions, sX, sY, width, height)
+	static draw(maps)
+	{
+		let map = maps.currentMap.collisions
+								let canvas = document.getElementById('canvas-x');
+						let ctx = canvas.getContext('2d');
+								ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+		for (let r = map.length - 1; r >= 0; r--)
+		{
+			if (map[r])
+			{
+				for (let c = map[r].length - 1; c >= 0; c--)
+				{
+					if (map[r][c])
+					{
+						let tileRatio = maps['tileSizeCurrent'] / maps['tileSizeOrigin'];
+
+						ctx.beginPath();
+						ctx.fillStyle = 'red';
+						ctx.rect(c * tileRatio, r * tileRatio, 1, 1);
+						ctx.fill();
+					}
+				}
+			}
+		}
+	}
+
+	static update(tileSize, ctx, collisions, sX, sY, width, height, tileRatio)
 	{
 		let pixels = ctx ? ctx.getImageData(sX, sY, width, height).data : false;
 
 		for (let h = height - 1; h >= 0; h--)
 		{
+
 			for (let w = width - 1; w >= 0; w--)
 			{
 				let constante = 4;
 				let indexAlpha = 3;
-				let size = 1;
+				let size = tileSize;
 
-				let index = ((h * (size * constante)) + (w * constante)) + indexAlpha;
+				let index = (h * (size * constante)) + (w * constante) + indexAlpha;
+
+				let pixRow = Math.round((sY + h) / tileRatio);
+				let pixCol = Math.round((sX + w) / tileRatio);
+				collisions[pixRow] = !collisions[pixRow] ? [] : collisions[pixRow];
 
 				if(!pixels || pixels[index] == 255)
 				{
-					let pixCol = Math.round(sX + w);
-					let pixRow = Math.round(sY + h);
-					
-					collisions[pixRow] = !collisions[pixRow] ? [] : collisions[pixRow];
 					collisions[pixRow][pixCol] = true;
+				}
+				else
+				{
+					collisions[pixRow][pixCol] = false;
 				}
 			}
 		}
@@ -47,7 +79,10 @@ class Collisions
 	static init(maps, canvasName)
 	{
 		let map = maps['currentMap']['tiles'];
-		let tileSize = maps['tileSizeOrigin'];
+		let canvasW = maps['currentMap'].w;
+
+		let tileRatio = maps['tileSizeCurrent'] / maps['tileSizeOrigin'];
+		let tileSize = maps['tileSizeCurrent'];
 
 		let canvas = document.getElementById(canvasName);
 		let ctx = canvas.getContext('2d');
@@ -72,38 +107,12 @@ class Collisions
 						let width = colWidth * tileSize;
 						let height = rowHeight * tileSize;
 
-						collisions = this.update(ctx, collisions, sX, sY, width, height);
+						collisions = this.update(tileSize, ctx, collisions, sX, sY, width, height, tileRatio);
 					}
 				}
 			}
 		}
-		/*
-		// take only alpha
-		for (let y = 0, yLength = h; y < yLength; y++)
-		{
-			for (let x = 0, xLength = w; x < xLength; x++)
-			{
-				collisions[y] = !collisions[y] ? [] : collisions[y];
-				collisions[y][x] = !collisions[y][x] ? [] : collisions[y][x];
 
-				let constante = 4;
-				let indexAlpha = 3;
-				x = Math.floor(x);
-				y = Math.floor(y);
-
-				let index = ((y * (w * constante)) + (x * constante)) + indexAlpha;
-
-				if(pixels[index] == 255)
-				{
-					collisions[y][x] = true;
-				}
-				else
-				{
-					collisions[y][x] = false;
-				}
-			}
-		}
-		*/
 		return collisions;
 	}
 }

@@ -115,8 +115,9 @@ class Engine
 
 				this.imgs.preloadImgs(this.maps, [imgCommonInfos, imgMapInfos], () =>
 				{
-					this.game.launchGame();
+					this.game.loadMap();
 					this.updateWindowSize();
+					this.game.launchGame();
 					this.loading = false;
 				});
 			}
@@ -152,8 +153,8 @@ class Engine
 
 		if (this.status == 'game')
 		{
-			let w = this.maps[this.maps.currentMapName]['w'];
-			let h = this.maps[this.maps.currentMapName]['h'];
+			let w = this.maps['currentMap']['w'];
+			let h = this.maps['currentMap']['h'];
 			
 			this.maps.tileSizeCurrent = Resolution.update(this.maps.tileSizeOrigin, w, h);
 			this.game.drawMap();
@@ -265,6 +266,12 @@ class Engine
 		if (this.status == "game" && !this.loading)
 		{
 			this.game.mainLoop();
+			if (this.test === 0)
+			{
+				Collisions.draw(this.maps);
+			}
+			this.test = this.test > 120 ? 0 : this.test + 1;
+
 		}
 		else if (this.status == "editor" && !this.loading)
 		{
@@ -389,6 +396,8 @@ class Engine
 
 		//window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 		window.requestAnimationFrame(() => this.mainLoop());
+
+		this.test = 0;
 	}
 }
 
