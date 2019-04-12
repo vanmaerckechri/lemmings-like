@@ -221,7 +221,7 @@ class Maps
 			{
 				gameBlock: 2
 			},
-			antsLength: 20,
+			antsLength: 2,
 			elemsList: 
 			{
 				blocs: ["grass", "ground", "stalactites"],

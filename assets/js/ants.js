@@ -155,7 +155,7 @@ class Ants
 					let x = ant.direction < 0 ? ant.x + ant.w : ant.x;
 
 					// if ground exist and action have length
-					if (Collisions.check(this.maps, y, x) && this.manageActionLength())
+					if (Collisions.check(this.maps, y, x, ant.w - 2, 1) && this.manageActionLength())
 					{
 						this.unSelectAction();
 
@@ -165,7 +165,7 @@ class Ants
 						let tileRatio = this.maps['tileSizeCurrent'] / this.maps['tileSizeOrigin'];
 
 						let ctx = false;
-						currentMap['collisions'] = Collisions.update(ctx, currentMap['collisions'], ant.x * tileRatio, ant.y * tileRatio, ant.w * tileRatio, ant.h * tileRatio, tileRatio);
+						currentMap['collisions'] = Collisions.update(this.maps['tileSizeCurrent'], ctx, currentMap['collisions'], ant.x * tileRatio, ant.y * tileRatio, ant.w * tileRatio, ant.h * tileRatio, tileRatio);
 					}
 				}
 			}
@@ -175,13 +175,11 @@ class Ants
 	fall(ant, engineSpeed, tileRatio)
 	{
 		let y = ant.y + ant.h;
-		let x = ant.x;
-
-		x = ant.direction < 0 ? x + ant.w : x;
+		let x = ant.x + 2;
 
 		let speed = this.maps.gravity * engineSpeed;
 
-		let isCollision = Collisions.check(this.maps, y, x);
+		let isCollision = Collisions.check(this.maps, y, x, ant.w - 2, 1);
 
 		if (!isCollision)
 		{
@@ -214,7 +212,7 @@ class Ants
 
 		let speed = ant.direction * engineSpeed;
 
-		let isCollision = Collisions.check(this.maps, y, x);
+		let isCollision = Collisions.check(this.maps, y, x, 1, Math.round(ant.h / 2));
 
 		if (!isCollision)
 		{
@@ -299,7 +297,7 @@ class Ants
 						if (mapTiles['catName'] == "doors" && mapTiles['objName'] == "spawn")
 						{
 							this.spawn.x = (c + 0.5) * this.maps.tileSizeOrigin;
-							this.spawn.y = (r) * this.maps.tileSizeOrigin;
+							this.spawn.y = (r + 1) * this.maps.tileSizeOrigin;
 						}
 					}
 				}

@@ -2,55 +2,39 @@
 
 class Collisions
 {
-	static check(maps, y, x)
+	static check(maps, y, x, width, height)
 	{
 		let map = maps['currentMap']['tiles'];
 		let collisions = maps['currentMap']['collisions'];
+		let ratio = maps.tileSizeOrigin / maps.tileSizeCurrent;
 
-		x = Math.round(x);
-		y = Math.round(y);
+		width = Math.round(width)
+		height = Math.round(height)
 
-		if (collisions[y] && collisions[y][x])
+		for (let h = height; h >= 0; h--)
 		{
-			return true;
-		}
-		return false;
-	}
-
-	static draw(maps)
-	{
-		let map = maps.currentMap.collisions
-								let canvas = document.getElementById('canvas-x');
-						let ctx = canvas.getContext('2d');
-								ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-		for (let r = map.length - 1; r >= 0; r--)
-		{
-			if (map[r])
+			for (let w = width; w >= 0; w--)
 			{
-				for (let c = map[r].length - 1; c >= 0; c--)
-				{
-					if (map[r][c])
-					{
-						let tileRatio = maps['tileSizeCurrent'] / maps['tileSizeOrigin'];
+				let xx = Math.round(x + w);
+				let yy = Math.round(y + h);
 
-						ctx.beginPath();
-						ctx.fillStyle = 'red';
-						ctx.rect(c * tileRatio, r * tileRatio, 1, 1);
-						ctx.fill();
-					}
+				if (collisions[yy] && collisions[yy][xx])
+				{
+					return true;
 				}
 			}
 		}
+		return false;
+
 	}
 
 	static update(tileSize, ctx, collisions, sX, sY, width, height, tileRatio)
 	{
+		// if ctx is false, give collisions at all pixels
 		let pixels = ctx ? ctx.getImageData(sX, sY, width, height).data : false;
 
 		for (let h = height - 1; h >= 0; h--)
 		{
-
 			for (let w = width - 1; w >= 0; w--)
 			{
 				let constante = 4;

@@ -266,12 +266,13 @@ class Engine
 		if (this.status == "game" && !this.loading)
 		{
 			this.game.mainLoop();
+/*
 			if (this.test === 0)
 			{
 				Collisions.draw(this.maps);
 			}
 			this.test = this.test > 120 ? 0 : this.test + 1;
-
+*/
 		}
 		else if (this.status == "editor" && !this.loading)
 		{
