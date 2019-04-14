@@ -97,7 +97,7 @@
 }
 .editorCat
 {
-	max-width: 150px;
+	max-width: 120px;
 	text-align: left;
 	pointer-events: auto;
 	img
@@ -105,6 +105,8 @@
 		margin: 0 2px;
 		border: 2px solid transparent;
 		display: inline-block;
+		max-width: 56px;
+		height: auto;
 		user-select: none;
 		&:hover
 		{

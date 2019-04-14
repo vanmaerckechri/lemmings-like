@@ -367,13 +367,15 @@ canvas {
   padding: 10px; }
 
 .editorCat {
-  max-width: 150px;
+  max-width: 120px;
   text-align: left;
   pointer-events: auto; }
   .editorCat img {
     margin: 0 2px;
     border: 2px solid transparent;
     display: inline-block;
+    max-width: 56px;
+    height: auto;
     -webkit-user-select: none;
        -moz-user-select: none;
         -ms-user-select: none;

@@ -28,7 +28,6 @@ class Editor
 			},
 			elemsList: 
 			{
-				blocs: ["grass", "ground", "stalactites"],
 			},
 			tiles: [],
 			collisions: []
@@ -486,11 +485,6 @@ class Editor
 				{
 					img.addEventListener('click', this.selectElem.bind(this, catName, objsName[i], t, collision), false);
 				}
-			}
-			if (catName != "doors")
-			{
-				let br = document.createElement('br');
-				catContainer.appendChild(br);
 			}
 		}
 		editorElemsCont.appendChild(catContainer)

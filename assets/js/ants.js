@@ -40,7 +40,7 @@ class Ants
 			fallStartY: 0,
 			imgIndex: 0,
 			lastAnimationType: 'walk',
-			animationType: 'spawn', 
+			animation: 'spawn', 
 			status: 'spawn'
 		}
 		this.ants.push(ant);
@@ -53,7 +53,7 @@ class Ants
 		let tileSizeOrigin = this.maps.tileSizeOrigin;
 		let tileRatio = this.maps.tileSizeCurrent / tileSizeOrigin
 
-		let currentAnim = ant['animationType'];
+		let currentAnim = ant['animation'];
 
 		let sX = ant.w * ant.imgIndex;
 		let sY = currentAnim == "walk" && ant.direction < 0 ? tileSizeOrigin : 0;
@@ -151,7 +151,7 @@ class Ants
 			let ant = this.selectedAnt;
 			if (ant)
 			{
-				if (this.selectedAction == "gameBlock")
+				if (this.selectedAction == "gameBlock" && ant.status != "block")
 				{
 					let y = ant.y + ant.h;
 					let x = ant.direction < 0 ? ant.x + ant.w : ant.x;
@@ -161,8 +161,9 @@ class Ants
 					{
 						this.unSelectAction();
 
-						ant.animationType = "block";
-						
+						ant.status = "block";
+						ant.animation = "block";
+
 						let currentMap = this.maps['currentMap'];
 						let tileRatio = this.maps['tileSizeCurrent'] / this.maps['tileSizeOrigin'];
 
@@ -187,30 +188,37 @@ class Ants
 	fall(ant, engineSpeed, tileRatio)
 	{
 		let y = ant.y + ant.h;
-		let x = ant.x + 2;
+		let x = ant.x + 14;
 
 		let speed = this.maps.gravity * engineSpeed;
 
-		let isCollision = Collisions.check(this.maps, y, x, ant.w - 4, 1);
+		let isCollision = Collisions.check(this.maps, y, x, 4, 1);
 
 		if (!isCollision)
 		{
 			ant.y += speed;
 			// if ant begin to fall
-			if (ant.animationType != "fall")
+			if (ant.status != "fall")
 			{
-				ant.imgIndex = 0;
-				ant.lastAnimationType = ant.animationType;
-				ant.animationType = "fall";
+				ant.lastAnimationType = ant.status;
+				ant.status = "fall";
 				ant.fallStartY = y;
+			}
+			else
+			{
+				if (ant.animation != "fall" && (ant.y - ant.fallStartY) / this.maps.tileSizeCurrent >= 1)
+				{
+					ant.imgIndex = 0;
+					ant.animation = "fall";
+				}
 			}
 		}
 		else
 		{
 			// ant is landing
-			if (ant.animationType == "fall")
+			if (ant.status == "fall")
 			{
-				ant.animationType = ant.lastAnimationType;
+				ant.status = ant.lastAnimationType;
 				// check death
 				if ((ant.y - ant.fallStartY) / this.maps.tileSizeCurrent >= 4)
 				{
@@ -245,13 +253,14 @@ class Ants
 	{
 		let tileRatio = this.maps['tileSizeCurrent'] / this.maps['tileSizeOrigin'];
 
-		if (ant.animationType == "spawn")
+		if (ant.status == "spawn")
 		{
 			let img = this.maps['elemInfos']['ants']['spawn']['img'];
 			// if last spawn img is played => walk
 			if (ant.imgIndex >= img.width / ant.w - 1)
 			{
-				ant.animationType = "walk";
+				ant.status = "walk";
+				ant.animation = "walk";
 				ant.imgIndex = 0;
 			}
 		}
@@ -260,7 +269,7 @@ class Ants
 			this.fall(ant, engineSpeed, tileRatio);
 		}
 		
-		if (ant.animationType == "walk")
+		if (ant.status == "walk")
 		{
 			this.walk(ant, engineSpeed, tileRatio);
 		}
@@ -316,8 +325,8 @@ class Ants
 						let mapTiles = map['tiles'][r][c];
 						if (mapTiles['catName'] == "doors" && mapTiles['objName'] == "spawn")
 						{
-							this.spawn.x = (c + 0.5) * this.maps.tileSizeOrigin;
-							this.spawn.y = (r + 1) * this.maps.tileSizeOrigin;
+							this.spawn.x = (c + 1.5) * this.maps.tileSizeOrigin;
+							this.spawn.y = (r + 2) * this.maps.tileSizeOrigin;
 						}
 					}
 				}
