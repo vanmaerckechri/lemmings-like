@@ -13,6 +13,7 @@ class Particles
 	{
 		let ctx = canvas.getContext('2d');
 		let ratio = this.maps.tileSizeOrigin / this.maps.tileSizeCurrent;
+		size /= ratio;
 
 		ctx.beginPath();
 		ctx.fillStyle = color;

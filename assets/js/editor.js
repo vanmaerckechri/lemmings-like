@@ -21,36 +21,65 @@ class Editor
 		this.mapHeight = mapHeight;
 		this.col = 0;
 		this.row = 0;
+		this.spawn = null;
 
 		this.init();
 	}
 
-	cleanElement(row, col)
+	deleteTileByParent(r, c)
 	{
 		let map = this.map['tiles'];
 
-		if (map[row] && map[row][col] && map[row][col].dependToRow)
+		if (map[r] && map[r][c] && map[r][c]['catName'])
 		{
-			let dependToRow = map[row][col].dependToRow;
-			let dependToCol = map[row][col].dependToCol;
+			let catName = map[r][c]['catName'];
+			let objName = map[r][c]['objName'];
+			let tileInfos = this.maps['elemInfos'][catName][objName];
 
-			let elem = map[dependToRow][dependToCol];
-
-			if (elem && elem.objName)
+			for (let h = tileInfos.rowHeight - 1; h >= 0; h--)
 			{
-				let elRef = this.maps['elemInfos'][elem.catName][elem.objName];
-
-				for (let r = elRef.rowHeight - 1; r >= 0; r--)
+				for (let w = tileInfos.colWidth - 1; w >= 0; w--)
 				{
-					map[dependToRow + r] = !map[dependToRow + r] ? [] : map[dependToRow + r];
-
-					for (let c = elRef.colWidth - 1; c >= 0; c--)
-					{
-						map[dependToRow + r][dependToCol + c] = null;
-					}
+					map[r + h][c + w] = null;
 				}
 			}
 		}
+	}
+
+	cleanTiles(r, c)
+	{
+		let map = this.map['tiles'];
+		// check if current tile is busy
+		if (map[r] && map[r][c])
+		{
+			// check if current tile is a child tile
+			if (map[r][c].dependToCol)
+			{
+				let rTemp = r;
+				r = map[r][c].dependToRow;
+				c = map[rTemp][c].dependToCol;
+			}
+			// delete parent tile
+			this.deleteTileByParent(r, c);
+		}
+	}
+
+	deleteAll(catName, objName)
+	{
+		let map = this.map['tiles'];
+		for (let r = map.length - 1; r >= 0; r--)
+		{
+			if (map[r])
+			{
+				for (let c = map[r].length - 1; c >= 0; c--)
+				{
+					if (map[r][c] && map[r][c].catName && map[r][c].catName == catName && map[r][c].objName == objName)
+					{
+						this.cleanTiles(r, c);
+					}
+				}
+			}
+		}		
 	}
 
 	putElement()
@@ -70,35 +99,42 @@ class Editor
 
 			if (this.selectedElem == "removeTile")
 			{
-				this.cleanElement(row, col);
-				if (map[row] && map[row][col])
-				{
-					map[row][col] = null;
-				}
+				this.cleanTiles(row, col);
 			}
 			else
 			{
-				let elRef = this.maps['elemInfos'][this.selectedElem.catName][this.selectedElem.objName];
+				let catName = this.selectedElem['catName'];
+				let objName = this.selectedElem['objName'];
+				let elRef = this.maps['elemInfos'][catName][objName];
 
+				// items that can not be duplicated
+				if (objName == "spawn" || objName == "exit")
+				{
+					this.deleteAll(catName, objName);
+				}
+
+				// clean and create tiles informations (parent / childs)
 				for (let r = elRef.rowHeight - 1; r >= 0; r--)
 				{
 					map[row + r] = !map[row + r] ? [] : map[row + r];
 
 					for (let c = elRef.colWidth - 1; c >= 0; c--)
 					{
+						// clean current tile if busy
 						if (map[row + r][col + c] && map[row + r][col + c].dependToRow)
 						{
-							this.cleanElement(row + r, col + c);
+							this.cleanTiles(row + r, col + c);
 						}
+						// create child tile infos if element have more than 1*1 tile
 						map[row + r][col + c] = { dependToRow: row, dependToCol: col };
 					}
 				}
 
+				// replace this tile by parent element info tile
 				let newObj = JSON.parse(JSON.stringify(this.selectedElem));
-
 				map[row][col] = newObj;
 
-				// change shade for next
+				// change visual shade for next
 				let shade = 0;
 				if (elRef.shadeLength > 1)
 				{
@@ -106,6 +142,7 @@ class Editor
 				}
 				this.selectedElem.imgCol = shade
 			}
+
 			this.updateLinkToExportMap();
 		}
 	}
@@ -314,14 +351,18 @@ class Editor
 	toggleMenuSide()
 	{
 		let editorUi = document.getElementById('editor-ui');
+		let editorMenuOptions = document.getElementById('editor-menuOptions');
+		let toggleSideMenu = document.getElementById('toggleSideMenu');
 
 		if (editorUi.classList.contains('editor-rightSide'))
 		{
 			editorUi.classList.remove('editor-rightSide');
+			editorMenuOptions.appendChild(toggleSideMenu);
 		}
 		else
 		{
 			editorUi.classList.add('editor-rightSide');
+			editorMenuOptions.insertBefore(toggleSideMenu, editorMenuOptions.firstChild);
 		}
 	}
 
