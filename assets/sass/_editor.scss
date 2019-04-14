@@ -19,6 +19,18 @@
 		flex: 1;
 		text-align: center;
 	}
+
+	.btn
+	{
+		color: $color-hot;
+		text-decoration: none;
+		text-align: center;
+		&:hover
+		{
+			text-decoration: underline;
+			cursor: pointer;
+		}
+	}
 }
 .editor-openUi
 {
@@ -132,4 +144,11 @@
 			text-decoration: underline;
 		}
 	}
+}
+.backToEditor
+{
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	pointer-events: auto;
 }

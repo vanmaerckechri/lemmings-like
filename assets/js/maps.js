@@ -213,6 +213,8 @@ class Maps
 			}
 		};
 
+		this.editorMap = {};
+
 		this.map01 = 
 		{
 			w: 1920,

@@ -364,6 +364,12 @@ class Ants
 		}
 	}
 
+	deleteGameIcons()
+	{
+		let gameUiBotCont = document.getElementById('game-uiBotCont');
+		gameUiBotCont.innerText = "";
+	}
+
 	init()
 	{
 		let canvasCon = document.getElementById('canvas-container');

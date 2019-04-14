@@ -307,6 +307,13 @@ canvas {
         -ms-flex: 1;
             flex: 1;
     text-align: center; }
+  .editor-ui .btn {
+    color: #c07878;
+    text-decoration: none;
+    text-align: center; }
+    .editor-ui .btn:hover {
+      text-decoration: underline;
+      cursor: pointer; }
 
 .editor-openUi {
   -webkit-transform: translate3d(0, 0, 0);
@@ -395,6 +402,12 @@ canvas {
   .loadFileContainer:hover .loadFileFakeLink {
     text-decoration: underline; }
 
+.backToEditor {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  pointer-events: auto; }
+
 .hidden {
   display: none;
   pointer-events: none; }
@@ -409,5 +422,8 @@ canvas {
 .off {
   -webkit-filter: grayscale(100%);
           filter: grayscale(100%); }
+
+.active {
+  pointer-events: auto; }
 
 /*# sourceMappingURL=style.css.map */

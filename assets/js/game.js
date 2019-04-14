@@ -23,6 +23,22 @@ class Game
 
 	// UI
 
+	resetTimer()
+	{
+		this.gameSpeed = 1;
+		this.lastGameSpeed = 1;
+		this.timeTempo = null;
+		this.minutes = 0;
+		this.secondes = 0;
+		this.pauseTime = 0;
+
+		let timerContent = document.getElementById('timer-content');
+		timerContent.innerText = 0 + ":" + 0;
+
+		let speedContent = document.getElementById('speed-content');
+		speedContent.innerText = "1.0";
+	}
+
 	updateTimer()
 	{
 		let speed = 1000 / this.gameSpeed;
@@ -255,7 +271,10 @@ class Game
 	mainLoop()
 	{
 		this.updateTimer(this.gameSpeed);
-		this.ants.mainLoop(this.gameSpeed);
+		if (this.ants)
+		{
+			this.ants.mainLoop(this.gameSpeed);
+		}
 	}
 
 	loadTimeSpeedIcons()
@@ -264,24 +283,27 @@ class Game
 		let icons = this.maps['commonElem']['elemsList']['gameSpeedIcons'];
 		for (let i = 0, iLength = icons.length; i < iLength; i++)
 		{
-			let imgContainer = document.createElement('div');
-			imgContainer.setAttribute('id', icons[i]);
-			imgContainer.setAttribute('class', "img-container");
-
-			imgContainer.addEventListener('click', ()=>
+			if (!document.getElementById(icons[i]))
 			{
-				this.updateSpeedGameByButton(icons[i]);
-			})
+				let imgContainer = document.createElement('div');
+				imgContainer.setAttribute('id', icons[i]);
+				imgContainer.setAttribute('class', "img-container");
 
-			if (icons[i] == "timePlay")
-			{
-				imgContainer.classList.add('hidden');
+				imgContainer.addEventListener('click', ()=>
+				{
+					this.updateSpeedGameByButton(icons[i]);
+				})
+
+				if (icons[i] == "timePlay")
+				{
+					imgContainer.classList.add('hidden');
+				}
+
+				let img = this.maps['elemInfos']['gameSpeedIcons'][icons[i]].img;
+
+				imgContainer.appendChild(img);
+				gameSpeed.appendChild(imgContainer);
 			}
-
-			let img = this.maps['elemInfos']['gameSpeedIcons'][icons[i]].img;
-
-			imgContainer.appendChild(img);
-			gameSpeed.appendChild(imgContainer);
 		}
 	}
 
@@ -297,6 +319,7 @@ class Game
 		this.loadTimeSpeedIcons();
 
 		this.ants = new Ants(this.maps);
+		this.resetTimer();
 	}
 
 	loadMap()
@@ -306,5 +329,22 @@ class Game
 		gameSection.classList.remove('hidden');
 		// importMap
 		this.maps['currentMap'] = JSON.parse(JSON.stringify(this.maps[this.maps.currentMapName]));
+	}
+
+	stopGame()
+	{
+		let gameUi = document.getElementById('game-ui');
+		let canvas = document.querySelectorAll('canvas');
+
+		gameUi.classList.add('hidden');
+
+		for (let c = canvas.length - 1; c >= 0; c--)
+		{
+			let ctx = canvas[c].getContext('2d');
+			canvas[c].width = canvas[c].width;
+		}
+
+		this.ants.deleteGameIcons();
+		this.ants = null;
 	}
 }

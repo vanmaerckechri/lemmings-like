@@ -4,6 +4,7 @@ class Editor
 {
 	constructor(maps, mapWidth, mapHeight)
 	{
+		this.status = "editor";
 		// all maps infos
 		this.maps = maps;
 
@@ -16,7 +17,22 @@ class Editor
 		this.tileRatio = 1;
 
 		// current map created in editor
-		this.map = { tiles: [] };
+		this.map =
+		{ 
+			w: 1920,
+			h: 1024,
+			antsLength: 20,
+			actions:
+			{
+				gameBlock: 2
+			},
+			elemsList: 
+			{
+				blocs: ["grass", "ground", "stalactites"],
+			},
+			tiles: [],
+			collisions: []
+		};
 		this.mapWidth = mapWidth;
 		this.mapHeight = mapHeight;
 		this.col = 0;
@@ -24,6 +40,39 @@ class Editor
 		this.spawn = null;
 
 		this.init();
+	}
+
+	getStatus()
+	{
+		return this.status;
+	}
+
+	testMap()
+	{
+		let canvas = document.getElementById('canvas-editorUi');
+		let editorUi = document.getElementById('editor-ui');
+		let backToEditor = document.getElementById('backToEditor');
+
+		canvas.classList.add('hidden');
+		editorUi.classList.add('hidden');
+		backToEditor.classList.remove('hidden');
+
+		this.status = 'testMap';
+		this.maps.editorMap = JSON.parse(JSON.stringify(this.map));
+		this.maps.currentMapName = "editorMap";
+	}
+
+	backToEditor()
+	{
+		let canvas = document.getElementById('canvas-editorUi');
+		let editorUi = document.getElementById('editor-ui');
+		let backToEditor = document.getElementById('backToEditor');
+
+		canvas.classList.remove('hidden');
+		editorUi.classList.remove('hidden');
+		backToEditor.classList.add('hidden');
+
+		this.status = 'editor';
 	}
 
 	deleteTileByParent(r, c)
@@ -481,32 +530,51 @@ class Editor
 		}
 
 		this.createLinkToExportMap();
-		this.openUi();
 	}
 
 	initEvents()
 	{
-		let canvasCont = document.getElementById('canvas-container');
-		canvasCont.addEventListener('mousemove',  () =>
+		let canvas = document.getElementById('canvas-editorUi');
+
+		canvas.addEventListener('mousemove',  () =>
 		{ 
 			this.mouseX = event.layerX;
 			this.mouseY = event.layerY;
 		});
 
-		canvasCont.addEventListener('mousedown',  () =>
+		canvas.addEventListener('mousedown',  () =>
 		{
 			this.action = "putElem";
 		})
 
-		canvasCont.addEventListener('mouseup',  () =>
+		canvas.addEventListener('mouseup',  () =>
 		{
 			this.action = "";
 		})
 	}
 
+
+	initTestMap()
+	{
+		let testMapBtn = document.getElementById('testMap');
+		testMapBtn.addEventListener('click', () => this.testMap());
+
+		// back to editor
+		let ui = document.getElementById('ui');
+		let btn = document.createElement('button');
+		btn.innerText = "back to editor";
+		btn.setAttribute('id', "backToEditor");
+		btn.setAttribute('class', "btn backToEditor hidden");
+
+		btn.addEventListener('click', () => this.backToEditor());
+		ui.appendChild(btn)	;
+	}
+
 	init()
 	{
 		this.initMenu();
+		this.initTestMap();
+		this.openUi();
 		this.initEvents();
 	}
 }

@@ -22,6 +22,47 @@ class Engine
 		this.init();
 	}
 
+	// LAUNCH GAME / EDITOR
+
+	launchGame()
+	{
+		this.loading = true;
+
+		this.menus.closeMenus();
+		let queue = this.menus.closeMenus();
+		this.queues.push(queue);
+
+		let imgMapInfos = this.maps[this.maps["currentMapName"]]['elemsList'];
+		let imgCommonInfos = this.maps['commonElem']['elemsList'];
+
+		this.imgs.preloadImgs(this.maps, [imgCommonInfos, imgMapInfos], () =>
+		{
+			this.game.loadMap();
+			this.updateWindowSize();
+			this.game.launchGame();
+			this.loading = false;
+		});
+	}
+
+	launchEditor()
+	{
+		this.loading = true;
+
+		this.menus.closeMenus();
+		let queue = this.menus.closeMenus();
+		this.queues.push(queue);
+
+		let imgMapInfos = this.maps['editor']['elemsList'];
+
+		this.imgs.preloadImgs(this.maps, [imgMapInfos], () =>
+		{
+			let res = Resolution.getStandardRes();
+			this.editor = new Editor(this.maps, res["w"], res["h"]);
+			this.updateWindowSize();
+			this.loading = false;
+		});
+	}
+
 	// MENUS
 
 	dispatchOptions(options)
@@ -104,40 +145,11 @@ class Engine
 			this.status = this.menus.selectLabel(buttons);
 			if (this.status == "game")
 			{
-				this.loading = true;
-
-				this.menus.closeMenus();
-				let queue = this.menus.closeMenus();
-				this.queues.push(queue);
-
-				let imgMapInfos = this.maps[this.maps["currentMapName"]]['elemsList'];
-				let imgCommonInfos = this.maps['commonElem']['elemsList'];
-
-				this.imgs.preloadImgs(this.maps, [imgCommonInfos, imgMapInfos], () =>
-				{
-					this.game.loadMap();
-					this.updateWindowSize();
-					this.game.launchGame();
-					this.loading = false;
-				});
+				this.launchGame();
 			}
 			else if (this.status == "editor")
 			{
-				this.loading = true;
-
-				this.menus.closeMenus();
-				let queue = this.menus.closeMenus();
-				this.queues.push(queue);
-
-				let imgMapInfos = this.maps['editor']['elemsList'];
-
-				this.imgs.preloadImgs(this.maps, [imgMapInfos], () =>
-				{
-					let res = Resolution.getStandardRes();
-					this.editor = new Editor(this.maps, res["w"], res["h"]);
-					this.updateWindowSize();
-					this.loading = false;
-				});
+				this.launchEditor();
 			}
 		}
 	}
@@ -151,7 +163,7 @@ class Engine
 		let winWidth = window.innerWidth;
 		let winHeight = window.innerHeight;
 
-		if (this.status == 'game')
+		if (this.status == 'game' || this.status == 'testMap')
 		{
 			let w = this.maps['currentMap']['w'];
 			let h = this.maps['currentMap']['h'];
@@ -256,7 +268,7 @@ class Engine
 						this.manageEditor(command);
 					}
 					// game
-					else if (this.status == "game")
+					else if (this.status == "game" || this.status == "testMap")
 					{
 						this.manageGame(command);
 					}
@@ -265,28 +277,31 @@ class Engine
 		}
 	}
 
-	draw()
+	mainLoop()
 	{
 		if (this.status == "game" && !this.loading)
 		{
 			this.game.mainLoop();
-/*
-			if (this.test === 0)
-			{
-				Collisions.draw(this.maps);
-			}
-			this.test = this.test > 120 ? 0 : this.test + 1;
-*/
 		}
 		else if (this.status == "editor" && !this.loading)
 		{
 			this.editor.draw();
+			this.status = this.editor.getStatus();
+			if (this.status == "testMap" && !this.loading)
+			{
+				this.launchGame();
+			}
 		}
-	}
+		else if (this.status == "testMap" && !this.loading)
+		{
+			this.game.mainLoop();
+			this.status = this.editor.getStatus();
+			if (this.status == "editor" && !this.loading)
+			{
+				this.game.stopGame();
+			}
+		}
 
-	mainLoop()
-	{
-		this.draw();
 		this.manageQueues();
 		this.ui.calculFrameBySec();
 		window.requestAnimationFrame(() => this.mainLoop());
@@ -401,8 +416,6 @@ class Engine
 
 		//window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 		window.requestAnimationFrame(() => this.mainLoop());
-
-		this.test = 0;
 	}
 }
 
