@@ -185,7 +185,7 @@ class Ants
 		this.ants.splice(ant.index, 1);
 	}
 
-	fall(ant, engineSpeed, tileRatio)
+	fall(ant, engineSpeed)
 	{
 		let y = ant.y + ant.h;
 		let x = ant.x + 14;
@@ -229,13 +229,14 @@ class Ants
 		}
 	}
 
-	walk(ant, engineSpeed, tileRatio)
+	walk(ant, engineSpeed)
 	{
 		let speed = 1 * engineSpeed;
 		
-		let halfH = Math.round(ant.h / 2);
-		let floorDy = Math.round(ant.y - halfH);
-		let floorDx = ant.direction > 0 ? Math.round(ant.x + ant.w) : Math.round(ant.x);
+		let halfH = ant.h / 2;
+		let halfW = ant.w / 2;
+		let floorDy = ant.y - halfH;
+		let floorDx = ant.direction > 0 ? ant.x + ant.w : ant.x;
 		let wall = true;
 
 		// check floor
@@ -253,11 +254,10 @@ class Ants
 
 		if (!wall)
 		{
-			floorDx = ant.direction > 0 ? Math.round(ant.x + (ant.w / 2) + speed) : Math.round(ant.x + (ant.w / 2) - speed);
 			let isLastIterCollision;
-			let heightToScan = Math.round(ant.h);
-			floorDy = Math.round(ant.y + (ant.h));
-			floorDx = ant.direction > 0 ? Math.round(ant.x + (ant.w / 2) + speed) : Math.round(ant.x + (ant.w / 2) - speed);
+			let heightToScan = ant.h;
+			floorDy = ant.y + ant.h;
+			floorDx = ant.direction > 0 ? ant.x + halfW + speed : ant.x + halfW - speed;
 
 			for (let h = 0; h < heightToScan; h++)
 			{
@@ -285,8 +285,6 @@ class Ants
 
 	manageStatut(ant, engineSpeed)
 	{
-		let tileRatio = this.maps['tileSizeCurrent'] / this.maps['tileSizeOrigin'];
-
 		if (ant.status == "spawn")
 		{
 			let img = this.maps['elemInfos']['ants']['spawn']['img'];
@@ -300,12 +298,12 @@ class Ants
 		}
 		else
 		{
-			this.fall(ant, engineSpeed, tileRatio);
+			this.fall(ant, engineSpeed);
 		}
 		
 		if (ant.status == "walk")
 		{
-			this.walk(ant, engineSpeed, tileRatio);
+			this.walk(ant, engineSpeed);
 		}
 	}
 
