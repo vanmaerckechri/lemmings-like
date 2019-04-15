@@ -358,7 +358,7 @@ canvas {
     .menuOptions-container .icon-Container:hover {
       border-color: #c07878;
       cursor: pointer; }
-    .menuOptions-container .icon-Container img {
+    .menuOptions-container .icon-Container .img-container {
       display: block; }
   .menuOptions-container .iconSelected {
     border-color: #c07878; }
@@ -370,19 +370,21 @@ canvas {
   max-width: 120px;
   text-align: left;
   pointer-events: auto; }
-  .editorCat img {
+  .editorCat .img-container {
     margin: 0 2px;
     border: 2px solid transparent;
     display: inline-block;
-    max-width: 56px;
-    height: auto;
     -webkit-user-select: none;
        -moz-user-select: none;
         -ms-user-select: none;
             user-select: none; }
-    .editorCat img:hover {
+    .editorCat .img-container:hover {
       border-color: #c07878;
       cursor: pointer; }
+    .editorCat .img-container img {
+      max-width: 52px;
+      height: auto;
+      pointer-events: none; }
 
 .linkToSaveMap, .loadFileFakeLink {
   display: block;

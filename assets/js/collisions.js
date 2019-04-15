@@ -2,7 +2,7 @@
 
 class Collisions
 {
-	static check(maps, y, x, width, height)
+	static check(maps, y, x, width, height, color = false)
 	{
 		let map = maps['currentMap']['tiles'];
 		let collisions = maps['currentMap']['collisions'];
@@ -14,8 +14,20 @@ class Collisions
 				let xx = Math.round(x + w);
 				let yy = Math.round(y + h);
 
+
+
 				if (collisions[yy] && collisions[yy][xx])
 				{
+
+					if (color != false)
+					{
+						let canvas = document.getElementById('canvas-x');
+						let ctx = canvas.getContext('2d');
+						ctx.beginPath();
+						ctx.fillStyle = color;
+						ctx.rect(xx, yy , 2, 2);
+						ctx.fill();
+					}
 					return true;
 				}
 			}

@@ -80,7 +80,7 @@
 		{
 			@include iconsHover();
 		}
-		img
+		.img-container
 		{
 			display: block;
 		}
@@ -100,17 +100,21 @@
 	max-width: 120px;
 	text-align: left;
 	pointer-events: auto;
-	img
+	.img-container
 	{
 		margin: 0 2px;
 		border: 2px solid transparent;
 		display: inline-block;
-		max-width: 56px;
-		height: auto;
 		user-select: none;
 		&:hover
 		{
 			@include iconsHover();
+		}
+		img
+		{
+			max-width: 52px;
+			height: auto;
+			pointer-events: none;
 		}
 	}
 }

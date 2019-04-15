@@ -66,6 +66,7 @@ class Ants
 		ctx.imageSmoothingEnabled = false;
 		ctx.drawImage(img, sX, sY, ant.w, ant.h, dX, dY, dW, dH);
 
+/*
 		let speed = 100 / engineSpeed;
 		let animationTempo = ant.animationTempo;
 		ant.animationTempo = Tools.countTime(ant.animationTempo, speed);
@@ -73,6 +74,7 @@ class Ants
 		{
 			ant.imgIndex = ant.imgIndex < img.width / ant.w - 1 ? ant.imgIndex + 1 : 0;
 		}
+*/
 
 		// for selected ant
 		if (this.selectedAnt && this.selectedAnt == ant)
@@ -185,14 +187,15 @@ class Ants
 		this.ants.splice(ant.index, 1);
 	}
 
-	fall(ant, engineSpeed, tileRatio)
+	fall(ant, tileRatio)
 	{
 		let y = ant.y + ant.h;
-		let x = ant.x + 14;
+		let x = ant.direction > 0 ? ant.x : ant.x + ant.w - 4;
+		let w = 4;
 
-		let speed = this.maps.gravity * engineSpeed;
+		let speed = this.maps.gravity * 4;
 
-		let isCollision = Collisions.check(this.maps, y, x, 4, 1);
+		let isCollision = Collisions.check(this.maps, y, x, w, 1);
 
 		if (!isCollision)
 		{
@@ -219,6 +222,7 @@ class Ants
 			if (ant.status == "fall")
 			{
 				ant.status = ant.lastAnimationType;
+				ant.animation = ant.lastAnimationType;
 				// check death
 				if ((ant.y - ant.fallStartY) / this.maps.tileSizeCurrent >= 4)
 				{
@@ -228,20 +232,53 @@ class Ants
 		}
 	}
 
-	walk(ant, engineSpeed, tileRatio)
+	walk(ant, tileRatio)
 	{
-		let y = ant.y;
-		let x = ant.x;
+		let speed = 4;
+		
+		let halfH = Math.round(ant.h / 2);
+		let floorDy = Math.round(ant.y - halfH);
+		let floorDx = ant.direction > 0 ? Math.round(ant.x + ant.w) : Math.round(ant.x);
+		let wall = true;
 
-		x = ant.direction > 0 ? x + ant.w : x;
-
-		let speed = ant.direction * engineSpeed;
-
-		let isCollision = Collisions.check(this.maps, y, x, 1, Math.round(ant.h / 2));
-
-		if (!isCollision)
+		// check floor
+		for (let h = 2; h >= 0; h--)
 		{
-			ant.x += speed;
+			let isWall = Collisions.check(this.maps, floorDy, floorDx, 1, ant.h);
+			floorDy += h * halfH;
+
+			if (!isWall)
+			{
+				wall = false
+				break;
+			}
+		}
+
+		if (!wall)
+		{
+			floorDx = ant.direction > 0 ? Math.round(ant.x + (ant.w / 2) + speed) : Math.round(ant.x + (ant.w / 2) - speed);
+			let isLastIterCollision;
+			let heightToScan = Math.round(ant.h);
+			floorDy = Math.round(ant.y + (ant.h));
+			floorDx = ant.direction > 0 ? Math.round(ant.x + (ant.w / 2) + speed) : Math.round(ant.x + (ant.w / 2) - speed);
+
+			for (let h = 0; h < heightToScan; h++)
+			{
+				let isFloor = Collisions.check(this.maps, floorDy - h, floorDx, 1, 1);
+
+				// tile with collision is found
+				if (isFloor)
+				{
+					isLastIterCollision = true;
+				}
+				// floorY is found
+				if (!isFloor && isLastIterCollision)
+				{
+					ant.y = floorDy - h - ant.h + 1;
+					break;
+				}
+			}
+			ant.x += speed * ant.direction;
 		}
 		else
 		{
@@ -266,17 +303,18 @@ class Ants
 		}
 		else
 		{
-			this.fall(ant, engineSpeed, tileRatio);
+			this.fall(ant, tileRatio);
 		}
 		
 		if (ant.status == "walk")
 		{
-			this.walk(ant, engineSpeed, tileRatio);
+			this.walk(ant, tileRatio);
 		}
 	}
 
 	mainLoop(engineSpeed)
 	{
+
 		// create ants
 		if (this.antsSpawned < this.maps['currentMap']['antsLength'])
 		{
@@ -301,7 +339,19 @@ class Ants
 			let ant = this.ants[i];
 			ant.index = i;
 
-			this.manageStatut(ant, engineSpeed);
+			let speed = 100 / engineSpeed;
+			let animationTempo = ant.animationTempo;
+			ant.animationTempo = Tools.countTime(ant.animationTempo, speed);
+
+			if (animationTempo != ant.animationTempo)
+			{
+				let currentAnim = ant['animation'];
+				let img = this.maps['elemInfos']['ants'][currentAnim]['img'];
+				ant.imgIndex = ant.imgIndex < img.width / ant.w - 1 ? ant.imgIndex + 1 : 0;
+
+				this.manageStatut(ant, engineSpeed);
+			}
+			
 			this.draw(ant, engineSpeed);
 		}
 		

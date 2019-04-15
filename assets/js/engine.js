@@ -327,7 +327,7 @@ class Engine
 
 		window.addEventListener(zoomEvent, (event) =>
 		{
-			if (this.status == "game" || this.status == "editor")
+			if (this.status == "game" || this.status == "editor" || this.status == "testMap")
 			{
 				this.game.updateZoom(event);
 			}

@@ -21,7 +21,7 @@ class Editor
 		{ 
 			w: 1920,
 			h: 1024,
-			antsLength: 20,
+			antsLength: 1,
 			actions:
 			{
 				gameBlock: 2
@@ -468,22 +468,26 @@ class Editor
 				ctx.clearRect(0, 0, canvas.width, canvas.height);
 				ctx.drawImage(elem.img, 0, t * sH, sW, sH, 0, 0, sW, sH);
 
+				let imgContainer = document.createElement('div');
+				imgContainer.setAttribute('id', objsName[i] + '_' + t);
+				imgContainer.setAttribute('class', 'img-container');
+
 				let img = new Image();
 				img.src = canvas.toDataURL("image/png");
 
-				img.setAttribute('id', objsName[i] + '_' + t);
-				catContainer.appendChild(img);
+				imgContainer.appendChild(img);
+				catContainer.appendChild(imgContainer);
 
 				if (objsName[i] == "removeTile")
 				{
-					img.addEventListener('click', () =>
+					imgContainer.addEventListener('click', () =>
 					{
 						this.selectedElem = "removeTile";
 					});
 				}
 				else
 				{
-					img.addEventListener('click', this.selectElem.bind(this, catName, objsName[i], t, collision), false);
+					imgContainer.addEventListener('click', this.selectElem.bind(this, catName, objsName[i], t, collision), false);
 				}
 			}
 		}
@@ -541,7 +545,7 @@ class Editor
 			this.action = "putElem";
 		})
 
-		canvas.addEventListener('mouseup',  () =>
+		window.addEventListener('mouseup',  () =>
 		{
 			this.action = "";
 		})
