@@ -66,7 +66,6 @@ class Ants
 		ctx.imageSmoothingEnabled = false;
 		ctx.drawImage(img, sX, sY, ant.w, ant.h, dX, dY, dW, dH);
 
-/*
 		let speed = 100 / engineSpeed;
 		let animationTempo = ant.animationTempo;
 		ant.animationTempo = Tools.countTime(ant.animationTempo, speed);
@@ -74,7 +73,6 @@ class Ants
 		{
 			ant.imgIndex = ant.imgIndex < img.width / ant.w - 1 ? ant.imgIndex + 1 : 0;
 		}
-*/
 
 		// for selected ant
 		if (this.selectedAnt && this.selectedAnt == ant)
@@ -187,15 +185,14 @@ class Ants
 		this.ants.splice(ant.index, 1);
 	}
 
-	fall(ant, tileRatio)
+	fall(ant, engineSpeed, tileRatio)
 	{
 		let y = ant.y + ant.h;
-		let x = ant.direction > 0 ? ant.x : ant.x + ant.w - 4;
-		let w = 4;
+		let x = ant.x + 14;
 
-		let speed = this.maps.gravity * 4;
+		let speed = this.maps.gravity * engineSpeed;
 
-		let isCollision = Collisions.check(this.maps, y, x, w, 1);
+		let isCollision = Collisions.check(this.maps, y, x, 4, 1);
 
 		if (!isCollision)
 		{
@@ -232,9 +229,9 @@ class Ants
 		}
 	}
 
-	walk(ant, tileRatio)
+	walk(ant, engineSpeed, tileRatio)
 	{
-		let speed = 4;
+		let speed = 1 * engineSpeed;
 		
 		let halfH = Math.round(ant.h / 2);
 		let floorDy = Math.round(ant.y - halfH);
@@ -303,18 +300,17 @@ class Ants
 		}
 		else
 		{
-			this.fall(ant, tileRatio);
+			this.fall(ant, engineSpeed, tileRatio);
 		}
 		
 		if (ant.status == "walk")
 		{
-			this.walk(ant, tileRatio);
+			this.walk(ant, engineSpeed, tileRatio);
 		}
 	}
 
 	mainLoop(engineSpeed)
 	{
-
 		// create ants
 		if (this.antsSpawned < this.maps['currentMap']['antsLength'])
 		{
@@ -339,19 +335,7 @@ class Ants
 			let ant = this.ants[i];
 			ant.index = i;
 
-			let speed = 100 / engineSpeed;
-			let animationTempo = ant.animationTempo;
-			ant.animationTempo = Tools.countTime(ant.animationTempo, speed);
-
-			if (animationTempo != ant.animationTempo)
-			{
-				let currentAnim = ant['animation'];
-				let img = this.maps['elemInfos']['ants'][currentAnim]['img'];
-				ant.imgIndex = ant.imgIndex < img.width / ant.w - 1 ? ant.imgIndex + 1 : 0;
-
-				this.manageStatut(ant, engineSpeed);
-			}
-			
+			this.manageStatut(ant, engineSpeed);			
 			this.draw(ant, engineSpeed);
 		}
 		

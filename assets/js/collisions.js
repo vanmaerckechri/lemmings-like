@@ -14,8 +14,6 @@ class Collisions
 				let xx = Math.round(x + w);
 				let yy = Math.round(y + h);
 
-
-
 				if (collisions[yy] && collisions[yy][xx])
 				{
 
