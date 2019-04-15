@@ -206,7 +206,7 @@ class Ants
 			}
 			else
 			{
-				if (ant.animation != "fall" && (ant.y - ant.fallStartY) / this.maps.tileSizeCurrent >= 1)
+				if (ant.animation != "fall" && (ant.y - ant.fallStartY) / this.maps.tileSizeOrigin >= 1)
 				{
 					ant.imgIndex = 0;
 					ant.animation = "fall";
@@ -221,7 +221,7 @@ class Ants
 				ant.status = ant.lastAnimationType;
 				ant.animation = ant.lastAnimationType;
 				// check death
-				if ((ant.y - ant.fallStartY) / this.maps.tileSizeCurrent >= 4)
+				if ((ant.y - ant.fallStartY) / this.maps.tileSizeOrigin >= 4)
 				{
 					this.crashAnt(ant);
 				}
