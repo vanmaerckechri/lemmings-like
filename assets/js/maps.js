@@ -44,7 +44,7 @@ class Maps
 					rowHeight: 1,
 					shadeLength: 1,
 					typeLength: 1
-				},
+				}
 			},
 			antsIcons:
 			{
@@ -207,7 +207,16 @@ class Maps
 					active: false,
 					imgIndex: 0,
 					animation: true
-				}
+				},
+				link:
+				{
+					img: null,
+					imgSrc: "icon_link.png",
+					colWidth: 1,
+					rowHeight: 1,
+					shadeLength: 1,
+					typeLength: 1
+				},
 			},
 			decor:
 			{
@@ -246,7 +255,7 @@ class Maps
 			elemsList: 
 			{
 				alphaOmega: ["spawn", "exit"],
-				interactive: ["btn", "door"],
+				interactive: ["btn", "door", "link"],
 				blocs: ["grass", "ground"],
 				decor: ["tree", "tombs", "arrowLeft"],
 				editorOptionsIcons: ["autoCloseMenu", "toggleSideMenu"],

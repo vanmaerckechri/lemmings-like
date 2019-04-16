@@ -38,6 +38,15 @@ class Editor
 		this.row = 0;
 		this.spawn = null;
 
+		this.currentLink =
+		{
+			active: false,
+			row: 0,
+			col: 0,
+			x: 0,
+			y: 0
+		};
+
 		this.init();
 	}
 
@@ -127,7 +136,88 @@ class Editor
 					}
 				}
 			}
-		}		
+		}
+	}
+
+	completeLinkIntObj()
+	{
+		if (this.currentLink.active)
+		{
+			let map = this.map['tiles'];
+
+			let tileSizeOr = this.maps.tileSizeOrigin;
+			let tileRatio = this.maps.tileSizeCurrent / tileSizeOr;
+
+			let x = this.mouseX / tileRatio;
+			let y = this.mouseY / tileRatio;
+
+			let col = Math.floor(x / tileSizeOr);
+			let row = Math.floor(y / tileSizeOr);
+
+			if (map[row] && map[row][col])
+			{
+				if (map[row][col].dependToRow)
+				{
+					let rowTemp = row;
+					row = map[row][col].dependToRow;
+					col = map[rowTemp][col].dependToCol;
+				}
+				if (map[row][col].objName == "door")
+				{
+					let rowBtn = this.currentLink.row;
+					let colBtn = this.currentLink.col;
+
+					map[rowBtn][colBtn].focus = !map[rowBtn][colBtn].focus ? [] : map[rowBtn][colBtn].focus;
+
+					// check if btn is already link to this door
+					let focusList =  map[rowBtn][colBtn].focus;
+					let isAlreadyExist = false;
+					for (let i = focusList.length - 1; i >= 0; i--)
+					{
+						if (focusList[i].row == row && focusList[i].col == col)
+						{
+							isAlreadyExist = true;
+							break;
+						}
+					}
+					if (!isAlreadyExist)
+					{
+						let newFocus = {row: row, col: col};
+						map[rowBtn][colBtn].focus.push(newFocus);
+					}
+				}
+			}
+
+
+			// reset current link
+			this.currentLink = 
+			{
+				active: false,
+				row: 0,
+				col: 0,
+				x: 0,
+				y: 0
+			}
+		}
+	}
+
+	tryToLinkIntObjs(row, col, y, x)
+	{
+		let map = this.map['tiles'];
+		if (!this.currentLink.active && map[row] && map[row][col] && map[row][col].objName)
+		{
+			if (map[row][col].objName == "btn")
+			{
+				this.currentLink = 
+				{
+					active: true,
+					row: row,
+					col: col,
+					x: x,
+					y: y
+				}
+			}
+		}
 	}
 
 	putElement()
@@ -148,6 +238,10 @@ class Editor
 			if (this.selectedElem == "removeTile")
 			{
 				this.cleanTiles(row, col);
+			}
+			else if (this.selectedElem == "link")
+			{
+				this.tryToLinkIntObjs(row, col, y, x);
 			}
 			else
 			{
@@ -231,6 +325,27 @@ class Editor
 				ctx.fill();
 				ctx.stroke();
 			}
+			else if (this.selectedElem == "link")
+			{
+				// cursor
+				ctx.beginPath();
+				ctx.rect(x, y, tileSizeOr * tileRatio, tileSizeOr * tileRatio);
+				ctx.fillStyle = "rgba(122, 255, 122, .5)";
+				ctx.strokeStyle = "rgba(75, 255, 75, 1)";
+				ctx.fill();
+				ctx.stroke();
+				// line onclick to current mouse position
+				if (this.currentLink.active)
+				{
+					let sX = this.currentLink.x;
+					let sY = this.currentLink.y;
+					ctx.beginPath();
+					ctx.strokeStyle = "rgba(75, 255, 75, 1)";
+					ctx.moveTo(sX, sY);
+					ctx.lineTo(x, y);
+					ctx.stroke(); 
+				}
+			}
 			else
 			{
 				let imgRow = this.selectedElem.imgRow;
@@ -277,6 +392,42 @@ class Editor
 
 						ctxEd.imageSmoothingEnabled  = false;
  						ctxEd.drawImage(img, sX, sY, sW, sH, dX, dY, Math.ceil(sW * tileRatio), Math.ceil(sH * tileRatio));
+
+ 						// display links buttons/doors
+ 						if (map[r][c].objName == "btn")
+ 						{
+ 							let obj = map[r][c];
+ 							if (obj.focus && obj.focus.length > 0)
+ 							{
+ 								for (let i = obj.focus.length - 1; i >= 0; i--)
+ 								{
+ 									sX = (c + (el.colWidth / 2)) * tileSizeOr;
+ 									sY = (r + (el.rowHeight / 2)) * tileSizeOr;
+
+ 									let dRow = obj.focus[i].row;
+ 									let dCol = obj.focus[i].col;
+
+ 									// check if door still exist
+ 									if (map[dRow] && map[dRow][dCol] && map[dRow][dCol].objName == "door")
+ 									{
+	 									let dEl = this.maps['elemInfos'][map[dRow][dCol].catName][map[dRow][dCol].objName];
+	 									dX = (dCol + (dEl.colWidth / 2)) * tileSizeOr;
+	 									dY = (dRow + (dEl.rowHeight / 2)) * tileSizeOr;
+
+	 									ctxEd.beginPath();
+										ctxEd.strokeStyle = "grey";
+										ctxEd.moveTo(sX, sY);
+										ctxEd.lineTo(dX, dY);
+										ctxEd.stroke();
+ 									}
+ 									// ... clean links array
+ 									else
+ 									{
+										obj.focus.splice(i, 1);
+ 									}
+ 								}
+ 							}
+ 						}
 					}
 				}
 			}
@@ -480,11 +631,11 @@ class Editor
 				imgContainer.appendChild(img);
 				catContainer.appendChild(imgContainer);
 
-				if (objsName[i] == "removeTile")
+				if (objsName[i] == "removeTile" || objsName[i] == "link")
 				{
 					imgContainer.addEventListener('click', () =>
 					{
-						this.selectedElem = "removeTile";
+						this.selectedElem = objsName[i];
 					});
 				}
 				else
@@ -550,6 +701,7 @@ class Editor
 		window.addEventListener('mouseup',  () =>
 		{
 			this.action = "";
+			this.completeLinkIntObj();
 		})
 	}
 
