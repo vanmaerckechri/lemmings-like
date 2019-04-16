@@ -241,7 +241,7 @@ class Game
 			{
 				for (let c = map[r].length - 1; c >= 0; c--)
 				{
-					if (map[r][c] && map[r][c].objName)
+					if (map[r][c] && map[r][c].catName && map[r][c].catName != "interactive")
 					{
 						let imgRow = map[r][c].imgRow;
 						let imgCol = map[r][c].imgCol;

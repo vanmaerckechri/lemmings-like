@@ -174,6 +174,8 @@ class Engine
 			if (this.game.ants)
 			{
 				this.game.ants.particles.drawDeads();
+				let forceDraw = true;
+				InteractiveEntities.mainLoop(this.maps, forceDraw);
 			}
 		}
 		else if (this.status == 'editor')

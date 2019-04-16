@@ -430,5 +430,9 @@ class Ants
 		this.createGameIcons();
 
 		this.detectSpawn();
+
+		// draw interactive obj
+		let forceDraw = true;
+		InteractiveEntities.mainLoop(this.maps, forceDraw);
 	}
 }

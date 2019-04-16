@@ -200,6 +200,8 @@ class Editor
 		let map = this.map['tiles'];
 
 		let tileSizeOr = this.maps.tileSizeOrigin;
+		let tileSizeCurrent = this.maps.tileSizeCurrent;
+
 		let tileRatio = this.maps.tileSizeCurrent / tileSizeOr;
 
 		if (this.action == "putElem")

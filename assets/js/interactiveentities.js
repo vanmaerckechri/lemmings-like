@@ -6,7 +6,38 @@ class InteractiveEntities
 	{
 	}
 
-	static draw(maps)
+	static draw(maps, obj, metaNfo, img, r, c, tileSizeOr)
+	{
+		let tileSizeCur = maps.tileSizeCurrent;
+
+		let canvas = document.getElementById('canvas-bg');
+		let ctx = canvas.getContext('2d');
+
+		let currentMap = maps['currentMap'];
+		let tileRatio = maps.ratio;
+
+		let imgRow = obj.imgRow;
+		let imgCol = obj.imgCol;
+	
+		let sX = tileSizeOr * obj.imgIndex;
+		let sY = imgRow * tileSizeOr;
+		let sW = tileSizeOr * metaNfo.colWidth;
+		let sH = tileSizeOr * metaNfo.rowHeight;
+
+
+		let dX = c * tileSizeCur;
+		let dY = r * tileSizeCur;
+		let dW = tileSizeCur * metaNfo.colWidth;
+		let dH = tileSizeCur * metaNfo.rowHeight;
+
+		ctx.imageSmoothingEnabled  = false;
+		ctx.clearRect(dX, dY, dW, dH);
+		ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
+
+		currentMap['collisions'] = Collisions.update(maps['tileSizeCurrent'], ctx, currentMap['collisions'], dX, dY, dW, dW, tileRatio);
+	}
+
+	static mainLoop(maps, draw = false)
 	{
 		let map = maps['currentMap']['tiles'];
 
@@ -14,8 +45,6 @@ class InteractiveEntities
 		let ctx = canvas.getContext('2d');
 
 		let tileSizeOr = maps.tileSizeOrigin;
-		let tileSizeCur = maps.tileSizeCurrent;
-
 
 		for (let r = map.length - 1; r >= 0; r--)
 		{
@@ -26,9 +55,6 @@ class InteractiveEntities
 					if (map[r][c] && map[r][c].catName && map[r][c].catName == "interactive")
 					{
 						let obj = map[r][c];
-
-						let imgRow = obj.imgRow;
-						let imgCol = obj.imgCol;
 
 						let metaNfo = maps['elemInfos'][obj.catName][obj.objName];
 						let img = metaNfo.img;
@@ -44,37 +70,15 @@ class InteractiveEntities
 							obj.imgIndex = obj.imgIndex * tileSizeOr > 0 ? obj.imgIndex - 1 : 0;
 						}
 
-						let sX = tileSizeOr * obj.imgIndex;
-						let sY = imgRow * tileSizeOr;
-						let sW = tileSizeOr * metaNfo.colWidth;
-						let sH = tileSizeOr * metaNfo.rowHeight;
-
-
-						let dX = c * tileSizeCur;
-						let dY = r * tileSizeCur;
-						let dW = tileSizeCur * metaNfo.colWidth;
-						let dH = tileSizeCur * metaNfo.rowHeight;
-
-						ctx.imageSmoothingEnabled  = false;
-						ctx.clearRect(dX, dY, dW, dH);
- 						ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
-
-						if (lastImgIndex != obj.imgIndex)
+						if (lastImgIndex != obj.imgIndex || draw === true)
 						{
-							let currentMap = maps['currentMap'];
-							let tileRatio = maps.ratio;
-							currentMap['collisions'] = Collisions.update(maps['tileSizeCurrent'], ctx, currentMap['collisions'], dX, dY, dW, dW, tileRatio);
+							this.draw(maps, obj, metaNfo, img, r, c, tileSizeOr);
 						}
  						obj.active = false;
 					}
 				}
 			}
 		}
-	}
-
-	static mainLoop(map)
-	{
-		this.draw(map);
 	}
 
 	static manageInteractiveEntities(maps, ant)

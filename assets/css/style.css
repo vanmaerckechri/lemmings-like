@@ -383,6 +383,7 @@ canvas {
       cursor: pointer; }
     .editorCat .img-container img {
       max-width: 52px;
+      max-height: 52px;
       height: auto;
       pointer-events: none; }
 
