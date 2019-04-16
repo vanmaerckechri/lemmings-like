@@ -333,13 +333,15 @@ class Ants
 			let ant = this.ants[i];
 			ant.index = i;
 
-			this.manageStatut(ant, engineSpeed);			
+			InteractiveEntities.manageInteractiveEntities(this.maps, ant);
+			this.manageStatut(ant, engineSpeed);
 			this.draw(ant, engineSpeed);
 		}
 		
 		this.checkIfAntAtMouse();
 
 		this.particles.mainLoop();
+		InteractiveEntities.mainLoop(this.maps);
 	}
 
 	detectSpawn()
@@ -355,7 +357,7 @@ class Ants
 					if (map['tiles'][r][c])
 					{
 						let mapTiles = map['tiles'][r][c];
-						if (mapTiles['catName'] == "doors" && mapTiles['objName'] == "spawn")
+						if (mapTiles['objName'] == "spawn")
 						{
 							this.spawn.x = (c + 1.5) * this.maps.tileSizeOrigin;
 							this.spawn.y = (r + 2) * this.maps.tileSizeOrigin;

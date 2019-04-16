@@ -169,6 +169,7 @@ class Engine
 			let h = this.maps['currentMap']['h'];
 			
 			this.maps.tileSizeCurrent = Resolution.update(this.maps.tileSizeOrigin, w, h);
+			this.maps.ratio = this.maps.tileSizeCurrent / this.maps.tileSizeOrigin;
 			this.game.drawMap();
 			if (this.game.ants)
 			{
@@ -178,10 +179,12 @@ class Engine
 		else if (this.status == 'editor')
 		{
 			this.maps.tileSizeCurrent = Resolution.update(this.maps.tileSizeOrigin, this.editor.canWidth, this.editor.canHeight);
+			this.maps.ratio = this.maps.tileSizeCurrent / this.maps.tileSizeOrigin;
 		}
 		else
 		{
 			this.maps.tileSizeCurrent = Resolution.update(this.maps.tileSizeOrigin);
+			this.maps.ratio = this.maps.tileSizeCurrent / this.maps.tileSizeOrigin;
 		}
 
 		this.game.updateScreen();

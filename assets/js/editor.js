@@ -184,7 +184,7 @@ class Editor
 
 				// change visual shade for next
 				let shade = 0;
-				if (elRef.shadeLength > 1)
+				if (elRef.animation && elRef.shadeLength > 1)
 				{
 					shade = Math.floor(Math.random() * (elRef.shadeLength - 0) + 0);
 				}

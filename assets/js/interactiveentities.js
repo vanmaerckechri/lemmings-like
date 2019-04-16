@@ -1,0 +1,115 @@
+"use strict";
+
+class InteractiveEntities
+{
+	constructor()
+	{
+	}
+
+	static draw(maps)
+	{
+		let map = maps['currentMap']['tiles'];
+
+		let canvas = document.getElementById('canvas-bg');
+		let ctx = canvas.getContext('2d');
+
+		let tileSizeOr = maps.tileSizeOrigin;
+		let tileSizeCur = maps.tileSizeCurrent;
+
+
+		for (let r = map.length - 1; r >= 0; r--)
+		{
+			if (map[r])
+			{
+				for (let c = map[r].length - 1; c >= 0; c--)
+				{
+					if (map[r][c] && map[r][c].catName && map[r][c].catName == "interactive")
+					{
+						let obj = map[r][c];
+
+						let imgRow = obj.imgRow;
+						let imgCol = obj.imgCol;
+
+						let metaNfo = maps['elemInfos'][obj.catName][obj.objName];
+						let img = metaNfo.img;
+
+						let lastImgIndex = obj.imgIndex;
+
+						if (obj.active)
+						{
+							obj.imgIndex = (obj.imgIndex + 1) * tileSizeOr < img.width - 1 ? obj.imgIndex + 1 : obj.imgIndex;
+						}
+						else
+						{
+							obj.imgIndex = obj.imgIndex * tileSizeOr > 0 ? obj.imgIndex - 1 : 0;
+						}
+
+						let sX = tileSizeOr * obj.imgIndex;
+						let sY = imgRow * tileSizeOr;
+						let sW = tileSizeOr * metaNfo.colWidth;
+						let sH = tileSizeOr * metaNfo.rowHeight;
+
+
+						let dX = c * tileSizeCur;
+						let dY = r * tileSizeCur;
+						let dW = tileSizeCur * metaNfo.colWidth;
+						let dH = tileSizeCur * metaNfo.rowHeight;
+
+						ctx.imageSmoothingEnabled  = false;
+						ctx.clearRect(dX, dY, dW, dH);
+ 						ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
+
+						if (lastImgIndex != obj.imgIndex)
+						{
+							let currentMap = maps['currentMap'];
+							let tileRatio = maps.ratio;
+							currentMap['collisions'] = Collisions.update(maps['tileSizeCurrent'], ctx, currentMap['collisions'], dX, dY, dW, dW, tileRatio);
+						}
+ 						obj.active = false;
+					}
+				}
+			}
+		}
+	}
+
+	static mainLoop(map)
+	{
+		this.draw(map);
+	}
+
+	static manageInteractiveEntities(maps, ant)
+	{
+		let map = maps['currentMap']['tiles'];
+
+		let ratio = maps.ratio;
+
+		let w = Math.round(ant.w * ratio);
+		let h = Math.round(ant.h * ratio);
+
+		let r = Math.round(ant.y / maps.tileSizeOrigin);
+		let c = Math.round(ant.x / maps.tileSizeOrigin);
+
+		if (map[r] && map[r][c] && map[r][c].catName == "interactive")
+		{
+			if (map[r][c].objName == "btn")
+			{
+				let isCollision = Collisions.check(maps, ant.y + ant.h + 2, ant.x + (ant.w / 2), 1, 1);
+				if (isCollision)
+				{
+					map[r][c].active = true;
+				}
+			}
+		}
+
+/*
+		let x = c * this.maps.tileSizeCurrent;
+		let y = r * this.maps.tileSizeCurrent;
+		let canvas = document.getElementById('canvas-y');
+		let ctx = canvas.getContext('2d');
+		ctx.beginPath();
+		ctx.fillStyle = "red";
+		ctx.rect(x, y , w, h);
+		ctx.fill();
+*/
+	}
+}

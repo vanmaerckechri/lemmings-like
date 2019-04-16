@@ -41,7 +41,7 @@ class Collisions
 
 	}
 
-	static update(tileSize, ctx, collisions, sX, sY, width, height, tileRatio)
+	static update(tileSize, ctx, collisions, sX, sY, width, height, tileRatio, collisionType = true)
 	{
 		// if ctx is false, give collisions at all pixels
 		let pixels = ctx ? ctx.getImageData(sX, sY, width, height).data : false;
@@ -62,7 +62,7 @@ class Collisions
 
 				if(!pixels || pixels[index] == 255)
 				{
-					collisions[pixRow][pixCol] = true;
+					collisions[pixRow][pixCol] = collisionType;
 				}
 				else
 				{
@@ -104,7 +104,7 @@ class Collisions
 						let width = colWidth * tileSize;
 						let height = rowHeight * tileSize;
 
-						collisions = this.update(tileSize, ctx, collisions, sX, sY, width, height, tileRatio);
+						collisions = this.update(tileSize, ctx, collisions, sX, sY, width, height, tileRatio, map[r][c].collision);
 					}
 				}
 			}
