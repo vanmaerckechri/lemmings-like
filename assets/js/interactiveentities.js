@@ -81,8 +81,7 @@ class InteractiveEntities
 
 								if (map[focusRow] && map[focusRow][focusCol])
 								{
-									console.log('ok')
-									map[focusRow][focusCol].active = map[r][c].active;
+									map[focusRow][focusCol].active = map[focusRow][focusCol].active ? false : true;
 								}
 							}
 						}
