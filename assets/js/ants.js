@@ -163,6 +163,7 @@ class Ants
 
 						ant.status = "block";
 						ant.animation = "block";
+						ant.imgIndex = 0;
 
 						let currentMap = this.maps['currentMap'];
 						let tileRatio = this.maps['tileSizeCurrent'] / this.maps['tileSizeOrigin'];
@@ -344,6 +345,8 @@ class Ants
 		let ctx = canvas.getContext('2d');
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+		this.checkIfAntAtMouse();
+
 		for (let i = this.ants.length - 1; i >= 0; i--)
 		{
 			let ant = this.ants[i];
@@ -354,8 +357,6 @@ class Ants
 			this.draw(ant, engineSpeed);
 		}
 		
-		this.checkIfAntAtMouse();
-
 		this.particles.mainLoop();
 		InteractiveEntities.mainLoop(this.maps);
 	}

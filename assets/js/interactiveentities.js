@@ -56,21 +56,6 @@ class InteractiveEntities
 					{
 						let obj = map[r][c];
 
-						// active other objs from current obj?
-						if (obj.focus && obj.focus.length > 0)
-						{
-							for (let i = obj.focus.length - 1; i >= 0; i--)
-							{
-								let focusRow = obj.focus[i].row;
-								let focusCol = obj.focus[i].col;
-
-								if (map[focusRow] && map[focusRow][focusCol])
-								{
-									map[focusRow][focusCol].active = map[r][c].active;
-								}
-							}
-						}
-
 						// animation
 						let lastImgIndex = obj.imgIndex;
 
@@ -84,6 +69,22 @@ class InteractiveEntities
 						else
 						{
 							obj.imgIndex = obj.imgIndex * tileSizeOr > 0 ? obj.imgIndex - 1 : 0;
+						}
+
+						// active other objs from current obj?
+						if (obj.active && obj.focus && obj.focus.length > 0)
+						{
+							for (let i = obj.focus.length - 1; i >= 0; i--)
+							{
+								let focusRow = obj.focus[i].row;
+								let focusCol = obj.focus[i].col;
+
+								if (map[focusRow] && map[focusRow][focusCol])
+								{
+									console.log('ok')
+									map[focusRow][focusCol].active = map[r][c].active;
+								}
+							}
 						}
 
 						// if animation is not finish refresh canvas
