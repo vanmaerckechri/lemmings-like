@@ -81,7 +81,10 @@ class InteractiveEntities
 
 								if (map[focusRow] && map[focusRow][focusCol])
 								{
-									map[focusRow][focusCol].active = map[focusRow][focusCol].active ? false : true;
+									// for another door type ((- + -) = +) ...
+									//map[focusRow][focusCol].active = map[focusRow][focusCol].active ? false : true;
+
+									map[focusRow][focusCol].active = true;
 								}
 							}
 						}

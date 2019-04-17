@@ -114,14 +114,28 @@ class Ants
 		}
 	}
 
-	unSelectAction()
+	unSelectAction(all = false)
 	{
-		let icon = document.getElementById(this.selectedAction);
-		if (icon.classList.contains('selected'))
+		if (all)
 		{
-			icon.classList.remove('selected');
+			let icons = document.querySelectorAll(".bottom-container .img-container");
+			for (let i = icons.length - 1; i >= 0; i--)
+			{
+				if (icons[i].classList.contains("selected"))
+				{
+					icons[i].classList.remove('selected');
+				}
+			}
 		}
-		this.selectedAction = null;
+		else
+		{
+			let icon = document.getElementById(this.selectedAction);
+			if (icon.classList.contains('selected'))
+			{
+				icon.classList.remove('selected');
+			}
+			this.selectedAction = null;
+		}
 	}
 
 	manageActionLength()
@@ -413,6 +427,8 @@ class Ants
 					let icon = document.getElementById(icons[i]);
 					if (!icon.classList.contains('selected') && !icon.classList.contains('off'))
 					{
+						let all = true;
+						this.unSelectAction(all);
 						icon.classList.add('selected');
 					}
 				})
