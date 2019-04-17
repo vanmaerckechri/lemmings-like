@@ -56,6 +56,15 @@ class Maps
 					rowHeight: 1,
 					shadeLength: 1,
 					typeLength: 2
+				},
+				cancel:
+				{
+					img: null,
+					imgSrc: "icon_game_cancel.png",
+					colWidth: 1,
+					rowHeight: 1,
+					shadeLength: 1,
+					typeLength: 1
 				}
 			},
 			gameSpeedIcons:
@@ -269,7 +278,7 @@ class Maps
 			{
 				ants: ["walk", "spawn", "fall", "block"],
 				alphaOmega: ["spawn", "exit"],
-				antsIcons: ["gameBlock"],
+				antsIcons: ["cancel", "gameBlock"],
 				gameSpeedIcons: ["timeDown", "timePause", "timePlay", "timeUp"]
 			}
 		};
@@ -282,7 +291,8 @@ class Maps
 			h: 720,
 			actions:
 			{
-				gameBlock: 2
+				gameBlock: 2,
+				cancel: " "
 			},
 			antsLength: 20,
 			elemsList: 

@@ -171,6 +171,22 @@ class Ants
 						currentMap['collisions'] = Collisions.update(this.maps['tileSizeCurrent'], ctx, currentMap['collisions'], ant.x * tileRatio, ant.y * tileRatio, ant.w * tileRatio, ant.h * tileRatio, tileRatio);
 					}
 				}
+				else if (this.selectedAction == "cancel")
+				{
+					this.unSelectAction();
+
+					if (ant.status == "block")
+					{
+						let currentMap = this.maps['currentMap'];
+						let tileRatio = this.maps['tileSizeCurrent'] / this.maps['tileSizeOrigin'];
+						let ctx = false;
+						let collision = false
+						currentMap['collisions'] = Collisions.update(this.maps['tileSizeCurrent'], ctx, currentMap['collisions'], ant.x * tileRatio, ant.y * tileRatio, ant.w * tileRatio, ant.h * tileRatio, tileRatio, collision);
+					}
+
+					ant.status = ant.lastAnimationType;
+					ant.animation = ant.lastAnimationType;
+				}
 			}
 		}
 	}
@@ -385,9 +401,9 @@ class Ants
 				imgContainer.setAttribute('id', icons[i]);
 				imgContainer.setAttribute('class', 'img-container');
 
-				let actionLength = document.createElement('p');
-				actionLength.setAttribute('class', 'actionLength');
-				actionLength.innerText = this.maps['currentMap']['actions'][icons[i]];
+				let actionLengthTag = document.createElement('p');
+				actionLengthTag.setAttribute('class', 'actionLength');
+				actionLengthTag.innerText = this.maps['currentMap']['actions'][icons[i]];
 
 				let img = this.maps['elemInfos']['antsIcons'][icons[i]]['img'];
 				imgContainer.addEventListener('click', () =>
@@ -401,7 +417,7 @@ class Ants
 				})
 
 				imgContainer.appendChild(img);
-				imgContainer.appendChild(actionLength);
+				imgContainer.appendChild(actionLengthTag);
 				gameUiBotCont.appendChild(imgContainer);
 			}
 		}
