@@ -34,7 +34,7 @@ class InteractiveEntities
 		ctx.clearRect(dX, dY, dW, dH);
 		ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
 
-		currentMap['collisions'] = Collisions.update(maps['tileSizeCurrent'], ctx, currentMap['collisions'], dX, dY, dW, dW, tileRatio);
+		currentMap['collisions'] = Collisions.update(maps['tileSizeCurrent'], ctx, currentMap['collisions'], dX, dY, dW, dH, tileRatio);
 	}
 
 	static mainLoop(maps, draw = false)
@@ -56,10 +56,26 @@ class InteractiveEntities
 					{
 						let obj = map[r][c];
 
+						// active other objs from current obj?
+						if (obj.focus && obj.focus.length > 0)
+						{
+							for (let i = obj.focus.length - 1; i >= 0; i--)
+							{
+								let focusRow = obj.focus[i].row;
+								let focusCol = obj.focus[i].col;
+
+								if (map[focusRow] && map[focusRow][focusCol])
+								{
+									map[focusRow][focusCol].active = map[r][c].active;
+								}
+							}
+						}
+
+						// animation
+						let lastImgIndex = obj.imgIndex;
+
 						let metaNfo = maps['elemInfos'][obj.catName][obj.objName];
 						let img = metaNfo.img;
-
-						let lastImgIndex = obj.imgIndex;
 
 						if (obj.active)
 						{
@@ -70,6 +86,7 @@ class InteractiveEntities
 							obj.imgIndex = obj.imgIndex * tileSizeOr > 0 ? obj.imgIndex - 1 : 0;
 						}
 
+						// if animation is not finish refresh canvas
 						if (lastImgIndex != obj.imgIndex || draw === true)
 						{
 							this.draw(maps, obj, metaNfo, img, r, c, tileSizeOr);

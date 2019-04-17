@@ -314,11 +314,9 @@ class Game
 		let fpsContainer = document.getElementById('fps-container');
 		topContainer.insertBefore(fpsContainer, topContainer.firstChild)
 
-		this.maps['currentMap']['collisions'] = Collisions.init(this.maps, "canvas-bg");
-
 		this.loadTimeSpeedIcons();
-
 		this.ants = new Ants(this.maps);
+		this.maps['currentMap']['collisions'] = Collisions.init(this.maps, "canvas-bg");
 		this.resetTimer();
 	}
 

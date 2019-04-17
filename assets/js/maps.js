@@ -184,7 +184,7 @@ class Maps
 			{
 				btn:
 				{
-					collision: "btn",
+					collision: true,
 					img: null,
 					imgSrc: "entity_btn.png",
 					colWidth: 1,
@@ -197,7 +197,7 @@ class Maps
 				},
 				door:
 				{
-					collision: "door",
+					collision: true,
 					img: null,
 					imgSrc: "entity_door.png",
 					colWidth: 1,

@@ -21,7 +21,7 @@ class Editor
 		{ 
 			w: 1920,
 			h: 1024,
-			antsLength: 1,
+			antsLength: 3,
 			actions:
 			{
 				gameBlock: 2
