@@ -212,10 +212,21 @@ class Ants
 
 					ant.status = ant.lastAnimationType;
 					ant.animation = ant.lastAnimationType;
+					ant.imgIndex = 0;
 				}
 				else if (this.selectedAction == "suicide")
 				{
 					this.unSelectAction();
+
+					if (ant.status == "block")
+					{
+						let currentMap = this.maps['currentMap'];
+						let tileRatio = this.maps['tileSizeCurrent'] / this.maps['tileSizeOrigin'];
+						let ctx = false;
+						let collision = false
+						currentMap['collisions'] = Collisions.update(this.maps['tileSizeCurrent'], ctx, currentMap['collisions'], ant.x * tileRatio, ant.y * tileRatio, ant.w * tileRatio, ant.h * tileRatio, tileRatio, collision);
+					}
+
 					ant.status = "suicide";
 					ant.animation = "suicide";
 					ant.imgIndex = 0;
