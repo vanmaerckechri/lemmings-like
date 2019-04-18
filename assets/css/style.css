@@ -2,7 +2,8 @@ html, body, header, nav, footer, section, div, span, h1, h2, h3, h4, h5, h6, p, 
   margin: 0;
   border: none;
   padding: 0;
-  box-sizing: border-box; }
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box; }
 
 p, a, cite, label, input, button, span {
   font-family: "Quicksand", sans-serif; }
@@ -45,24 +46,43 @@ a {
   left: 0;
   width: 100%;
   height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   background-color: #99a0ad;
   opacity: 1;
+  -webkit-transition: opacity 0.5s;
   transition: opacity 0.5s; }
 
 .menu-container {
   width: 250px;
   height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   font-size: 1.5rem;
   color: white;
   background-color: #181d1e;
-  transition: transform 0.2s; }
+  -webkit-transition: -webkit-transform 0.2s;
+  transition: -webkit-transform 0.2s;
+  transition: transform 0.2s;
+  transition: transform 0.2s, -webkit-transform 0.2s; }
   .menu-container button {
     margin-top: 0.2rem;
     margin-bottom: 0.2rem;
@@ -76,7 +96,8 @@ a {
     background-color: #c07878; }
 
 .closeMainMenu {
-  transform: translateX(-100%); }
+  -webkit-transform: translateX(-100%);
+          transform: translateX(-100%); }
 
 .options-container {
   margin: 0 auto;
@@ -85,9 +106,15 @@ a {
   .options-container button {
     margin: 0.5rem 0;
     width: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
     color: #181d1e; }
     .options-container button span {
       display: inline-block; }
@@ -135,6 +162,7 @@ a {
   left: 0;
   background-color: #99a0ad;
   opacity: 1;
+  -webkit-transition: opacity 0.5s ease;
   transition: opacity 0.5s ease; }
 
 .canvas-container {
@@ -167,22 +195,41 @@ canvas {
     position: absolute;
     top: 0;
     left: 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
     width: 100%;
     text-align: center;
-    user-select: none; }
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none; }
     .game-ui .top-container .fps-container {
       padding-left: 10px;
       position: static;
-      flex: 1;
+      -webkit-box-flex: 1;
+          -ms-flex: 1;
+              flex: 1;
       text-align: left; }
     .game-ui .top-container .center-container {
-      flex: 3;
+      -webkit-box-flex: 3;
+          -ms-flex: 3;
+              flex: 3;
+      display: -webkit-box;
+      display: -ms-flexbox;
       display: flex;
-      justify-content: center;
-      align-items: center; }
+      -webkit-box-pack: center;
+          -ms-flex-pack: center;
+              justify-content: center;
+      -webkit-box-align: center;
+          -ms-flex-align: center;
+              align-items: center; }
     .game-ui .top-container .timer p {
       width: 100px;
       text-align: left; }
@@ -191,18 +238,32 @@ canvas {
       text-align: left; }
     .game-ui .top-container .gameSpeed-icons {
       margin-left: 10px;
+      display: -webkit-box;
+      display: -ms-flexbox;
       display: flex;
-      justify-content: center;
-      align-items: center; }
+      -webkit-box-pack: center;
+          -ms-flex-pack: center;
+              justify-content: center;
+      -webkit-box-align: center;
+          -ms-flex-align: center;
+              align-items: center; }
       .game-ui .top-container .gameSpeed-icons .img-container {
         border-radius: 50%; }
     .game-ui .top-container .alive-container {
-      margin-left: 20px; }
+      margin-left: 20px;
+      border-left: 1px solid white;
+      padding-left: 5px; }
     .game-ui .top-container .saved-container {
-      margin-left: 10px; }
+      margin-left: 5px;
+      border-left: 1px solid white;
+      border-right: 1px solid white;
+      padding-left: 5px;
+      padding-right: 5px; }
     .game-ui .top-container .zoom {
       padding-right: 10px;
-      flex: 1;
+      -webkit-box-flex: 1;
+          -ms-flex: 1;
+              flex: 1;
       text-align: right; }
   .game-ui .img-container {
     margin: 0 auto;
@@ -211,7 +272,10 @@ canvas {
     position: relative;
     width: 36px;
     height: 36px;
-    user-select: none;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
     pointer-events: auto; }
     .game-ui .img-container:hover {
       border-color: red;
@@ -222,7 +286,8 @@ canvas {
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate3d(-50%, -50%, 0);
+      -webkit-transform: translate3d(-50%, -50%, 0);
+              transform: translate3d(-50%, -50%, 0);
       font-size: 24px;
       text-shadow: 1px 0 0 black, 1px 1px 0 black, 0 1px 0 black, -1px 1px 0 black, -1px 0 0 black, -1px -1px 0 black, 0 -1px 0 black, 1px -1px 0 black; }
   .game-ui .img-container.off:hover {
@@ -236,17 +301,32 @@ canvas {
   left: 0;
   width: 100%;
   height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   background-color: #99a0ad; }
   .intro-container .intro-content, .intro-container .outro-content, .outro-container .intro-content, .outro-container .outro-content {
     border: 1px solid white;
     padding: 90px 30px 30px;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
     width: 50%;
     height: 90%;
     max-width: 600px;
@@ -272,12 +352,34 @@ canvas {
     font-size: 20px;
     background-color: #99a0ad;
     pointer-events: auto;
+    -webkit-transition: all 0.2s;
     transition: all 0.2s; }
     .intro-container button:hover, .outro-container button:hover {
       border-color: #99a0ad;
       color: #181d1e;
       background-color: #dea200;
       cursor: pointer; }
+
+.endGameBtn {
+  border: 2px solid #dea200;
+  border-radius: 50%;
+  position: absolute;
+  left: 10px;
+  bottom: 46px;
+  width: 100px;
+  height: 100px;
+  color: #181d1e;
+  font-weight: bold;
+  font-size: 20px;
+  background-color: #99a0ad;
+  pointer-events: auto;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s; }
+  .endGameBtn:hover {
+    border-color: #99a0ad;
+    color: #181d1e;
+    background-color: #dea200;
+    cursor: pointer; }
 
 @media screen and (max-width: 1024px) {
   .intro-container .intro-content, .intro-container .outr-content, .outro-container .intro-content, .outro-container .outr-content {
@@ -306,14 +408,20 @@ canvas {
   z-index: 3;
   background-color: #181d1e;
   pointer-events: auto;
-  transform: translate3d(-100%, 0, 0);
+  -webkit-transform: translate3d(-100%, 0, 0);
+          transform: translate3d(-100%, 0, 0);
+  -webkit-transition: -webkit-transform 0.5s;
+  transition: -webkit-transform 0.5s;
   transition: transform 0.5s;
+  transition: transform 0.5s, -webkit-transform 0.5s;
   overflow-y: auto;
   overflow-x: hidden; }
   .editor-ui .fps-container {
     padding-left: 10px;
     position: static;
-    flex: 1;
+    -webkit-box-flex: 1;
+        -ms-flex: 1;
+            flex: 1;
     text-align: center; }
   .editor-ui .btn {
     color: #c07878;
@@ -324,12 +432,15 @@ canvas {
       cursor: pointer; }
 
 .editor-openUi {
-  transform: translate3d(0, 0, 0); }
+  -webkit-transform: translate3d(0, 0, 0);
+          transform: translate3d(0, 0, 0); }
 
 .editor-autoClose {
-  transform: translate3d(calc(16px - 100%), 0, 0); }
+  -webkit-transform: translate3d(calc(16px - 100%), 0, 0);
+          transform: translate3d(calc(16px - 100%), 0, 0); }
   .editor-autoClose:hover {
-    transform: translate3d(0, 0, 0); }
+    -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0); }
 
 .editor-rightSide {
   border-right: none;
@@ -337,19 +448,27 @@ canvas {
   left: unset;
   right: 0; }
   .editor-rightSide .toggleSideMenu {
-    transform: scaleX(-1); }
+    -webkit-transform: scaleX(-1);
+            transform: scaleX(-1); }
 
 .editor-rightSide.editor-autoClose {
-  transform: translate3d(calc(100% - 16px), 0, 0); }
+  -webkit-transform: translate3d(calc(100% - 16px), 0, 0);
+          transform: translate3d(calc(100% - 16px), 0, 0); }
   .editor-rightSide.editor-autoClose:hover {
-    transform: translate3d(0, 0, 0); }
+    -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0); }
 
 .menuOptions-container {
   border-bottom: 1px solid white;
   border-top: 1px solid white;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: space-around;
-  align-items: center; }
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center; }
   .menuOptions-container .icon-Container {
     border: 2px solid transparent; }
     .menuOptions-container .icon-Container:hover {
@@ -371,7 +490,10 @@ canvas {
     margin: 0 2px;
     border: 2px solid transparent;
     display: inline-block;
-    user-select: none; }
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none; }
     .editorCat .img-container:hover {
       border-color: #c07878;
       cursor: pointer; }
@@ -419,7 +541,8 @@ canvas {
   color: #900; }
 
 .off {
-  filter: grayscale(100%); }
+  -webkit-filter: grayscale(100%);
+          filter: grayscale(100%); }
 
 .active {
   pointer-events: auto; }

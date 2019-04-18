@@ -338,7 +338,7 @@ class Maps
 			intro:
 			{
 				map: "MAP 02",
-				rules: 8,
+				rules: 9,
 				tips: "Hold the Door!"
 			},
 			w: 1280,

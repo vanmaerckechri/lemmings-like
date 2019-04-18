@@ -296,6 +296,73 @@ class Game
 		else
 		{
 			alert("Game is in dev! No more maps for moment. TY to have play.");
+			location.reload();
+		}
+	}
+
+	callEndGame()
+	{
+		let map = this.maps['currentMap'];
+
+		this.stopGame();
+
+		let outroCont = document.getElementById('outro-container');
+		let result = document.getElementById('outro-result');
+		let details = document.getElementById('outro-details');
+
+		let leaveBtn = document.getElementById('outro-leave');
+		let restartBtn = document.getElementById('outro-restart');
+		let nextMapBtn = document.getElementById('outro-nextMap');
+
+		if (document.getElementById('endGameBtn'))
+		{
+			document.getElementById('endGameBtn').remove();
+		}
+
+		let closeOutro = function()
+		{
+			leaveBtn.onclick = null;
+			restartBtn.onclick = null;
+			nextMapBtn.onclick = null;
+
+			outroCont.classList.add('hidden');
+			nextMapBtn.classList.add('hidden');
+		}
+
+		leaveBtn.onclick = () =>
+		{
+			location.reload();
+		}
+
+		restartBtn.onclick = () =>
+		{
+			closeOutro();
+			this.loadNextMap(map.index);
+		}
+
+		outroCont.classList.remove('hidden');
+
+		if (map.savedLength >= map.intro.rules)
+		{
+			//win
+			result.innerText = "Congratulations!";
+			let detailsText = map.savedLength > 1 ? map.savedLength + " bots." : map.savedLength + " bot.";
+			details.innerText = detailsText;
+
+			nextMapBtn.classList.remove('hidden');
+
+			nextMapBtn.onclick = () =>
+			{
+				closeOutro();
+				this.loadNextMap(map.index + 1);
+			}
+		}
+		else
+		{
+			//defeat
+			result.innerText = "Defeat!";
+			let detailsText = map.savedLength > 1 ? map.savedLength + " bots." : map.savedLength + " bot.";
+			details.innerText = detailsText;
 		}
 	}
 
@@ -307,61 +374,33 @@ class Game
 
 			if (map.antsLength == map.deletedAntsLength)
 			{
+				this.callEndGame();
+			}
+			else
+			{
+				// call victory or defeat button even if there are still ants
 
-				this.stopGame();
-
-				let outroCont = document.getElementById('outro-container');
-				let result = document.getElementById('outro-result');
-				let details = document.getElementById('outro-details');
-
-				let leaveBtn = document.getElementById('outro-leave');
-				let restartBtn = document.getElementById('outro-restart');
-				let nextMapBtn = document.getElementById('outro-nextMap');
-
-				let closeOutro = function()
+				if (!document.getElementById('endGameBtn'))
 				{
-					leaveBtn.onclick = null;
-					restartBtn.onclick = null;
-					nextMapBtn.onclick = null;
+					let status = map.savedLength >= map.intro.rules ? "victory" : "defeat";
+					let currentAliveLength = map.antsLength - map.deletedAntsLength;
+					let saved = map.savedLength;
+					let numberNeeded = map.intro.rules;
 
-					outroCont.classList.add('hidden');
-				}
-
-				leaveBtn.onclick = () =>
-				{
-					location.reload();
-				}
-
-				restartBtn.onclick = () =>
-				{
-					closeOutro();
-					this.loadNextMap(map.index);
-				}
-
-				outroCont.classList.remove('hidden');
-
-				if (map.savedLength >= map.intro.rules)
-				{
-					//win
-					result.innerText = "Congratulations!";
-					let detailsText = map.savedLength > 1 ? map.savedLength + " bots." : map.savedLength + " bot.";
-					details.innerText = detailsText;
-
-					nextMapBtn.classList.remove('hidden');
-
-					nextMapBtn.onclick = () =>
+					if (status == "victory" || saved + currentAliveLength < numberNeeded)
 					{
-						closeOutro();
-						this.loadNextMap(map.index + 1);
-					}
-				}
-				else
-				{
-					//defeat
+						let gameUi = document.getElementById('game-ui');
+						let btn = document.createElement('button');
+						btn.setAttribute('id', 'endGameBtn');
+						btn.setAttribute('class', 'endGameBtn');
+						btn.innerText = status;
 
-					result.innerText = "Defeat!";
-					let detailsText = map.savedLength > 1 ? map.savedLength + " bots." : map.savedLength + " bot.";
-					details.innerText = detailsText;
+						gameUi.appendChild(btn);
+						btn.onclick = () =>
+						{
+							this.callEndGame();
+						}
+					}
 				}
 			}
 		}

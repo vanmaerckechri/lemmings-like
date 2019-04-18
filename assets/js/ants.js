@@ -310,7 +310,7 @@ class Ants
 
 	walk(ant, engineSpeed)
 	{
-		let speed = 1 * engineSpeed;
+		let speed = (1 * this.maps.ratio) * engineSpeed;
 		
 		let halfH = ant.h / 2;
 		let halfW = ant.w / 2;

@@ -92,10 +92,16 @@ canvas
 		.alive-container
 		{
 			margin-left: 20px;
+			border-left: 1px solid white;
+			padding-left: 5px;
 		}
 		.saved-container
 		{
-			margin-left: 10px;
+			margin-left: 5px;
+			border-left: 1px solid white;
+			border-right: 1px solid white;
+			padding-left: 5px;
+			padding-right: 5px;
 		}
 		.zoom
 		{
@@ -207,6 +213,30 @@ canvas
 			cursor: pointer;
 		}
 	}
+}
+
+.endGameBtn
+{
+	border: 2px solid $color-hottest;
+	border-radius: 50%;
+	position: absolute;
+	left: 10px;
+	bottom: 46px;
+	width: 100px;
+	height: 100px;
+	color: $color-darkest;
+	font-weight: bold;
+	font-size: 20px;
+	background-color: $color-cold;
+	pointer-events: auto;
+	transition: all 0.2s;
+	&:hover
+	{
+		border-color: $color-cold;
+		color: $color-darkest;
+		background-color: $color-hottest;
+		cursor: pointer;
+	}	
 }
 
 @media screen and (max-width: 1024px)
