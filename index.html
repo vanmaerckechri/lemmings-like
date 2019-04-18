@@ -56,10 +56,20 @@
 		<div id="intro-container" class="intro-container hidden">
 			<div class="intro-content">
 				<p id="mapName" class="mapName"></p>
-				<p id="mapRules" class="mapRules"></p>
-				<p class="mapTips">TIPS</p>
-				<p id="mapTips-content" class="mapTips-content"></p>
+				<p class="mapRules-container">Save at least <span id="mapRules-antsToSave"></span> of <span id="mapRules-antsLength"></span> bots.</p>
+				<p id="mapTips" class="mapTips"></p>
 				<button id="launchGame" class="btn">PLAY</button>
+			</div>
+		</div>
+		<div id="outro-container" class="outro-container hidden">
+			<div class="outro-content">
+				<p id="outro-result" class="outro-result"></p>
+				<p class="outro-details">You saved <span id="outro-details"></span></p>
+				<div class="btn-container">
+					<button id="outro-leave" class="btn">LEAVE</button>
+					<button id="outro-restart" class="btn">RESTART</button>
+					<button id="outro-nextMap" class="btn hidden">NEXT</button>
+				</div>
 			</div>
 		</div>
 	</section>

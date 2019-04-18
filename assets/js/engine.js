@@ -4,7 +4,6 @@ class Engine
 {
 	constructor()
 	{
-		this.imgs;
 		this.keyboard;
 		this.ui;
 		this.menus;
@@ -35,7 +34,7 @@ class Engine
 		let imgMapInfos = this.maps[this.maps["currentMapName"]]['elemsList'];
 		let imgCommonInfos = this.maps['commonElem']['elemsList'];
 
-		this.imgs.preloadImgs(this.maps, [imgCommonInfos, imgMapInfos], () =>
+		Imgs.preloadImgs(this.maps, [imgCommonInfos, imgMapInfos], () =>
 		{
 			this.game.loadMap();
 			this.updateWindowSize();
@@ -54,7 +53,7 @@ class Engine
 
 		let imgMapInfos = this.maps['editor']['elemsList'];
 
-		this.imgs.preloadImgs(this.maps, [imgMapInfos], () =>
+		Imgs.preloadImgs(this.maps, [imgMapInfos], () =>
 		{
 			let res = Resolution.getStandardRes();
 			this.editor = new Editor(this.maps, res["w"], res["h"]);
@@ -407,7 +406,6 @@ class Engine
 
 	init()
 	{
-		this.imgs = new Imgs();
 		this.maps = new Maps();
 
 		this.initKeyboard();

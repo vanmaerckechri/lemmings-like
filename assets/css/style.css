@@ -2,8 +2,7 @@ html, body, header, nav, footer, section, div, span, h1, h2, h3, h4, h5, h6, p, 
   margin: 0;
   border: none;
   padding: 0;
-  -webkit-box-sizing: border-box;
-          box-sizing: border-box; }
+  box-sizing: border-box; }
 
 p, a, cite, label, input, button, span {
   font-family: "Quicksand", sans-serif; }
@@ -46,43 +45,24 @@ a {
   left: 0;
   width: 100%;
   height: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: start;
-      -ms-flex-pack: start;
-          justify-content: flex-start;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: flex-start;
+  align-items: center;
   background-color: #99a0ad;
   opacity: 1;
-  -webkit-transition: opacity 0.5s;
   transition: opacity 0.5s; }
 
 .menu-container {
   width: 250px;
   height: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   font-size: 1.5rem;
   color: white;
   background-color: #181d1e;
-  -webkit-transition: -webkit-transform 0.2s;
-  transition: -webkit-transform 0.2s;
-  transition: transform 0.2s;
-  transition: transform 0.2s, -webkit-transform 0.2s; }
+  transition: transform 0.2s; }
   .menu-container button {
     margin-top: 0.2rem;
     margin-bottom: 0.2rem;
@@ -96,8 +76,7 @@ a {
     background-color: #c07878; }
 
 .closeMainMenu {
-  -webkit-transform: translateX(-100%);
-          transform: translateX(-100%); }
+  transform: translateX(-100%); }
 
 .options-container {
   margin: 0 auto;
@@ -106,15 +85,9 @@ a {
   .options-container button {
     margin: 0.5rem 0;
     width: 100%;
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-pack: justify;
-        -ms-flex-pack: justify;
-            justify-content: space-between;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
+    justify-content: space-between;
+    align-items: center;
     color: #181d1e; }
     .options-container button span {
       display: inline-block; }
@@ -162,7 +135,6 @@ a {
   left: 0;
   background-color: #99a0ad;
   opacity: 1;
-  -webkit-transition: opacity 0.5s ease;
   transition: opacity 0.5s ease; }
 
 .canvas-container {
@@ -195,41 +167,22 @@ canvas {
     position: absolute;
     top: 0;
     left: 0;
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
-    -webkit-box-align: center;
-        -ms-flex-align: center;
-            align-items: center;
+    justify-content: center;
+    align-items: center;
     width: 100%;
     text-align: center;
-    -webkit-user-select: none;
-       -moz-user-select: none;
-        -ms-user-select: none;
-            user-select: none; }
+    user-select: none; }
     .game-ui .top-container .fps-container {
       padding-left: 10px;
       position: static;
-      -webkit-box-flex: 1;
-          -ms-flex: 1;
-              flex: 1;
+      flex: 1;
       text-align: left; }
     .game-ui .top-container .timer-container {
-      -webkit-box-flex: 3;
-          -ms-flex: 3;
-              flex: 3;
-      display: -webkit-box;
-      display: -ms-flexbox;
+      flex: 3;
       display: flex;
-      -webkit-box-pack: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-box-align: center;
-          -ms-flex-align: center;
-              align-items: center; }
+      justify-content: center;
+      align-items: center; }
     .game-ui .top-container .timer p {
       width: 100px;
       text-align: left; }
@@ -238,22 +191,14 @@ canvas {
       text-align: left; }
     .game-ui .top-container .gameSpeed-icons {
       margin-left: 10px;
-      display: -webkit-box;
-      display: -ms-flexbox;
       display: flex;
-      -webkit-box-pack: center;
-          -ms-flex-pack: center;
-              justify-content: center;
-      -webkit-box-align: center;
-          -ms-flex-align: center;
-              align-items: center; }
+      justify-content: center;
+      align-items: center; }
       .game-ui .top-container .gameSpeed-icons .img-container {
         border-radius: 50%; }
     .game-ui .top-container .zoom {
       padding-right: 10px;
-      -webkit-box-flex: 1;
-          -ms-flex: 1;
-              flex: 1;
+      flex: 1;
       text-align: right; }
   .game-ui .img-container {
     margin: 0 auto;
@@ -262,10 +207,7 @@ canvas {
     position: relative;
     width: 36px;
     height: 36px;
-    -webkit-user-select: none;
-       -moz-user-select: none;
-        -ms-user-select: none;
-            user-select: none;
+    user-select: none;
     pointer-events: auto; }
     .game-ui .img-container:hover {
       border-color: red;
@@ -276,8 +218,7 @@ canvas {
       position: absolute;
       top: 50%;
       left: 50%;
-      -webkit-transform: translate3d(-50%, -50%, 0);
-              transform: translate3d(-50%, -50%, 0);
+      transform: translate3d(-50%, -50%, 0);
       font-size: 24px;
       text-shadow: 1px 0 0 black, 1px 1px 0 black, 0 1px 0 black, -1px 1px 0 black, -1px 0 0 black, -1px -1px 0 black, 0 -1px 0 black, 1px -1px 0 black; }
   .game-ui .img-container.off:hover {
@@ -285,82 +226,74 @@ canvas {
   .game-ui .img-container.selected {
     border-color: red; }
 
-.intro-container {
+.intro-container, .outro-container {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  justify-content: center;
+  align-items: center;
   background-color: #99a0ad; }
-  .intro-container .intro-content {
-    padding: 50px;
-    position: relative;
-    width: 48%;
-    height: 100%;
-    max-width: 608px;
-    max-height: 672px;
-    background-image: url("../img/intro_bg.png");
-    background-position: center center;
-    background-repeat: round; }
-  .intro-container .mapName, .intro-container .mapRules, .intro-container .mapTips, .intro-container .mapTips-content {
-    color: #dea200;
+  .intro-container .intro-content, .intro-container .outro-content, .outro-container .intro-content, .outro-container .outro-content {
+    border: 1px solid white;
+    padding: 90px 30px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 50%;
+    height: 90%;
+    max-width: 600px;
+    max-height: 720px;
+    text-align: center;
+    font-family: "Quicksand", sans-serif;
+    background-image: url("../img/intro_bg.png"); }
+  .intro-container .mapName, .intro-container .mapRules-container, .intro-container .mapTips, .intro-container .mapTips-content, .intro-container .outro-result, .intro-container .outro-details, .outro-container .mapName, .outro-container .mapRules-container, .outro-container .mapTips, .outro-container .mapTips-content, .outro-container .outro-result, .outro-container .outro-details {
+    color: #99a0ad;
     font-weight: bold; }
-  .intro-container .mapTips, .intro-container .mapName {
+  .intro-container .mapName, .intro-container .outro-result, .outro-container .mapName, .outro-container .outro-result {
+    font-family: "Lato", sans-serif;
     font-size: 36px; }
-  .intro-container .mapTips {
-    margin-top: 36px; }
-  .intro-container .mapRules, .intro-container .mapTips-content {
+  .intro-container .mapRules-container, .intro-container .mapTips, .intro-container .outro-details, .outro-container .mapRules-container, .outro-container .mapTips, .outro-container .outro-details {
     font-size: 30px; }
-  .intro-container button {
+  .intro-container button, .outro-container button {
     border: 2px solid #dea200;
     border-radius: 50%;
-    position: absolute;
-    bottom: 36px;
-    left: 50%;
-    color: #99a0ad;
+    width: 100px;
+    height: 100px;
+    color: #181d1e;
     font-weight: bold;
     font-size: 36px;
+    background-color: #99a0ad;
     pointer-events: auto;
-    -webkit-transform: translate3d(-50%, 0, 0);
-            transform: translate3d(-50%, 0, 0); }
-    .intro-container button:hover {
-      border: 2px solid #99a0ad;
-      color: #dea200;
+    transition: all 0.2s; }
+    .intro-container button:hover, .outro-container button:hover {
+      border-color: #99a0ad;
+      color: #181d1e;
+      background-color: #dea200;
       cursor: pointer; }
 
 @media screen and (max-width: 1024px) {
-  .intro-container .intro-content {
-    padding: 46px; }
-  .intro-container .mapTips {
-    margin-top: 30px; }
-  .intro-container .mapTips, .intro-container .mapName {
+  .intro-container .intro-content, .intro-container .outr-content, .outro-container .intro-content, .outro-container .outr-content {
+    padding: 60px 20px 20px; }
+  .intro-container .mapName, .intro-container .outro-result, .outro-container .mapName, .outro-container .outro-result {
     font-size: 30px; }
-  .intro-container .mapRules, .intro-container .mapTips-content {
+  .intro-container .mapRules-container, .intro-container .mapTips, .intro-container .outro-details, .outro-container .mapRules-container, .outro-container .mapTips, .outro-container .outro-details {
     font-size: 27px; }
-  .intro-container button {
+  .intro-container button, .outro-container button {
+    width: 86px;
+    height: 86px;
     font-size: 30px;
     bottom: 30px; } }
 @media screen and (max-width: 870px) {
-  .intro-container .intro-content {
-    padding: 30px; }
-  .intro-container .mapTips {
-    margin-top: 24px; }
-  .intro-container .mapTips, .intro-container .mapName {
+  .intro-container .intro-content, .intro-container .outr-content, .outro-container .intro-content, .outro-container .outr-content {
+    padding: 54px 16px 16px; }
+  .intro-container .mapName, .intro-container .outro-result, .outro-container .mapName, .outro-container .outro-result {
     font-size: 24px; }
-  .intro-container .mapRules, .intro-container .mapTips-content {
-    font-size: 18px; }
-  .intro-container button {
-    font-size: 24px;
-    bottom: 24px; } }
+  .intro-container .mapRules-container, .intro-container .mapTips, .intro-container .outro-details, .outro-container .mapRules-container, .outro-container .mapTips, .outro-container .outro-details {
+    font-size: 18px; } }
 .editor-ui {
   border-right: 1px solid white;
   height: 100%;
@@ -370,20 +303,14 @@ canvas {
   z-index: 3;
   background-color: #181d1e;
   pointer-events: auto;
-  -webkit-transform: translate3d(-100%, 0, 0);
-          transform: translate3d(-100%, 0, 0);
-  -webkit-transition: -webkit-transform 0.5s;
-  transition: -webkit-transform 0.5s;
+  transform: translate3d(-100%, 0, 0);
   transition: transform 0.5s;
-  transition: transform 0.5s, -webkit-transform 0.5s;
   overflow-y: auto;
   overflow-x: hidden; }
   .editor-ui .fps-container {
     padding-left: 10px;
     position: static;
-    -webkit-box-flex: 1;
-        -ms-flex: 1;
-            flex: 1;
+    flex: 1;
     text-align: center; }
   .editor-ui .btn {
     color: #c07878;
@@ -394,15 +321,12 @@ canvas {
       cursor: pointer; }
 
 .editor-openUi {
-  -webkit-transform: translate3d(0, 0, 0);
-          transform: translate3d(0, 0, 0); }
+  transform: translate3d(0, 0, 0); }
 
 .editor-autoClose {
-  -webkit-transform: translate3d(calc(16px - 100%), 0, 0);
-          transform: translate3d(calc(16px - 100%), 0, 0); }
+  transform: translate3d(calc(16px - 100%), 0, 0); }
   .editor-autoClose:hover {
-    -webkit-transform: translate3d(0, 0, 0);
-            transform: translate3d(0, 0, 0); }
+    transform: translate3d(0, 0, 0); }
 
 .editor-rightSide {
   border-right: none;
@@ -410,27 +334,19 @@ canvas {
   left: unset;
   right: 0; }
   .editor-rightSide .toggleSideMenu {
-    -webkit-transform: scaleX(-1);
-            transform: scaleX(-1); }
+    transform: scaleX(-1); }
 
 .editor-rightSide.editor-autoClose {
-  -webkit-transform: translate3d(calc(100% - 16px), 0, 0);
-          transform: translate3d(calc(100% - 16px), 0, 0); }
+  transform: translate3d(calc(100% - 16px), 0, 0); }
   .editor-rightSide.editor-autoClose:hover {
-    -webkit-transform: translate3d(0, 0, 0);
-            transform: translate3d(0, 0, 0); }
+    transform: translate3d(0, 0, 0); }
 
 .menuOptions-container {
   border-bottom: 1px solid white;
   border-top: 1px solid white;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-pack: distribute;
-      justify-content: space-around;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center; }
+  justify-content: space-around;
+  align-items: center; }
   .menuOptions-container .icon-Container {
     border: 2px solid transparent; }
     .menuOptions-container .icon-Container:hover {
@@ -452,10 +368,7 @@ canvas {
     margin: 0 2px;
     border: 2px solid transparent;
     display: inline-block;
-    -webkit-user-select: none;
-       -moz-user-select: none;
-        -ms-user-select: none;
-            user-select: none; }
+    user-select: none; }
     .editorCat .img-container:hover {
       border-color: #c07878;
       cursor: pointer; }
@@ -503,8 +416,7 @@ canvas {
   color: #900; }
 
 .off {
-  -webkit-filter: grayscale(100%);
-          filter: grayscale(100%); }
+  filter: grayscale(100%); }
 
 .active {
   pointer-events: auto; }

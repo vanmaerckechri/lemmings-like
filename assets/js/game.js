@@ -268,12 +268,103 @@ class Game
 		}
 	}
 
+	loadNextMap(mapIndex)
+	{
+		let mapName = mapIndex >= 10 ? "map" + mapIndex : "map0" + mapIndex;
+		if (this.maps[mapName])
+		{
+			this.maps['currentMapName'] = mapName;
+			this.maps['currentMap'] = JSON.parse(JSON.stringify(this.maps[mapName]));
+
+			let imgMapInfos = this.maps["currentMap"]['elemsList'];
+
+			Imgs.preloadImgs(this.maps, [imgMapInfos], () =>
+			{
+				this.drawMap();
+				this.launchGame();
+			});
+		}
+		else
+		{
+			alert("Game is in dev! No more maps for moment. TY to have play.");
+		}
+	}
+
+	checkEndGame()
+	{
+		if (this.maps && this.maps['currentMap'])
+		{
+			let map = this.maps['currentMap'];
+
+			if (map.antsLength == map.deletedAntsLength)
+			{
+
+				this.stopGame();
+
+				let outroCont = document.getElementById('outro-container');
+				let result = document.getElementById('outro-result');
+				let details = document.getElementById('outro-details');
+
+				let leaveBtn = document.getElementById('outro-leave');
+				let restartBtn = document.getElementById('outro-restart');
+				let nextMapBtn = document.getElementById('outro-nextMap');
+
+				let closeOutro = function()
+				{
+					leaveBtn.onclick = null;
+					restartBtn.onclick = null;
+					nextMapBtn.onclick = null;
+
+					outroCont.classList.add('hidden');
+				}
+
+				leaveBtn.onclick = () =>
+				{
+					location.reload();
+				}
+
+				restartBtn.onclick = () =>
+				{
+					closeOutro();
+					this.loadNextMap(map.index);
+				}
+
+				outroCont.classList.remove('hidden');
+
+				if (map.savedLength >= map.intro.rules)
+				{
+					//win
+					result.innerText = "Congratulations!";
+					let detailsText = map.savedLength > 1 ? map.savedLength + " bots." : map.savedLength + " bot.";
+					details.innerText = detailsText;
+
+					nextMapBtn.classList.remove('hidden');
+
+					nextMapBtn.onclick = () =>
+					{
+						closeOutro();
+						this.loadNextMap(map.index + 1);
+					}
+				}
+				else
+				{
+					//defeat
+
+					result.innerText = "Defeat!";
+					let detailsText = map.savedLength > 1 ? map.savedLength + " bots." : map.savedLength + " bot.";
+					details.innerText = detailsText;
+				}
+			}
+		}
+	}
+
 	mainLoop()
 	{
 		this.updateTimer(this.gameSpeed);
 		if (this.ants)
 		{
 			this.ants.mainLoop(this.gameSpeed);
+			this.checkEndGame();
 		}
 	}
 
@@ -311,15 +402,18 @@ class Game
 	{
 		if (this.maps['currentMap']['intro'])
 		{
-			let introNfo = this.maps['currentMap']['intro'];
+			let map = this.maps['currentMap'];
+			let introNfo = map['intro'];
 			let introCont = document.getElementById('intro-container');
 			let mapName = document.getElementById('mapName');
-			let mapRules = document.getElementById('mapRules');
-			let mapTips = document.getElementById('mapTips-content');
+			let mapRulesAntsToSave = document.getElementById('mapRules-antsToSave');
+			let mapRulesAntsLength = document.getElementById('mapRules-antsLength');
+			let mapTips = document.getElementById('mapTips');
 			let launchGameBtn = document.getElementById('launchGame');
 
 			mapName.innerText = introNfo.map;
-			mapRules.innerText = introNfo.rules;
+			mapRulesAntsToSave.innerText = introNfo.rules;
+			mapRulesAntsLength.innerText = map.antsLength;
 			mapTips.innerText = introNfo.tips;
 			introCont.classList.remove('hidden');
 			launchGameBtn.onclick = () => 

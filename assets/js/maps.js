@@ -256,18 +256,6 @@ class Maps
 					shadeLength: 1,
 					typeLength: 1						
 				}
-			},
-			intro:
-			{
-				background:
-				{
-					img: null,
-					imgSrc: "intro_bg.png",
-					colWidth: 19,
-					rowHeight: 21,
-					shadeLength: 1,
-					typeLength: 1						
-				}
 			}
 		};
 
@@ -288,7 +276,6 @@ class Maps
 		{
 			elemsList: 
 			{
-				intro: ["background"],
 				ants: ["walk", "spawn", "fall", "block"],
 				alphaOmega: ["spawn", "exit"],
 				antsIcons: ["cancel", "gameBlock"],
@@ -300,10 +287,11 @@ class Maps
 
 		this.map01 = 
 		{
+			index: 1,
 			intro:
 			{
 				map: "MAP 01",
-				rules: "Save at least 1 of 10 bots.",
+				rules: 1,
 				tips: "Use the hand icon on one of your bots to force others to make a U-turn."
 			},
 			w: 1280,
@@ -314,6 +302,8 @@ class Maps
 				cancel: " "
 			},
 			antsLength: 10,
+			deletedAntsLength: 0,
+			savedLength: 0,
 			elemsList: 
 			{
 				blocs: ["grass", "ground"],
@@ -325,6 +315,13 @@ class Maps
 
 		this.map02 = 
 		{
+			index: 2,
+			intro:
+			{
+				map: "MAP 02",
+				rules: 8,
+				tips: "Hold the Door!"
+			},
 			w: 1280,
 			h: 720,
 			actions:
@@ -333,6 +330,8 @@ class Maps
 				cancel: " "
 			},
 			antsLength: 10,
+			deletedAntsLength: 0,
+			savedLength: 0,
 			elemsList: 
 			{
 				blocs: ["grass", "ground"],

@@ -9,9 +9,15 @@ class Ants
 
 		this.spawn = 
 		{
-			x: 150,
-			y: 300
+			x: 0,
+			y: 0
 		};
+		this.exit = 
+		{
+			x: 0,
+			y: 0
+		};
+
 		this.antsSpawned = 0;
 		this.spawnTempo = null;
 
@@ -206,6 +212,18 @@ class Ants
 		}
 	}
 
+	detectExit(ant)
+	{
+		let exitX = this.exit.x;
+		let exitY = this.exit.y;
+		if (exitX - (ant.w / 4) < ant.x && exitX + (ant.w / 4) > ant.x && exitY - (ant.h / 4) < ant.y && exitY + (ant.h / 4) > ant.y)
+		{
+			this.ants.splice(ant.index, 1);
+			this.maps['currentMap'].savedLength += 1;
+			this.maps['currentMap'].deletedAntsLength += 1;
+		}
+	}
+
 	crashAnt(ant)
 	{
 		let size = 4;
@@ -214,6 +232,7 @@ class Ants
 
 		this.particles.create(Math.round(ant.x), Math.round(ant.y), size, number, 'red')
 		this.ants.splice(ant.index, 1);
+		this.maps['currentMap'].deletedAntsLength += 1;
 	}
 
 	fall(ant, engineSpeed)
@@ -368,6 +387,7 @@ class Ants
 
 			InteractiveEntities.manageInteractiveEntities(this.maps, ant);
 			this.manageStatut(ant, engineSpeed);
+			this.detectExit(ant);
 			this.draw(ant, engineSpeed);
 		}
 		
@@ -375,7 +395,7 @@ class Ants
 		InteractiveEntities.mainLoop(this.maps);
 	}
 
-	detectSpawn()
+	initSpawnAndExit()
 	{
 		let map = this.maps[this.maps['currentMapName']];
 
@@ -392,6 +412,11 @@ class Ants
 						{
 							this.spawn.x = (c + 1.5) * this.maps.tileSizeOrigin;
 							this.spawn.y = (r + 2) * this.maps.tileSizeOrigin;
+						}
+						else if (mapTiles['objName'] == "exit")
+						{
+							this.exit.x = (c + 1.5) * this.maps.tileSizeOrigin;
+							this.exit.y = (r + 2) * this.maps.tileSizeOrigin;
 						}
 					}
 				}
@@ -462,7 +487,7 @@ class Ants
 		})
 		this.createGameIcons();
 
-		this.detectSpawn();
+		this.initSpawnAndExit();
 
 		// draw interactive obj
 		let forceDraw = true;

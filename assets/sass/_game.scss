@@ -138,7 +138,7 @@ canvas
 	}
 }
 
-.intro-container
+.intro-container, .outro-container
 {
 	position: absolute;
 	top: 0;
@@ -149,32 +149,33 @@ canvas
 	justify-content: center;
 	align-items: center;
 	background-color: $color-cold;
-	.intro-content
+	.intro-content, .outro-content
 	{
-		padding: 50px;
-		position: relative;
-		width: 48%;
-		height: 100%;
-		max-width: 608px;
-		max-height: 672px;
+		border: 1px solid white;
+		padding: 90px 30px 30px;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		align-items: center;
+		width: 50%;
+		height: 90%;
+		max-width: 600px;
+		max-height: 720px;
+		text-align: center;
+		font-family: $main-fontFamily;
 		background-image: url("../img/intro_bg.png");
- 		background-position: center center;
-		background-repeat: round;
 	}
-	.mapName, .mapRules, .mapTips, .mapTips-content
+	.mapName, .mapRules-container, .mapTips, .mapTips-content, .outro-result, .outro-details
 	{
-		color: $color-hottest;
+		color: $color-cold;
 		font-weight: bold;
 	}
-	.mapTips, .mapName
+	.mapName, .outro-result
 	{
+		font-family: $sec-fontFamily;
 		font-size: 36px;
 	}
-	.mapTips
-	{
-		margin-top: 36px;
-	}
-	.mapRules, .mapTips-content
+	.mapRules-container, .mapTips, .outro-details
 	{
 		font-size: 30px;
 	}
@@ -182,18 +183,19 @@ canvas
 	{
 		border: 2px solid $color-hottest;
 		border-radius: 50%;
-		position: absolute;
-		bottom: 36px;
-		left: 50%;
-		color: $color-cold;
+		width: 100px;
+		height: 100px;
+		color: $color-darkest;
 		font-weight: bold;
 		font-size: 36px;
+		background-color: $color-cold;
 		pointer-events: auto;
-		transform: translate3d(-50%, 0, 0);
+		transition: all 0.2s;
 		&:hover
 		{
-			border: 2px solid $color-cold;
-			color: $color-hottest;
+			border-color: $color-cold;
+			color: $color-darkest;
+			background-color: $color-hottest;
 			cursor: pointer;
 		}
 	}
@@ -201,26 +203,24 @@ canvas
 
 @media screen and (max-width: 1024px)
 {
-	.intro-container
+	.intro-container, .outro-container
 	{
-		.intro-content
+		.intro-content, .outr-content
 		{
-			padding: 46px;
+			padding: 60px 20px 20px;
 		}
-		.mapTips
-		{
-			margin-top: 30px;
-		}
-		.mapTips, .mapName
+		.mapName, .outro-result
 		{
 			font-size: 30px;
 		}
-		.mapRules, .mapTips-content
+		.mapRules-container, .mapTips, .outro-details
 		{
 			font-size: 27px;
 		}
 		button
 		{
+			width: 86px;
+			height: 86px;
 			font-size: 30px;
 			bottom: 30px;
 		}
@@ -229,28 +229,19 @@ canvas
 
 @media screen and (max-width: 870px)
 {
-	.intro-container
+	.intro-container, .outro-container
 	{
-		.intro-content
+		.intro-content, .outr-content
 		{
-			padding: 30px;
+			padding: 54px 16px 16px;
 		}
-		.mapTips
-		{
-			margin-top: 24px;
-		}
-		.mapTips, .mapName
+		.mapName, .outro-result
 		{
 			font-size: 24px;
 		}
-		.mapRules, .mapTips-content
+		.mapRules-container, .mapTips, .outro-details
 		{
 			font-size: 18px;
-		}
-		button
-		{
-			font-size: 24px;
-			bottom: 24px;
 		}
 	}
 }
