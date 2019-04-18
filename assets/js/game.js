@@ -413,7 +413,11 @@ class Game
 		{
 			this.ants.mainLoop(this.gameSpeed);
 			this.updateAliveSaved();
-			this.checkEndGame();
+
+			if (this.maps['currentMapName'] != "editorMap")
+			{
+				this.checkEndGame();
+			}
 		}
 	}
 

@@ -19,9 +19,17 @@ class Editor
 		// current map created in editor
 		this.map =
 		{ 
-			w: 1920,
-			h: 1024,
-			antsLength: 3,
+			w: 1280,
+			h: 720,
+			actions:
+			{
+				gameBlock: 2,
+				cancel: " ",
+				suicide: " "
+			},
+			antsLength: 10,
+			deletedAntsLength: 0,
+			savedLength: 0,
 			actions:
 			{
 				gameBlock: 2,
