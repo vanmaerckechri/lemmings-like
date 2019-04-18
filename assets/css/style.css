@@ -178,7 +178,7 @@ canvas {
       position: static;
       flex: 1;
       text-align: left; }
-    .game-ui .top-container .timer-container {
+    .game-ui .top-container .center-container {
       flex: 3;
       display: flex;
       justify-content: center;
@@ -196,6 +196,10 @@ canvas {
       align-items: center; }
       .game-ui .top-container .gameSpeed-icons .img-container {
         border-radius: 50%; }
+    .game-ui .top-container .alive-container {
+      margin-left: 20px; }
+    .game-ui .top-container .saved-container {
+      margin-left: 10px; }
     .game-ui .top-container .zoom {
       padding-right: 10px;
       flex: 1;
@@ -265,7 +269,7 @@ canvas {
     height: 100px;
     color: #181d1e;
     font-weight: bold;
-    font-size: 36px;
+    font-size: 20px;
     background-color: #99a0ad;
     pointer-events: auto;
     transition: all 0.2s; }
@@ -285,7 +289,6 @@ canvas {
   .intro-container button, .outro-container button {
     width: 86px;
     height: 86px;
-    font-size: 30px;
     bottom: 30px; } }
 @media screen and (max-width: 870px) {
   .intro-container .intro-content, .intro-container .outr-content, .outro-container .intro-content, .outro-container .outr-content {

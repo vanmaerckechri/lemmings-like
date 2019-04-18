@@ -23,6 +23,15 @@ class Game
 
 	// UI
 
+	updateAliveSaved()
+	{
+		let saved = document.getElementById('saved');
+		let alive = document.getElementById('alive');
+
+		saved.innerText = this.maps['currentMap'].savedLength;
+		alive.innerText = this.maps['currentMap'].antsLength - this.maps['currentMap'].deletedAntsLength;
+	}
+
 	resetTimer()
 	{
 		this.gameSpeed = 1;
@@ -364,6 +373,7 @@ class Game
 		if (this.ants)
 		{
 			this.ants.mainLoop(this.gameSpeed);
+			this.updateAliveSaved();
 			this.checkEndGame();
 		}
 	}
@@ -442,6 +452,7 @@ class Game
 			this.ants = new Ants(this.maps);
 			this.maps['currentMap']['collisions'] = Collisions.init(this.maps, "canvas-bg");
 			this.resetTimer();
+			this.updateAliveSaved();
 		})
 	}
 

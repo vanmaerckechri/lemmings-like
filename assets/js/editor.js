@@ -25,7 +25,8 @@ class Editor
 			actions:
 			{
 				gameBlock: 2,
-				cancel: " "
+				cancel: " ",
+				suicide: " "
 			},
 			elemsList: 
 			{

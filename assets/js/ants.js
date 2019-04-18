@@ -80,6 +80,11 @@ class Ants
 			ant.imgIndex = ant.imgIndex < img.width / ant.w - 1 ? ant.imgIndex + 1 : 0;
 		}
 
+		if (currentAnim == "suicide" && ant.imgIndex == img.width / ant.w - 1)
+		{
+			this.suicide(ant);
+		}
+
 		// for selected ant
 		if (this.selectedAnt && this.selectedAnt == ant)
 		{
@@ -208,6 +213,13 @@ class Ants
 					ant.status = ant.lastAnimationType;
 					ant.animation = ant.lastAnimationType;
 				}
+				else if (this.selectedAction == "suicide")
+				{
+					this.unSelectAction();
+					ant.status = "suicide";
+					ant.animation = "suicide";
+					ant.imgIndex = 0;
+				}
 			}
 		}
 	}
@@ -222,6 +234,12 @@ class Ants
 			this.maps['currentMap'].savedLength += 1;
 			this.maps['currentMap'].deletedAntsLength += 1;
 		}
+	}
+
+	suicide(ant)
+	{
+		this.ants.splice(ant.index, 1);
+		this.maps['currentMap'].deletedAntsLength += 1;
 	}
 
 	crashAnt(ant)

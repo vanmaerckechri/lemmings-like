@@ -48,6 +48,15 @@ class Maps
 			},
 			antsIcons:
 			{
+				suicide:
+				{
+					img: null,
+					imgSrc: "icon_suicide.png",
+					colWidth: 1,
+					rowHeight: 1,
+					shadeLength: 1,
+					typeLength: 1
+				},
 				gameBlock:
 				{
 					img: null,
@@ -166,6 +175,15 @@ class Maps
 					rowHeight: 1,
 					shadeLength: 1,
 					typeLength: 1
+				},
+				suicide:
+				{
+					img: null,
+					imgSrc: "ant_suicide.png",
+					colWidth: 1,
+					rowHeight: 1,
+					shadeLength: 1,
+					typeLength: 1
 				}
 			},
 			alphaOmega:
@@ -276,9 +294,9 @@ class Maps
 		{
 			elemsList: 
 			{
-				ants: ["walk", "spawn", "fall", "block"],
+				ants: ["walk", "spawn", "fall", "block", "suicide"],
 				alphaOmega: ["spawn", "exit"],
-				antsIcons: ["cancel", "gameBlock"],
+				antsIcons: ["suicide", "cancel", "gameBlock"],
 				gameSpeedIcons: ["timeDown", "timePause", "timePlay", "timeUp"]
 			}
 		};
@@ -299,7 +317,8 @@ class Maps
 			actions:
 			{
 				gameBlock: 2,
-				cancel: " "
+				cancel: " ",
+				suicide: " "
 			},
 			antsLength: 10,
 			deletedAntsLength: 0,
@@ -327,7 +346,8 @@ class Maps
 			actions:
 			{
 				gameBlock: 3,
-				cancel: " "
+				cancel: " ",
+				suicide: " "
 			},
 			antsLength: 10,
 			deletedAntsLength: 0,

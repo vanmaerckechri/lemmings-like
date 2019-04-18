@@ -58,7 +58,7 @@ canvas
 			flex: 1;
 			text-align: left;
 		}
-		.timer-container
+		.center-container
 		{
 			flex: 3;
 			display: flex;
@@ -88,6 +88,14 @@ canvas
 			{
 				border-radius: 50%;
 			}
+		}
+		.alive-container
+		{
+			margin-left: 20px;
+		}
+		.saved-container
+		{
+			margin-left: 10px;
 		}
 		.zoom
 		{
@@ -187,7 +195,7 @@ canvas
 		height: 100px;
 		color: $color-darkest;
 		font-weight: bold;
-		font-size: 36px;
+		font-size: 20px;
 		background-color: $color-cold;
 		pointer-events: auto;
 		transition: all 0.2s;
@@ -221,7 +229,6 @@ canvas
 		{
 			width: 86px;
 			height: 86px;
-			font-size: 30px;
 			bottom: 30px;
 		}
 	}
