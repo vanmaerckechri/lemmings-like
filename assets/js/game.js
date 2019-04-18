@@ -382,12 +382,12 @@ class Game
 
 				if (!document.getElementById('endGameBtn'))
 				{
-					let status = map.savedLength >= map.intro.rules ? "victory" : "defeat";
+					let status = map.savedLength >= map.intro.rules ? "VICTORY" : "DEFEAT";
 					let currentAliveLength = map.antsLength - map.deletedAntsLength;
 					let saved = map.savedLength;
 					let numberNeeded = map.intro.rules;
 
-					if (status == "victory" || saved + currentAliveLength < numberNeeded)
+					if (status == "VICTORY" || saved + currentAliveLength < numberNeeded)
 					{
 						let gameUi = document.getElementById('game-ui');
 						let btn = document.createElement('button');

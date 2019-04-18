@@ -356,7 +356,6 @@ canvas {
     transition: all 0.2s; }
     .intro-container button:hover, .outro-container button:hover {
       border-color: #99a0ad;
-      color: #181d1e;
       background-color: #dea200;
       cursor: pointer; }
 
@@ -371,13 +370,11 @@ canvas {
   color: #181d1e;
   font-weight: bold;
   font-size: 20px;
-  background-color: #99a0ad;
+  background-color: rgba(222, 162, 0, 0.5);
   pointer-events: auto;
   -webkit-transition: all 0.2s;
   transition: all 0.2s; }
   .endGameBtn:hover {
-    border-color: #99a0ad;
-    color: #181d1e;
     background-color: #dea200;
     cursor: pointer; }
 

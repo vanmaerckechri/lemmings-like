@@ -208,7 +208,6 @@ canvas
 		&:hover
 		{
 			border-color: $color-cold;
-			color: $color-darkest;
 			background-color: $color-hottest;
 			cursor: pointer;
 		}
@@ -227,13 +226,11 @@ canvas
 	color: $color-darkest;
 	font-weight: bold;
 	font-size: 20px;
-	background-color: $color-cold;
+	background-color: rgba(222, 162, 0, 0.5);
 	pointer-events: auto;
 	transition: all 0.2s;
 	&:hover
 	{
-		border-color: $color-cold;
-		color: $color-darkest;
 		background-color: $color-hottest;
 		cursor: pointer;
 	}	
