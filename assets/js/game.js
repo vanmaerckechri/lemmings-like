@@ -307,17 +307,48 @@ class Game
 		}
 	}
 
+	loadMapIntro(launch)
+	{
+		if (this.maps['currentMap']['intro'])
+		{
+			let introNfo = this.maps['currentMap']['intro'];
+			let introCont = document.getElementById('intro-container');
+			let mapName = document.getElementById('mapName');
+			let mapRules = document.getElementById('mapRules');
+			let mapTips = document.getElementById('mapTips-content');
+			let launchGameBtn = document.getElementById('launchGame');
+
+			mapName.innerText = introNfo.map;
+			mapRules.innerText = introNfo.rules;
+			mapTips.innerText = introNfo.tips;
+			introCont.classList.remove('hidden');
+			launchGameBtn.onclick = () => 
+			{
+				introCont.classList.add('hidden');
+				launchGameBtn.onclick = null;
+				launch();
+			}
+		}
+		else
+		{
+			launch();
+		}
+	}
+
 	launchGame()
 	{
-		// move fps display
-		let topContainer = document.getElementById('top-container');
-		let fpsContainer = document.getElementById('fps-container');
-		topContainer.insertBefore(fpsContainer, topContainer.firstChild)
+		this.loadMapIntro(() => 
+		{
+			// move fps display
+			let topContainer = document.getElementById('top-container');
+			let fpsContainer = document.getElementById('fps-container');
+			topContainer.insertBefore(fpsContainer, topContainer.firstChild)
 
-		this.loadTimeSpeedIcons();
-		this.ants = new Ants(this.maps);
-		this.maps['currentMap']['collisions'] = Collisions.init(this.maps, "canvas-bg");
-		this.resetTimer();
+			this.loadTimeSpeedIcons();
+			this.ants = new Ants(this.maps);
+			this.maps['currentMap']['collisions'] = Collisions.init(this.maps, "canvas-bg");
+			this.resetTimer();
+		})
 	}
 
 	loadMap()

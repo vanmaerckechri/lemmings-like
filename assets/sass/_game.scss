@@ -137,3 +137,120 @@ canvas
 		border-color: red;
 	}
 }
+
+.intro-container
+{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: $color-cold;
+	.intro-content
+	{
+		padding: 50px;
+		position: relative;
+		width: 48%;
+		height: 100%;
+		max-width: 608px;
+		max-height: 672px;
+		background-image: url("../img/intro_bg.png");
+ 		background-position: center center;
+		background-repeat: round;
+	}
+	.mapName, .mapRules, .mapTips, .mapTips-content
+	{
+		color: $color-hottest;
+		font-weight: bold;
+	}
+	.mapTips, .mapName
+	{
+		font-size: 36px;
+	}
+	.mapTips
+	{
+		margin-top: 36px;
+	}
+	.mapRules, .mapTips-content
+	{
+		font-size: 30px;
+	}
+	button
+	{
+		border: 2px solid $color-hottest;
+		border-radius: 50%;
+		position: absolute;
+		bottom: 36px;
+		left: 50%;
+		color: $color-cold;
+		font-weight: bold;
+		font-size: 36px;
+		pointer-events: auto;
+		transform: translate3d(-50%, 0, 0);
+		&:hover
+		{
+			border: 2px solid $color-cold;
+			color: $color-hottest;
+			cursor: pointer;
+		}
+	}
+}
+
+@media screen and (max-width: 1024px)
+{
+	.intro-container
+	{
+		.intro-content
+		{
+			padding: 46px;
+		}
+		.mapTips
+		{
+			margin-top: 30px;
+		}
+		.mapTips, .mapName
+		{
+			font-size: 30px;
+		}
+		.mapRules, .mapTips-content
+		{
+			font-size: 27px;
+		}
+		button
+		{
+			font-size: 30px;
+			bottom: 30px;
+		}
+	}
+}
+
+@media screen and (max-width: 870px)
+{
+	.intro-container
+	{
+		.intro-content
+		{
+			padding: 30px;
+		}
+		.mapTips
+		{
+			margin-top: 24px;
+		}
+		.mapTips, .mapName
+		{
+			font-size: 24px;
+		}
+		.mapRules, .mapTips-content
+		{
+			font-size: 18px;
+		}
+		button
+		{
+			font-size: 24px;
+			bottom: 24px;
+		}
+	}
+}

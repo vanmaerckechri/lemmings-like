@@ -285,6 +285,82 @@ canvas {
   .game-ui .img-container.selected {
     border-color: red; }
 
+.intro-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: #99a0ad; }
+  .intro-container .intro-content {
+    padding: 50px;
+    position: relative;
+    width: 48%;
+    height: 100%;
+    max-width: 608px;
+    max-height: 672px;
+    background-image: url("../img/intro_bg.png");
+    background-position: center center;
+    background-repeat: round; }
+  .intro-container .mapName, .intro-container .mapRules, .intro-container .mapTips, .intro-container .mapTips-content {
+    color: #dea200;
+    font-weight: bold; }
+  .intro-container .mapTips, .intro-container .mapName {
+    font-size: 36px; }
+  .intro-container .mapTips {
+    margin-top: 36px; }
+  .intro-container .mapRules, .intro-container .mapTips-content {
+    font-size: 30px; }
+  .intro-container button {
+    border: 2px solid #dea200;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 36px;
+    left: 50%;
+    color: #99a0ad;
+    font-weight: bold;
+    font-size: 36px;
+    pointer-events: auto;
+    -webkit-transform: translate3d(-50%, 0, 0);
+            transform: translate3d(-50%, 0, 0); }
+    .intro-container button:hover {
+      border: 2px solid #99a0ad;
+      color: #dea200;
+      cursor: pointer; }
+
+@media screen and (max-width: 1024px) {
+  .intro-container .intro-content {
+    padding: 46px; }
+  .intro-container .mapTips {
+    margin-top: 30px; }
+  .intro-container .mapTips, .intro-container .mapName {
+    font-size: 30px; }
+  .intro-container .mapRules, .intro-container .mapTips-content {
+    font-size: 27px; }
+  .intro-container button {
+    font-size: 30px;
+    bottom: 30px; } }
+@media screen and (max-width: 870px) {
+  .intro-container .intro-content {
+    padding: 30px; }
+  .intro-container .mapTips {
+    margin-top: 24px; }
+  .intro-container .mapTips, .intro-container .mapName {
+    font-size: 24px; }
+  .intro-container .mapRules, .intro-container .mapTips-content {
+    font-size: 18px; }
+  .intro-container button {
+    font-size: 24px;
+    bottom: 24px; } }
 .editor-ui {
   border-right: 1px solid white;
   height: 100%;
