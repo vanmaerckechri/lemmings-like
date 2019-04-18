@@ -264,6 +264,16 @@ class Ants
 		this.maps['currentMap'].deletedAntsLength += 1;
 	}
 
+	checkOuterScreen(ant)
+	{
+		let canvas = document.getElementById('canvas-ant');
+		if (ant.x > canvas.width || ant.x < 0 || ant.y > canvas.height || ant.y < 0)
+		{
+			this.ants.splice(ant.index, 1);
+			this.maps['currentMap'].deletedAntsLength += 1;		
+		}
+	}
+
 	fall(ant, engineSpeed)
 	{
 		let y = ant.y + ant.h;
@@ -417,6 +427,7 @@ class Ants
 			InteractiveEntities.manageInteractiveEntities(this.maps, ant);
 			this.manageStatut(ant, engineSpeed);
 			this.detectExit(ant);
+			this.checkOuterScreen(ant);
 			this.draw(ant, engineSpeed);
 		}
 		
