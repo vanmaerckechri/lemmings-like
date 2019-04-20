@@ -329,7 +329,9 @@ class Engine
 			zoomEvent = "DOMMouseScroll";			
 		}
 
-		window.addEventListener(zoomEvent, (event) =>
+		let canvasCont = document.getElementById('canvas-container');
+
+		canvasCont.addEventListener(zoomEvent, (event) =>
 		{
 			if (this.status == "game" || this.status == "editor" || this.status == "testMap")
 			{
