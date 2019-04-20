@@ -19,15 +19,16 @@ class Editor
 		// current map created in editor
 		this.map =
 		{ 
+			index: false,
+			intro:
+			{
+				map: "Editor Map",
+				rules: 10,
+				tips: ""
+			},
 			w: 1280,
 			h: 720,
-			actions:
-			{
-				gameBlock: 2,
-				cancel: " ",
-				suicide: " "
-			},
-			antsLength: 10,
+			antsLength: 20,
 			deletedAntsLength: 0,
 			savedLength: 0,
 			actions:
@@ -71,9 +72,28 @@ class Editor
 		let editorUi = document.getElementById('editor-ui');
 		let backToEditor = document.getElementById('backToEditor');
 
+		let introContainer = document.getElementById('intro-container');
+		let title = document.getElementById('mapOptions-title')
+		let botsLength = document.getElementById('mapOptions-botsLength');
+		let botsToSave = document.getElementById('mapOptions-botsToSave');	
+		let tips = document.getElementById('mapOptions-tips');
+
+
+		let map = this.map;
+
+		map.intro.map = title.value;
+		map.intro.tips = tips.value;
+
+		botsLength.value = isNaN(botsLength.value) ? 10 : botsLength.value;
+		botsToSave.value = isNaN(botsToSave.value) || botsToSave.value > botsLength.value ? 5 : botsToSave.value;
+
+		map.antsLength = botsLength.value;
+		map.intro.rules = botsToSave.value;
+
 		canvas.classList.add('hidden');
 		editorUi.classList.add('hidden');
 		backToEditor.classList.remove('hidden');
+		introContainer.classList.remove('hidden');
 
 		this.status = 'testMap';
 		this.maps.editorMap = JSON.parse(JSON.stringify(this.map));
@@ -85,10 +105,14 @@ class Editor
 		let canvas = document.getElementById('canvas-editorUi');
 		let editorUi = document.getElementById('editor-ui');
 		let backToEditor = document.getElementById('backToEditor');
+		let introContainer = document.getElementById('intro-container');
+		let outroContainer = document.getElementById('outro-container');
 
 		canvas.classList.remove('hidden');
 		editorUi.classList.remove('hidden');
 		backToEditor.classList.add('hidden');
+		introContainer.classList.add('hidden');
+		outroContainer.classList.add('hidden');
 
 		this.status = 'editor';
 	}
@@ -706,13 +730,13 @@ class Editor
 		canvas.addEventListener('mousedown',  () =>
 		{
 			this.action = "putElem";
-		})
+		});
 
 		window.addEventListener('mouseup',  () =>
 		{
 			this.action = "";
 			this.completeLinkIntObj();
-		})
+		});
 	}
 
 

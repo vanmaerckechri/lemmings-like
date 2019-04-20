@@ -19,6 +19,7 @@ class Game
 		this.secondes = 0;
 
 		this.pauseTime = 0;
+		this.pauseLength = 0;
 	}
 
 	// UI
@@ -27,9 +28,11 @@ class Game
 	{
 		let saved = document.getElementById('saved');
 		let alive = document.getElementById('alive');
+		let needToSave = document.getElementById('savedLength');
 
 		saved.innerText = this.maps['currentMap'].savedLength;
 		alive.innerText = this.maps['currentMap'].antsLength - this.maps['currentMap'].deletedAntsLength;
+		needToSave.innerText = this.maps['currentMap'].intro.rules;
 	}
 
 	resetTimer()
@@ -46,6 +49,12 @@ class Game
 
 		let speedContent = document.getElementById('speed-content');
 		speedContent.innerText = "1.0";
+
+		let timePlay = document.getElementById('timePlay');
+		timePlay.classList.add('hidden');
+
+		let timePause = document.getElementById('timePause');
+		timePause.classList.remove('hidden');
 	}
 
 	updateTimer()
@@ -82,7 +91,7 @@ class Game
 				timePlay.classList.add('hidden');
 				timePause.classList.remove('hidden');
 
-				self.ants['spawnTempo'] -= (self['pauseTime'] - new Date().getTime());
+				self['pauseLength'] = (self['pauseTime'] - new Date().getTime());
 			}
 		}
 
@@ -302,67 +311,70 @@ class Game
 
 	callEndGame()
 	{
-		let map = this.maps['currentMap'];
-
-		this.stopGame();
-
-		let outroCont = document.getElementById('outro-container');
-		let result = document.getElementById('outro-result');
-		let details = document.getElementById('outro-details');
-
-		let leaveBtn = document.getElementById('outro-leave');
-		let restartBtn = document.getElementById('outro-restart');
-		let nextMapBtn = document.getElementById('outro-nextMap');
-
-		if (document.getElementById('endGameBtn'))
+		if (this.maps.currentMapName != "editorMap")
 		{
-			document.getElementById('endGameBtn').remove();
-		}
+			let map = this.maps['currentMap'];
 
-		let closeOutro = function()
-		{
-			leaveBtn.onclick = null;
-			restartBtn.onclick = null;
-			nextMapBtn.onclick = null;
+			this.stopGame();
 
-			outroCont.classList.add('hidden');
-			nextMapBtn.classList.add('hidden');
-		}
+			let outroCont = document.getElementById('outro-container');
+			let result = document.getElementById('outro-result');
+			let details = document.getElementById('outro-details');
 
-		leaveBtn.onclick = () =>
-		{
-			location.reload();
-		}
+			let leaveBtn = document.getElementById('outro-leave');
+			let restartBtn = document.getElementById('outro-restart');
+			let nextMapBtn = document.getElementById('outro-nextMap');
 
-		restartBtn.onclick = () =>
-		{
-			closeOutro();
-			this.loadNextMap(map.index);
-		}
+			if (document.getElementById('endGameBtn'))
+			{
+				document.getElementById('endGameBtn').remove();
+			}
 
-		outroCont.classList.remove('hidden');
+			let closeOutro = function()
+			{
+				leaveBtn.onclick = null;
+				restartBtn.onclick = null;
+				nextMapBtn.onclick = null;
 
-		if (map.savedLength >= map.intro.rules)
-		{
-			//win
-			result.innerText = "Congratulations!";
-			let detailsText = map.savedLength > 1 ? map.savedLength + " bots." : map.savedLength + " bot.";
-			details.innerText = detailsText;
+				outroCont.classList.add('hidden');
+				nextMapBtn.classList.add('hidden');
+			}
 
-			nextMapBtn.classList.remove('hidden');
+			leaveBtn.onclick = () =>
+			{
+				location.reload();
+			}
 
-			nextMapBtn.onclick = () =>
+			restartBtn.onclick = () =>
 			{
 				closeOutro();
-				this.loadNextMap(map.index + 1);
+				this.loadNextMap(map.index);
 			}
-		}
-		else
-		{
-			//defeat
-			result.innerText = "Defeat!";
-			let detailsText = map.savedLength > 1 ? map.savedLength + " bots." : map.savedLength + " bot.";
-			details.innerText = detailsText;
+
+			outroCont.classList.remove('hidden');
+
+			if (map.savedLength >= map.intro.rules)
+			{
+				//win
+				result.innerText = "Congratulations!";
+				let detailsText = map.savedLength > 1 ? map.savedLength + " bots." : map.savedLength + " bot.";
+				details.innerText = detailsText;
+
+				nextMapBtn.classList.remove('hidden');
+
+				nextMapBtn.onclick = () =>
+				{
+					closeOutro();
+					this.loadNextMap(map.index + 1);
+				}
+			}
+			else
+			{
+				//defeat
+				result.innerText = "Defeat!";
+				let detailsText = map.savedLength > 1 ? map.savedLength + " bots." : map.savedLength + " bot.";
+				details.innerText = detailsText;
+			}
 		}
 	}
 
@@ -411,14 +423,11 @@ class Game
 		this.updateTimer(this.gameSpeed);
 		if (this.ants)
 		{
-			this.ants.mainLoop(this.gameSpeed);
+			this.ants.mainLoop(this.gameSpeed, this.pauseLength);
 			this.updateAliveSaved();
-
-			if (this.maps['currentMapName'] != "editorMap")
-			{
-				this.checkEndGame();
-			}
+			this.checkEndGame();
 		}
+		this.pauseLength = 0;
 	}
 
 	loadTimeSpeedIcons()
@@ -491,7 +500,6 @@ class Game
 			let fpsContainer = document.getElementById('fps-container');
 			topContainer.insertBefore(fpsContainer, topContainer.firstChild)
 
-			this.loadTimeSpeedIcons();
 			this.ants = new Ants(this.maps);
 			this.maps['currentMap']['collisions'] = Collisions.init(this.maps, "canvas-bg");
 			this.resetTimer();
@@ -504,6 +512,8 @@ class Game
 		// unhide game section
 		let gameSection = document.getElementById('game');
 		gameSection.classList.remove('hidden');
+
+		this.loadTimeSpeedIcons();
 		// importMap
 		this.maps['currentMap'] = JSON.parse(JSON.stringify(this.maps[this.maps.currentMapName]));
 	}
@@ -521,7 +531,15 @@ class Game
 			canvas[c].width = canvas[c].width;
 		}
 
-		this.ants.deleteGameIcons();
-		this.ants = null;
+		if (this.ants)
+		{
+			this.ants.deleteGameIcons();
+			this.ants = null;
+		}
+
+		if (document.getElementById('endGameBtn'))
+		{
+			let endGameBtn = document.getElementById('endGameBtn').remove();
+		}
 	}
 }

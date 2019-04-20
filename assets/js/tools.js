@@ -2,7 +2,7 @@
 
 class Tools
 {
-	static countTime(timeStart, milliSec)
+	static countTime(timeStart, milliSec, unPause = false)
 	{
 		let currentTime = new Date().getTime();
 

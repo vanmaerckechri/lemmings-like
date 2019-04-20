@@ -76,11 +76,12 @@
 	.icon-Container
 	{
 		border: 2px solid transparent;
+		display: block;
 		&:hover
 		{
 			@include iconsHover();
 		}
-		.img-container
+		img
 		{
 			display: block;
 		}
@@ -97,8 +98,8 @@
 }
 .editorCat
 {
-	max-width: 120px;
-	text-align: left;
+	max-width: 138px;
+	text-align: center;
 	pointer-events: auto;
 	.img-container
 	{
@@ -112,8 +113,8 @@
 		}
 		img
 		{
-			max-width: 52px;
-			max-height: 52px;
+			max-width: 60px;
+			max-height: 60px;
 			height: auto;
 			pointer-events: none;
 		}
@@ -158,4 +159,37 @@
 	bottom: 0;
 	left: 0;
 	pointer-events: auto;
+	&:hover
+	{
+		cursor: pointer;
+	}
+}
+// Map Options
+.mapOptions-container
+{
+	border-bottom: 1px solid white;
+	padding-bottom: 10px;
+	text-align: center;
+}
+.mapOptions-title
+{
+	display: block;
+	width: 100%;
+	height: 16px;
+	text-align: center;
+}
+.mapOptions-input
+{
+	margin: 0 auto;
+	border-radius: 25%;
+	display: block;
+	width: 32px;
+	height: 16px;
+	text-align: center;
+}
+.mapOptions-tips
+{
+	width: 100%;
+	max-width: 100%;
+	resize: none;
 }

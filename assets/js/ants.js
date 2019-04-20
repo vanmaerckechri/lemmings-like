@@ -52,7 +52,7 @@ class Ants
 		this.ants.push(ant);
 	}
 
-	draw(ant, engineSpeed)
+	draw(ant, engineSpeed, pauseLength)
 	{
 		let canvas = document.getElementById('canvas-ant');
 		let ctx = canvas.getContext('2d');
@@ -73,6 +73,7 @@ class Ants
 		ctx.drawImage(img, sX, sY, ant.w, ant.h, dX, dY, dW, dH);
 
 		let speed = 100 / engineSpeed;
+		ant.animationTempo -= pauseLength;
 		let animationTempo = ant.animationTempo;
 		ant.animationTempo = Tools.countTime(ant.animationTempo, speed);
 		if (animationTempo != ant.animationTempo)
@@ -396,12 +397,13 @@ class Ants
 		}
 	}
 
-	mainLoop(engineSpeed)
+	mainLoop(engineSpeed, pauseLength)
 	{
 		// create ants
 		if (this.antsSpawned < this.maps['currentMap']['antsLength'])
 		{
 			let speed = 2000 / engineSpeed;
+			this.spawnTempo -= pauseLength;
 			let spawnTempo = this.spawnTempo;
 			this.spawnTempo = Tools.countTime(this.spawnTempo, speed);
 
@@ -428,7 +430,7 @@ class Ants
 			this.manageStatut(ant, engineSpeed);
 			this.detectExit(ant);
 			this.checkOuterScreen(ant);
-			this.draw(ant, engineSpeed);
+			this.draw(ant, engineSpeed, pauseLength);
 		}
 		
 		this.particles.mainLoop();

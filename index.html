@@ -35,8 +35,8 @@
 					</div>
 					<div id="gameSpeedIcons" class="gameSpeed-icons">
 					</div>
-					<p class="alive-container">Alive: <span id="alive"></span></p>
-					<p class="saved-container">Saved: <span id="saved"></span></p>
+					<p class="alive-container">Remaining: <span id="alive"></span></p>
+					<p class="saved-container">Saved: <span id="saved"></span> / <span id="savedLength"></span></p>
 				</div>
 				<div id="zoom" class="zoom">
 					<p>Zoom: <span id="zoom-content">100</span>%</p>
@@ -47,6 +47,15 @@
 		</div>
 		<div id="editor-ui" class="editor-ui">
 			<div id="editor-menuOptions" class="menuOptions-container">
+			</div>
+			<div id="editor-menuOptions" class="mapOptions-container">
+				<label>Title</label>
+				<input id="mapOptions-title" class="mapOptions-title" value="Editor Map">
+				<label>Number of bots</label>
+				<input id="mapOptions-botsLength" class="mapOptions-input" type="text" value="10">
+				<label>Number to save</label>
+				<input id="mapOptions-botsToSave" class="mapOptions-input" type="text" value="5">
+				<textarea id="mapOptions-tips" class="mapOptions-tips" maxlength="100"></textarea>
 			</div>
 			<div id="editorElems-container" class="editorElems-container">
 			</div>
