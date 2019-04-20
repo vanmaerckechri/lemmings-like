@@ -98,7 +98,7 @@
 }
 .editorCat
 {
-	max-width: 138px;
+	max-width: 164px;
 	text-align: center;
 	pointer-events: auto;
 	.img-container
@@ -168,11 +168,13 @@
 .mapOptions-container
 {
 	border-bottom: 1px solid white;
-	padding-bottom: 10px;
+	max-width: 164px;
+	width: 100%;
 	text-align: center;
 }
 .mapOptions-title
 {
+	margin: 0 auto 10px;
 	display: block;
 	width: 100%;
 	height: 16px;
@@ -180,7 +182,7 @@
 }
 .mapOptions-input
 {
-	margin: 0 auto;
+	margin: 0 auto 10px;
 	border-radius: 25%;
 	display: block;
 	width: 32px;

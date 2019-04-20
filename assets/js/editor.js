@@ -24,7 +24,7 @@ class Editor
 			{
 				map: "Editor Map",
 				rules: 10,
-				tips: ""
+				tips: "..."
 			},
 			w: 1280,
 			h: 720,
@@ -739,6 +739,21 @@ class Editor
 		});
 	}
 
+	initMapOptions()
+	{
+		let title = document.getElementById('mapOptions-title')
+		let botsLength = document.getElementById('mapOptions-botsLength');
+		let botsToSave = document.getElementById('mapOptions-botsToSave');	
+		let tips = document.getElementById('mapOptions-tips');
+
+		let map = this.map;
+
+		title.value = map.intro.map;
+		tips.value = map.intro.tips;
+
+		botsLength.value = map.antsLength;
+		botsToSave.value = map.intro.rules;		
+	}
 
 	initTestMap()
 	{
@@ -759,6 +774,7 @@ class Editor
 	init()
 	{
 		this.initMenu();
+		this.initMapOptions();
 		this.initTestMap();
 		this.openUi();
 		this.initEvents();
