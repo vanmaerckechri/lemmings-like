@@ -177,7 +177,7 @@ class Ants
 			let ant = this.selectedAnt;
 			if (ant)
 			{
-				if (this.selectedAction == "gameBlock" && ant.status != "block")
+				if (this.selectedAction == "block" && ant.status != "block")
 				{
 					let y = ant.y + ant.h;
 					let x = ant.direction < 0 ? ant.x + ant.w : ant.x;

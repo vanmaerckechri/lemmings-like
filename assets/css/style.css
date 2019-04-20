@@ -529,7 +529,7 @@ canvas {
   .backToEditor:hover {
     cursor: pointer; }
 
-.mapOptions-container {
+.mapOptions-container, .antsOptions-container {
   border-bottom: 1px solid white;
   max-width: 164px;
   width: 100%;
@@ -554,6 +554,21 @@ canvas {
   width: 100%;
   max-width: 100%;
   resize: none; }
+
+.antsOptions-container .row-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center; }
+  .antsOptions-container .row-container img, .antsOptions-container .row-container input {
+    width: 32px;
+    height: 32px; }
+  .antsOptions-container .row-container input {
+    text-align: center; }
 
 .hidden {
   display: none !important;

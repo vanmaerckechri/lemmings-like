@@ -33,7 +33,7 @@ class Editor
 			savedLength: 0,
 			actions:
 			{
-				gameBlock: 2,
+				block: 2,
 				cancel: " ",
 				suicide: " "
 			},
@@ -66,13 +66,55 @@ class Editor
 		return this.status;
 	}
 
-	testMap()
+	importAntsOptions()
 	{
-		let canvas = document.getElementById('canvas-editorUi');
-		let editorUi = document.getElementById('editor-ui');
-		let backToEditor = document.getElementById('backToEditor');
+		let actions = this.map.actions;
 
-		let introContainer = document.getElementById('intro-container');
+		for (let actionName in actions)
+		{
+			if (actionName != "cancel" && actionName != "suicide")
+			{
+				let tag = document.getElementById(actionName);
+				console.log(actionName)
+
+				tag.value = this.map.actions[actionName];
+			}
+		}
+	}
+
+	exportAntsOptions()
+	{
+		let actions = this.map.actions;
+
+		for (let actionName in actions)
+		{
+			if (actionName != "cancel" && actionName != "suicide")
+			{
+				let tag = document.getElementById(actionName);
+
+				this.map.actions[actionName] = tag.value;
+			}
+		}
+	}
+
+	importMapOptions()
+	{
+		let title = document.getElementById('mapOptions-title')
+		let botsLength = document.getElementById('mapOptions-botsLength');
+		let botsToSave = document.getElementById('mapOptions-botsToSave');	
+		let tips = document.getElementById('mapOptions-tips');
+
+		let map = this.map;
+
+		title.value = map.intro.map;
+		tips.value = map.intro.tips;
+
+		botsLength.value = map.antsLength;
+		botsToSave.value = map.intro.rules;		
+	}
+
+	exportMapOptions()
+	{
 		let title = document.getElementById('mapOptions-title')
 		let botsLength = document.getElementById('mapOptions-botsLength');
 		let botsToSave = document.getElementById('mapOptions-botsToSave');	
@@ -84,11 +126,23 @@ class Editor
 		map.intro.map = title.value;
 		map.intro.tips = tips.value;
 
-		botsLength.value = isNaN(botsLength.value) ? 10 : botsLength.value;
-		botsToSave.value = isNaN(botsToSave.value) || botsToSave.value > botsLength.value ? 5 : botsToSave.value;
+		botsLength.value = isNaN(botsLength.value) ? 10 : parseInt(botsLength.value, 10);
+		botsToSave.value = isNaN(botsToSave.value) || parseInt(botsToSave.value) > botsLength.value ? 5 : parseInt(botsToSave.value);
 
 		map.antsLength = botsLength.value;
 		map.intro.rules = botsToSave.value;
+	}
+
+	testMap()
+	{
+		let canvas = document.getElementById('canvas-editorUi');
+		let editorUi = document.getElementById('editor-ui');
+		let backToEditor = document.getElementById('backToEditor');
+
+		let introContainer = document.getElementById('intro-container');
+
+		this.exportMapOptions();
+		this.exportAntsOptions();
 
 		canvas.classList.add('hidden');
 		editorUi.classList.add('hidden');
@@ -497,6 +551,8 @@ class Editor
 	        fr.onload = () =>
 	        {
 	        	this.map = JSON.parse(fr.result);
+	        	this.importMapOptions();
+	        	this.importAntsOptions();
 	        	this.updateLinkToExportMap();
 	        };
 	        fr.readAsText(file);
@@ -524,10 +580,12 @@ class Editor
 		link.innerText = "save map";
 		editorUi.appendChild(link);
 
-		this.updateLinkToExportMap();
-
 		link.addEventListener('click', () =>
 		{
+			this.exportMapOptions();
+			this.exportAntsOptions();
+
+			this.updateLinkToExportMap();
 			if (this.map['tiles'].length == 0)
 			{
 				event.preventDefault();
@@ -628,6 +686,31 @@ class Editor
 		}
 	}
 
+	loadAntsOptions()
+	{
+		let antsOptionsCont = document.getElementById('editor-antsOptions');
+		let antsOptionsIcons = this.maps.editor.elemsList.antsIcons
+		for (let i = 0, length = antsOptionsIcons.length; i < length; i++)
+		{
+			if (antsOptionsIcons[i] != "cancel" && antsOptionsIcons[i] != "suicide")
+			{
+				let rowContainer = document.createElement('div');
+				rowContainer.setAttribute('class', 'row-container')
+
+				let imgNfo = this.maps['elemInfos']["antsIcons"][antsOptionsIcons[i]];
+				let img = imgNfo.img.cloneNode(true);
+
+				let input = document.createElement('input');
+				input.setAttribute('id', antsOptionsIcons[i]);
+				input.value = this.map.actions[antsOptionsIcons[i]];
+
+				rowContainer.appendChild(img);
+				rowContainer.appendChild(input);
+				antsOptionsCont.appendChild(rowContainer);
+			}
+		}
+	}
+
 	loadBuildMapIcons(objsName, catName)
 	{
 		let editorElemsCont = document.getElementById('editorElems-container');
@@ -707,6 +790,10 @@ class Editor
 			{
 				this.loadOptionsIcons(elemsList[catName], catName);
 			}
+			else if (catName == "antsIcons")
+			{
+				this.loadAntsOptions();
+			}
 			// icons to build map
 			else
 			{
@@ -739,22 +826,6 @@ class Editor
 		});
 	}
 
-	initMapOptions()
-	{
-		let title = document.getElementById('mapOptions-title')
-		let botsLength = document.getElementById('mapOptions-botsLength');
-		let botsToSave = document.getElementById('mapOptions-botsToSave');	
-		let tips = document.getElementById('mapOptions-tips');
-
-		let map = this.map;
-
-		title.value = map.intro.map;
-		tips.value = map.intro.tips;
-
-		botsLength.value = map.antsLength;
-		botsToSave.value = map.intro.rules;		
-	}
-
 	initTestMap()
 	{
 		let testMapBtn = document.getElementById('testMap');
@@ -774,9 +845,10 @@ class Editor
 	init()
 	{
 		this.initMenu();
-		this.initMapOptions();
 		this.initTestMap();
 		this.openUi();
 		this.initEvents();
+		this.importMapOptions();
+		this.importAntsOptions();
 	}
 }

@@ -165,7 +165,7 @@
 	}
 }
 // Map Options
-.mapOptions-container
+.mapOptions-container, .antsOptions-container
 {
 	border-bottom: 1px solid white;
 	max-width: 164px;
@@ -194,4 +194,22 @@
 	width: 100%;
 	max-width: 100%;
 	resize: none;
+}
+.antsOptions-container
+{
+	.row-container
+	{
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
+		img, input
+		{
+			width: 32px;
+			height: 32px;
+		}
+		input
+		{
+			text-align: center;
+		}
+	}
 }

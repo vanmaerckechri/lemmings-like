@@ -57,7 +57,7 @@ class Maps
 					shadeLength: 1,
 					typeLength: 1
 				},
-				gameBlock:
+				block:
 				{
 					img: null,
 					imgSrc: "icon_game_block.png",
@@ -286,7 +286,8 @@ class Maps
 				blocs: ["grass", "ground"],
 				decor: ["tree", "tombs", "arrowLeft"],
 				editorOptionsIcons: ["autoCloseMenu", "toggleSideMenu"],
-				editorToolsIcons: ["removeTile"]
+				editorToolsIcons: ["removeTile"],
+				antsIcons: ["block"]
 			}
 		};
 
@@ -296,7 +297,7 @@ class Maps
 			{
 				ants: ["walk", "spawn", "fall", "block", "suicide"],
 				alphaOmega: ["spawn", "exit"],
-				antsIcons: ["suicide", "cancel", "gameBlock"],
+				antsIcons: ["suicide", "cancel", "block"],
 				gameSpeedIcons: ["timeDown", "timePause", "timePlay", "timeUp"]
 			}
 		};
@@ -316,7 +317,7 @@ class Maps
 			h: 720,
 			actions:
 			{
-				gameBlock: 2,
+				block: 2,
 				cancel: " ",
 				suicide: " "
 			},
@@ -345,7 +346,7 @@ class Maps
 			h: 720,
 			actions:
 			{
-				gameBlock: 3,
+				block: 3,
 				cancel: " ",
 				suicide: " "
 			},
