@@ -323,11 +323,12 @@ class Ants
 	fall(ant, engineSpeed)
 	{
 		let y = ant.y + ant.h;
-		let x = ant.x + 14;
+		let x = ant.x + (ant.w / 4);
+		let w = ant.w / 2;
 
 		let speed = ant.role != "ball" ? this.maps.gravity * engineSpeed : (this.maps.gravity - 0.5) * engineSpeed;
 
-		let isCollision = Collisions.check(this.maps, y, x, 4, 1);
+		let isCollision = Collisions.check(this.maps, y, x, w, 1);
 
 		if (!isCollision)
 		{
@@ -357,56 +358,36 @@ class Ants
 
 	walk(ant, engineSpeed)
 	{
-		let speed = (1 * this.maps.ratio) * engineSpeed;
+		let speed = engineSpeed * this.maps.ratio;
 		
 		let halfH = ant.h / 2;
 		let halfW = ant.w / 2;
 		let floorDy = ant.y - halfH;
-		let floorDx = ant.direction > 0 ? ant.x + ant.w : ant.x;
-		let wall = true;
+		let floorDx = ant.direction > 0 ? ant.x + (ant.w / 2) : ant.x + (ant.w / 2) - speed;
+		let count = 0;
+
+		let test = 0;
 
 		// check floor
-		for (let h = 2; h >= 0; h--)
+		for (let h = 2 * ant.h; h >= 0; h--)
 		{
-			let isWall = Collisions.check(this.maps, floorDy, floorDx, 1, ant.h);
-			floorDy += h * halfH;
-
-			if (!isWall)
+			if (!Collisions.check(this.maps, floorDy + h, floorDx, speed, 1))
 			{
-				wall = false
-				break;
-			}
-		}
-
-		if (!wall)
-		{
-			let isLastIterCollision;
-			let heightToScan = ant.h;
-			floorDy = ant.y + ant.h;
-			floorDx = ant.direction > 0 ? ant.x + halfW + speed : ant.x + halfW - speed;
-
-			for (let h = 0; h < heightToScan; h++)
-			{
-				let isFloor = Collisions.check(this.maps, floorDy - h, floorDx, 1, 1);
-
-				// tile with collision is found
-				if (isFloor)
+				let y = ant.y + h;
+				count += 1;
+				if (count >= ant.h - 1)
 				{
-					isLastIterCollision = true;
-				}
-				// floorY is found
-				if (!isFloor && isLastIterCollision)
-				{
-					ant.y = floorDy - h - ant.h + 1;
-					break;
+					ant.y = floorDy + h;
+					ant.x += speed * ant.direction;
+					return;
 				}
 			}
-			ant.x += speed * ant.direction;
+			else
+			{
+				count = 0;
+			}
 		}
-		else
-		{
-			ant.direction *= -1;
-		}
+		ant.direction *= -1;
 	}
 
 	manageStatut(ant, engineSpeed)

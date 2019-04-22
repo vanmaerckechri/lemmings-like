@@ -23,7 +23,6 @@ class Collisions
 
 				if (collisions[yy] && collisions[yy][xx])
 				{
-
 					if (color != false)
 					{
 						let canvas = document.getElementById('canvas-x');
