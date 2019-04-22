@@ -364,26 +364,22 @@ class Ants
 	{
 		let speed = engineSpeed * this.maps.ratio;
 		
-		let halfH = ant.h / 2;
 		let halfW = ant.w / 2;
-		let floorDy = ant.y - halfH;
-		let floorDx = ant.direction > 0 ? ant.x + (ant.w / 2) : ant.x + (ant.w / 2) - speed;
+		let floorDy = ant.y - ((ant.h / 4) * 3);
 		let count = 0;
 
-		let test = 0;
-
-		// check floor
-		for (let h = 2 * ant.h; h >= 0; h--)
+		// check wall
+		let floorDx = ant.direction > 0 ? ant.x + ant.w : ant.x;
+		let isWall = true;
+		for (let h = 2.5 * ant.h; h >= 0; h--)
 		{
-			if (!Collisions.check(this.maps, floorDy + h, floorDx, speed, 1))
+			if (!Collisions.check(this.maps, floorDy + h, floorDx, 1, 1))
 			{
-				let y = ant.y + h;
 				count += 1;
 				if (count >= ant.h - 1)
 				{
-					ant.y = floorDy + h;
-					ant.x += speed * ant.direction;
-					return;
+					isWall = false;
+					break;
 				}
 			}
 			else
@@ -391,7 +387,37 @@ class Ants
 				count = 0;
 			}
 		}
-		ant.direction *= -1;
+
+		// check floor
+		if (!isWall)
+		{
+			let halfH = ant.h / 2;
+			count = 0;
+			floorDx = ant.direction > 0 ? ant.x + (ant.w / 2) : ant.x + (ant.w / 2) - speed;
+			floorDy = ant.y - halfH;
+			for (let h = 2 * ant.h; h >= 0; h--)
+			{
+				if (!Collisions.check(this.maps, floorDy + h, floorDx, 1, 1))
+				{
+					count += 1;
+					if (count >= ant.h - 1)
+					{
+						ant.y = floorDy + h;
+						ant.x += speed * ant.direction;
+						return;
+					}
+				}
+				else
+				{
+					count = 0;
+				}
+			}
+			ant.x += speed * ant.direction;
+		}
+		else
+		{
+			ant.direction *= -1;
+		}
 	}
 
 	manageStatut(ant, engineSpeed)

@@ -7,6 +7,8 @@ class Collisions
 		let map = maps['currentMap']['tiles'];
 		let collisions = maps['currentMap']['collisions'];
 
+		let ratio = maps.ratio
+
 		x = Math.round(x)
 		y = Math.round(y)
 		width = Math.round(width)
@@ -16,8 +18,8 @@ class Collisions
 		{
 			for (let w = width; w >= 0; w--)
 			{
-				let xx = Math.round(x + w);
-				let yy = Math.round(y + h);
+				let xx = x + w;
+				let yy = y + h;
 
 				if (collisions[yy] && collisions[yy][xx])
 				{
@@ -27,7 +29,7 @@ class Collisions
 						let ctx = canvas.getContext('2d');
 						ctx.beginPath();
 						ctx.fillStyle = color;
-						ctx.rect(xx, yy , 2, 2);
+						ctx.rect(xx * ratio, yy * ratio , 2 * ratio, 2 * ratio);
 						ctx.fill();
 					}
 					return true;
