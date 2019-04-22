@@ -312,8 +312,12 @@ class Ants
 
 	checkOuterScreen(ant)
 	{
+		let ratio = this.maps.ratio;
 		let canvas = document.getElementById('canvas-ant');
-		if (ant.x > canvas.width || ant.x < 0 || ant.y > canvas.height || ant.y < 0)
+		let x = ant.x * ratio;
+		let y = ant.y * ratio;
+
+		if (x > canvas.width || x < 0 || y > canvas.height || y < 0)
 		{
 			this.ants.splice(ant.index, 1);
 			this.maps['currentMap'].deletedAntsLength += 1;		
@@ -322,13 +326,13 @@ class Ants
 
 	fall(ant, engineSpeed)
 	{
-		let y = ant.y + ant.h;
-		let x = ant.x + (ant.w / 4);
-		let w = ant.w / 2;
+		let floorDy = ant.y + ant.h;
+		let floorDx = ant.x + (ant.w / 4);
+		let floorDw = ant.w / 2;
 
 		let speed = ant.role != "ball" ? this.maps.gravity * engineSpeed : (this.maps.gravity - 0.5) * engineSpeed;
 
-		let isCollision = Collisions.check(this.maps, y, x, w, 1);
+		let isCollision = Collisions.check(this.maps, floorDy, floorDx, floorDw, 1);
 
 		if (!isCollision)
 		{
@@ -338,7 +342,7 @@ class Ants
 			{
 				ant.status = "fall";
 				ant.imgIndex = 0;
-				ant.fallStartY = y;
+				ant.fallStartY = ant.y;
 			}
 		}
 		else

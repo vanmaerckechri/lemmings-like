@@ -16,6 +16,7 @@ class Keyboard
 			keyArrowDown: false,
 			keyArrowRight: false,
 			keyD: false,
+			keyF: false,
 			keyQ: false,
 			keyP: false,
 			keyS: false,
@@ -26,14 +27,14 @@ class Keyboard
 
 		this.keysDefault =
 		{
-			fullScreen: "keySpace",
+			fullScreen: "keyF",
 			moveUp: "keyArrowUp",
 			moveDown: "keyArrowDown",
 			moveLeft: "keyArrowLeft",
 			moveRight: "keyArrowRight",
 			speedUp: "keyMore",
 			speedDown: "keyLess",
-			pause: "keyP"
+			pause: "keySpace"
 		};
 
 		this.keysCurrent = this.keysDefault;
@@ -144,6 +145,11 @@ class Keyboard
 		{
 			self.keys.keyD = true;
 		}
+		// f
+		else if (event.keyCode == 70)
+		{
+			self.keys.keyF = true;
+		}
 		// p
 		else if (event.keyCode == 80)
 		{
@@ -218,6 +224,11 @@ class Keyboard
 		else if (event.keyCode == 68)
 		{
 			self.keys.keyD = false;
+		}
+		// f
+		else if (event.keyCode == 70)
+		{
+			self.keys.keyF = false;
 		}
 		// p
 		else if (event.keyCode == 80)
