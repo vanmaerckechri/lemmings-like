@@ -384,6 +384,7 @@ class Editor
 
 		let tileSizeOr = this.maps.tileSizeOrigin;
 		let tileSizeCurrent = this.maps.tileSizeCurrent;
+		let ratio = this.maps.ratio;
 
 		let tileRatio = this.maps.tileSizeCurrent / tileSizeOr;
 
@@ -426,8 +427,8 @@ class Editor
 				// line onclick to current mouse position
 				if (this.currentLink.active)
 				{
-					let sX = this.currentLink.x;
-					let sY = this.currentLink.y;
+					let sX = this.currentLink.x * ratio;
+					let sY = this.currentLink.y * ratio;
 					ctx.beginPath();
 					ctx.strokeStyle = "rgba(75, 255, 75, 1)";
 					ctx.moveTo(sX, sY);
@@ -476,8 +477,8 @@ class Editor
 						let sY = imgRow * tileSizeOr;
 						let sW = tileSizeOr * el.colWidth;
 						let sH = tileSizeOr * el.rowHeight;
-						let dX = c * this.maps.tileSizeCurrent;
-						let dY = r * this.maps.tileSizeCurrent;
+						let dX = c * tileSizeCurrent;
+						let dY = r * tileSizeCurrent;
 
 						ctxEd.imageSmoothingEnabled  = false;
  						ctxEd.drawImage(img, sX, sY, sW, sH, dX, dY, Math.ceil(sW * tileRatio), Math.ceil(sH * tileRatio));
@@ -490,8 +491,8 @@ class Editor
  							{
  								for (let i = obj.focus.length - 1; i >= 0; i--)
  								{
- 									sX = (c + (el.colWidth / 2)) * tileSizeOr;
- 									sY = (r + (el.rowHeight / 2)) * tileSizeOr;
+ 									sX = (c + (el.colWidth / 2)) * tileSizeCurrent;
+ 									sY = (r + (el.rowHeight / 2)) * tileSizeCurrent;
 
  									let dRow = obj.focus[i].row;
  									let dCol = obj.focus[i].col;
@@ -500,8 +501,8 @@ class Editor
  									if (map[dRow] && map[dRow][dCol] && map[dRow][dCol].objName == "door")
  									{
 	 									let dEl = this.maps['elemInfos'][map[dRow][dCol].catName][map[dRow][dCol].objName];
-	 									dX = (dCol + (dEl.colWidth / 2)) * tileSizeOr;
-	 									dY = (dRow + (dEl.rowHeight / 2)) * tileSizeOr;
+	 									dX = (dCol + (dEl.colWidth / 2)) * tileSizeCurrent;
+	 									dY = (dRow + (dEl.rowHeight / 2)) * tileSizeCurrent;
 
 	 									ctxEd.beginPath();
 										ctxEd.strokeStyle = "grey";
