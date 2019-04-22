@@ -45,11 +45,39 @@ class Ants
 			h: 32,
 			fallStartY: 0,
 			imgIndex: 0,
-			lastAnimationType: 'walk',
-			animation: 'spawn', 
+			role: null, 
 			status: 'spawn'
 		}
 		this.ants.push(ant);
+	}
+
+	getAnimationType(ant)
+	{
+		let status = ant.status
+		if (status == "spawn")
+		{
+			return "spawn";
+		}
+		else if (status == "walk" || status == "fall")
+		{
+			if (!ant.role)
+			{
+				return ant.status
+			}
+			else if (ant.role == "suicide")
+			{
+				return ant.role;
+			}
+			else
+			{
+				let animation = ant.role + status.charAt(0).toUpperCase() + status.substring(1).toLowerCase();
+				return animation;
+			}
+		}
+		else
+		{
+			return ant.role;
+		}
 	}
 
 	draw(ant, engineSpeed, pauseLength)
@@ -59,10 +87,10 @@ class Ants
 		let tileSizeOrigin = this.maps.tileSizeOrigin;
 		let tileRatio = this.maps.tileSizeCurrent / tileSizeOrigin
 
-		let currentAnim = ant['animation'];
+		let currentAnim = this.getAnimationType(ant);
 
 		let sX = ant.w * ant.imgIndex;
-		let sY = currentAnim == "walk" && ant.direction < 0 ? tileSizeOrigin : 0;
+		let sY = ant.status == "walk" && ant.direction < 0 ? tileSizeOrigin : 0;
 		let dX = ant.x * tileRatio;
 		let dY = ant.y * tileRatio;
 		let dW = this.maps.tileSizeCurrent * this.maps['elemInfos']['ants'][currentAnim]['colWidth'];
@@ -161,7 +189,7 @@ class Ants
 			let uiNumber = uiIcon.querySelector('.actionLength');
 			uiNumber.innerText = actions[this.selectedAction];
 
-			if (actions[this.selectedAction] == 0)
+			if (actions[this.selectedAction] === 0)
 			{
 				uiIcon.classList.add('off');
 			}
@@ -170,14 +198,24 @@ class Ants
 		}
 	}
 
+	unblock(ant)
+	{
+		let currentMap = this.maps['currentMap'];
+		let tileRatio = this.maps['tileSizeCurrent'] / this.maps['tileSizeOrigin'];
+		let ctx = false;
+		let collision = false
+		currentMap['collisions'] = Collisions.update(this.maps['tileSizeCurrent'], ctx, currentMap['collisions'], ant.x * tileRatio, ant.y * tileRatio, ant.w * tileRatio, ant.h * tileRatio, tileRatio, collision);
+	}
+
 	giveActionToAnt(event)
 	{
+
 		if (this.selectedAction)
 		{
 			let ant = this.selectedAnt;
 			if (ant)
 			{
-				if (this.selectedAction == "block" && ant.status != "block")
+				if (this.selectedAction == "block" && ant.role != "block")
 				{
 					let y = ant.y + ant.h;
 					let x = ant.direction < 0 ? ant.x + ant.w : ant.x;
@@ -187,8 +225,8 @@ class Ants
 					{
 						this.unSelectAction();
 
-						ant.status = "block";
-						ant.animation = "block";
+						ant.status = "stop";
+						ant.role = "block";
 						ant.imgIndex = 0;
 
 						let currentMap = this.maps['currentMap'];
@@ -202,35 +240,42 @@ class Ants
 				{
 					this.unSelectAction();
 
-					if (ant.status == "block")
+					if (ant.role == "block")
 					{
-						let currentMap = this.maps['currentMap'];
-						let tileRatio = this.maps['tileSizeCurrent'] / this.maps['tileSizeOrigin'];
-						let ctx = false;
-						let collision = false
-						currentMap['collisions'] = Collisions.update(this.maps['tileSizeCurrent'], ctx, currentMap['collisions'], ant.x * tileRatio, ant.y * tileRatio, ant.w * tileRatio, ant.h * tileRatio, tileRatio, collision);
+						this.unblock(ant);
 					}
 
-					ant.status = ant.lastAnimationType;
-					ant.animation = ant.lastAnimationType;
+					ant.status = "walk";
+					ant.role = null;
 					ant.imgIndex = 0;
 				}
 				else if (this.selectedAction == "suicide")
 				{
 					this.unSelectAction();
 
-					if (ant.status == "block")
+					if (ant.role == "block")
 					{
-						let currentMap = this.maps['currentMap'];
-						let tileRatio = this.maps['tileSizeCurrent'] / this.maps['tileSizeOrigin'];
-						let ctx = false;
-						let collision = false
-						currentMap['collisions'] = Collisions.update(this.maps['tileSizeCurrent'], ctx, currentMap['collisions'], ant.x * tileRatio, ant.y * tileRatio, ant.w * tileRatio, ant.h * tileRatio, tileRatio, collision);
+						this.unblock(ant);
 					}
 
-					ant.status = "suicide";
-					ant.animation = "suicide";
+					ant.status = "stop";
+					ant.role = "suicide";
 					ant.imgIndex = 0;
+				}
+				else if (this.selectedAction == "ball" && ant.role != "ball")
+				{
+					if (this.manageActionLength())
+					{
+						this.unSelectAction();
+						if (ant.role == "block")
+						{
+							this.unblock(ant);
+						}
+
+						ant.status = "walk";
+						ant.role = "ball";
+						ant.imgIndex = 0;
+					}
 				}
 			}
 		}
@@ -280,7 +325,7 @@ class Ants
 		let y = ant.y + ant.h;
 		let x = ant.x + 14;
 
-		let speed = this.maps.gravity * engineSpeed;
+		let speed = ant.role != "ball" ? this.maps.gravity * engineSpeed : (this.maps.gravity - 0.5) * engineSpeed;
 
 		let isCollision = Collisions.check(this.maps, y, x, 4, 1);
 
@@ -290,17 +335,9 @@ class Ants
 			// if ant begin to fall
 			if (ant.status != "fall")
 			{
-				ant.lastAnimationType = ant.status;
 				ant.status = "fall";
+				ant.imgIndex = 0;
 				ant.fallStartY = y;
-			}
-			else
-			{
-				if (ant.animation != "fall" && (ant.y - ant.fallStartY) / this.maps.tileSizeOrigin >= 1)
-				{
-					ant.imgIndex = 0;
-					ant.animation = "fall";
-				}
 			}
 		}
 		else
@@ -308,10 +345,9 @@ class Ants
 			// ant is landing
 			if (ant.status == "fall")
 			{
-				ant.status = ant.lastAnimationType;
-				ant.animation = ant.lastAnimationType;
+				ant.status = "walk";
 				// check death
-				if ((ant.y - ant.fallStartY) / this.maps.tileSizeOrigin >= 4)
+				if (ant.role != "ball" && (ant.y - ant.fallStartY) / this.maps.tileSizeOrigin >= 4)
 				{
 					this.crashAnt(ant);
 				}
@@ -382,7 +418,7 @@ class Ants
 			if (ant.imgIndex >= img.width / ant.w - 1)
 			{
 				ant.status = "walk";
-				ant.animation = "walk";
+				ant.role = null;
 				ant.imgIndex = 0;
 			}
 		}
@@ -476,33 +512,34 @@ class Ants
 		let icons = this.maps['commonElem']['elemsList']['antsIcons'];
 		for (let i = 0, iLength = icons.length; i < iLength; i++)
 		{
-			// action does exist on this map ?
-			if (this.maps['currentMap']['actions'][icons[i]])
+			let imgContainer = document.createElement('div');
+			imgContainer.setAttribute('id', icons[i]);
+			imgContainer.setAttribute('class', 'img-container');
+
+			let actionLengthTag = document.createElement('p');
+			actionLengthTag.setAttribute('class', 'actionLength');
+			actionLengthTag.innerText = this.maps['currentMap']['actions'][icons[i]];
+
+			let img = this.maps['elemInfos']['antsIcons'][icons[i]]['img'];
+			imgContainer.addEventListener('click', () =>
 			{
-				let imgContainer = document.createElement('div');
-				imgContainer.setAttribute('id', icons[i]);
-				imgContainer.setAttribute('class', 'img-container');
-
-				let actionLengthTag = document.createElement('p');
-				actionLengthTag.setAttribute('class', 'actionLength');
-				actionLengthTag.innerText = this.maps['currentMap']['actions'][icons[i]];
-
-				let img = this.maps['elemInfos']['antsIcons'][icons[i]]['img'];
-				imgContainer.addEventListener('click', () =>
+				this.selectedAction = icons[i];
+				let icon = document.getElementById(icons[i]);
+				if (!icon.classList.contains('selected') && !icon.classList.contains('off'))
 				{
-					this.selectedAction = icons[i];
-					let icon = document.getElementById(icons[i]);
-					if (!icon.classList.contains('selected') && !icon.classList.contains('off'))
-					{
-						let all = true;
-						this.unSelectAction(all);
-						icon.classList.add('selected');
-					}
-				})
+					let all = true;
+					this.unSelectAction(all);
+					icon.classList.add('selected');
+				}
+			})
 
-				imgContainer.appendChild(img);
-				imgContainer.appendChild(actionLengthTag);
-				gameUiBotCont.appendChild(imgContainer);
+			imgContainer.appendChild(img);
+			imgContainer.appendChild(actionLengthTag);
+			gameUiBotCont.appendChild(imgContainer);
+
+			if (this.maps['currentMap']['actions'][icons[i]] === 0)
+			{
+				imgContainer.classList.add('off')
 			}
 		}
 	}

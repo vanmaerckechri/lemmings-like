@@ -34,6 +34,7 @@ class Editor
 			actions:
 			{
 				block: 2,
+				ball: 3,
 				cancel: " ",
 				suicide: " "
 			},
