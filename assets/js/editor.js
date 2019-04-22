@@ -76,8 +76,6 @@ class Editor
 			if (actionName != "cancel" && actionName != "suicide")
 			{
 				let tag = document.getElementById(actionName);
-				console.log(actionName)
-
 				tag.value = this.map.actions[actionName];
 			}
 		}
@@ -378,22 +376,37 @@ class Editor
 		}
 	}
 
+	updateCursor()
+	{
+		let canvas = document.getElementById('canvas-editorUi');
+
+		if (this.selectedElem)
+		{
+			if (canvas.style.cursor != "none")
+			{
+				canvas.style.cursor = "none";
+			}
+		}
+		else
+		{
+			canvas.style.cursor = "";
+		}
+	}
+
 	draw()
 	{
+		//this.updateCursor();
+
 		let map = this.map['tiles'];
 
 		let tileSizeOr = this.maps.tileSizeOrigin;
 		let tileSizeCurrent = this.maps.tileSizeCurrent;
 		let ratio = this.maps.ratio;
 
-		let tileRatio = this.maps.tileSizeCurrent / tileSizeOr;
-
 		if (this.action == "putElem")
 		{
 			this.putElement();
 		}
-
-		this.tileRatio = tileRatio;
 
 		// draw selected tool
 		if (this.selectedElem != null)
@@ -401,15 +414,15 @@ class Editor
 			let canvas = document.getElementById('canvas-editorUi');
 			let ctx = canvas.getContext('2d');
 
-			let x = Math.floor(this.mouseX / (tileSizeOr * tileRatio)) * (tileSizeOr * tileRatio);
-			let y = Math.floor(this.mouseY / (tileSizeOr * tileRatio)) * (tileSizeOr * tileRatio);
+			let x = Math.floor(this.mouseX / tileSizeCurrent) * tileSizeCurrent;
+			let y = Math.floor(this.mouseY / tileSizeCurrent) * tileSizeCurrent;
 
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 			if (this.selectedElem == "removeTile")
 			{
 				ctx.beginPath();
-				ctx.rect(x, y, tileSizeOr * tileRatio, tileSizeOr * tileRatio);
+				ctx.rect(x, y, tileSizeCurrent, tileSizeCurrent);
 				ctx.fillStyle = "rgba(255, 122, 122, .5)";
 				ctx.strokeStyle = "rgba(255, 75, 75, 1)";
 				ctx.fill();
@@ -419,7 +432,7 @@ class Editor
 			{
 				// cursor
 				ctx.beginPath();
-				ctx.rect(x, y, tileSizeOr * tileRatio, tileSizeOr * tileRatio);
+				ctx.rect(x, y, tileSizeCurrent, tileSizeCurrent);
 				ctx.fillStyle = "rgba(122, 255, 122, .5)";
 				ctx.strokeStyle = "rgba(75, 255, 75, 1)";
 				ctx.fill();
@@ -449,7 +462,7 @@ class Editor
 				let sW = tileSizeOr * elem.colWidth;
 				let sH = tileSizeOr * elem.rowHeight;
 
-				ctx.drawImage(img, sX, sY, sW, sH, x, y, sW * tileRatio, sH * tileRatio);
+				ctx.drawImage(img, sX, sY, sW, sH, x, y, sW * ratio, sH * ratio);
 			}
 		}
 
@@ -481,7 +494,7 @@ class Editor
 						let dY = r * tileSizeCurrent;
 
 						ctxEd.imageSmoothingEnabled  = false;
- 						ctxEd.drawImage(img, sX, sY, sW, sH, dX, dY, Math.ceil(sW * tileRatio), Math.ceil(sH * tileRatio));
+ 						ctxEd.drawImage(img, sX, sY, sW, sH, dX, dY, Math.floor(sW * ratio), Math.floor(sH * ratio));
 
  						// display links buttons/doors
  						if (map[r][c].objName == "btn")
@@ -841,7 +854,7 @@ class Editor
 		btn.setAttribute('class', "btn backToEditor hidden");
 
 		btn.addEventListener('click', () => this.backToEditor());
-		ui.appendChild(btn)	;
+		ui.appendChild(btn);
 	}
 
 	init()
